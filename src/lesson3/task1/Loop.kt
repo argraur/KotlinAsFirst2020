@@ -2,6 +2,8 @@
 
 package lesson3.task1
 
+import java.lang.Math.pow
+import kotlin.math.pow
 import kotlin.math.sqrt
 
 // Урок 3: циклы
@@ -72,7 +74,16 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun digitNumber(n: Int): Int = TODO()
+fun digitNumber(n: Int): Int {
+    var count = 0
+    var a = n
+    if (a == 0) count++
+    while (a > 0) {
+        a /= 10
+        count++
+    }
+    return count
+}
 
 /**
  * Простая (2 балла)
@@ -87,14 +98,28 @@ fun fib(n: Int): Int = TODO()
  *
  * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
  */
-fun minDivisor(n: Int): Int = TODO()
+fun minDivisor(n: Int): Int {
+    for (i in 2..n) {
+        if (n % i == 0) {
+            return i
+        }
+    }
+    return n
+}
 
 /**
  * Простая (2 балла)
  *
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
-fun maxDivisor(n: Int): Int = TODO()
+fun maxDivisor(n: Int): Int {
+    for (i in 2..n) {
+        if (n % i == 0) {
+            return n / i
+        }
+    }
+    return 1
+}
 
 /**
  * Простая (2 балла)
@@ -138,7 +163,25 @@ fun isCoPrime(m: Int, n: Int): Boolean = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun revert(n: Int): Int = TODO()
+fun revert(n: Int): Int {
+    var count = -1
+    var a = 0
+    var b = n
+    while (b != 0) {
+        count++
+        b /= 10
+    }
+    b = n
+    for (i in count downTo 0) {
+        if (i != 0) {
+            a += (b % 10) * 10.0.pow(i).toInt()
+        } else {
+            a += (b % 10)
+        }
+        b /= 10
+    }
+    return a
+}
 
 /**
  * Средняя (3 балла)
@@ -149,7 +192,25 @@ fun revert(n: Int): Int = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun isPalindrome(n: Int): Boolean = TODO()
+fun isPalindrome(n: Int): Boolean {
+    var count = -1
+    var a = 0
+    var b = n
+    while (b != 0) {
+        count++
+        b /= 10
+    }
+    b = n
+    for (i in count downTo 0) {
+        if (i != 0) {
+            a += (b % 10) * 10.0.pow(i).toInt()
+        } else {
+            a += (b % 10)
+        }
+        b /= 10
+    }
+    return a == n
+}
 
 /**
  * Средняя (3 балла)
@@ -159,7 +220,19 @@ fun isPalindrome(n: Int): Boolean = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun hasDifferentDigits(n: Int): Boolean = TODO()
+fun hasDifferentDigits(n: Int): Boolean {
+    var b = n
+    val a = b % 10
+    b /= 10
+    while (b != 0) {
+        if (b % 10 == a) {
+            b /= 10
+        } else {
+            return true
+        }
+    }
+    return false
+}
 
 /**
  * Средняя (4 балла)
