@@ -69,15 +69,14 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  * Мой возраст. Для заданного 0 < n < 200, рассматриваемого как возраст человека,
  * вернуть строку вида: «21 год», «32 года», «12 лет».
  */
-fun ageDescription(age: Int): String {
+fun ageDescription(age: Int): String =
     if (age % 10 == 1 && age % 100 != 11) {
-        return "$age год"
-    } else if ((age % 10 == 2 || age % 10 == 3 || age % 10 == 4) && (age % 100 < 10 || age % 100 > 20)) {
-        return "$age года"
+        "$age год"
+    } else if (age % 10 in 2..4 && (age % 100 < 10 || age % 100 > 20)) {
+        "$age года"
     } else {
-        return "$age лет"
+        "$age лет"
     }
-}
 
 /**
  * Простая (2 балла)
@@ -105,15 +104,14 @@ fun whichRookThreatens(
     kingX: Int, kingY: Int,
     rookX1: Int, rookY1: Int,
     rookX2: Int, rookY2: Int
-): Int {
+): Int =
     if ((rookX1 == kingX || rookY1 == kingY) && (rookX2 == kingX || rookY2 == kingY)) {
-        return 3
+        3
     } else if (rookX1 == kingX || rookY1 == kingY) {
-        return 1
+        1
     } else if (rookX2 == kingX || rookY2 == kingY) {
-        return 2
-    } else return 0
-}
+        2
+    } else 0
 
 /**
  * Простая (2 балла)
@@ -140,28 +138,29 @@ fun rookOrBishopThreatens(
  * Если такой треугольник не существует, вернуть -1.
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int {
-    var d = 0.0
+    val max = maxOf(a, b, c)
     var e = 0.0
     var f = 0.0
-    if (a == Math.max(a, Math.max(b, c))) {
-        d = a
-        e = b
-        f = c
-    } else if (b == Math.max(b, Math.max(a, c))) {
-        d = b
-        e = a
-        f = c
-    } else if (c == Math.max(c, Math.max(a, b))) {
-        d = c
-        e = a
-        f = b
+    when (max) {
+        a -> {
+            e = b
+            f = c
+        }
+        b -> {
+            e = a
+            f = c
+        }
+        c -> {
+            e = a
+            f = b
+        }
     }
-    if (d + e > f && e + f > d && d + f > e) {
-        if (d.pow(2) == e.pow(2) + f.pow(2)) {
+    if (max + e > f && e + f > max && max + f > e) {
+        if (max.pow(2) == e.pow(2) + f.pow(2)) {
             return 1
-        } else if (d.pow(2) > e.pow(2) + f.pow(2)) {
+        } else if (max.pow(2) > e.pow(2) + f.pow(2)) {
             return 2
-        } else if (d.pow(2) < e.pow(2) + f.pow(2)) {
+        } else if (max.pow(2) < e.pow(2) + f.pow(2)) {
             return 0
         }
     } else return -1

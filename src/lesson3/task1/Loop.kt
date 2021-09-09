@@ -3,6 +3,7 @@
 package lesson3.task1
 
 import java.lang.Math.pow
+import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -78,7 +79,7 @@ fun digitNumber(n: Int): Int {
     var count = 0
     var a = n
     if (a == 0) count++
-    while (a > 0) {
+    while (a != 0) {
         a /= 10
         count++
     }
