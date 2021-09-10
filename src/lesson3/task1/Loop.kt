@@ -3,7 +3,10 @@
 package lesson3.task1
 
 import java.lang.Math.pow
+import java.math.BigInteger
+import java.util.*
 import kotlin.math.abs
+import kotlin.math.log10
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -92,7 +95,20 @@ fun digitNumber(n: Int): Int {
  * Найти число Фибоначчи из ряда 1, 1, 2, 3, 5, 8, 13, 21, ... с номером n.
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
-fun fib(n: Int): Int = TODO()
+fun fib(n: Int): Int =
+    when (n) {
+        1 -> 1
+        2 -> 1
+        else -> {
+            val fib = IntArray(n + 1)
+            fib[1] = 1
+            fib[2] = 1
+            for (i in 3..n) {
+                fib[i] = fib[i - 2] + fib[i - 1]
+            }
+            fib[n]
+        }
+    }
 
 /**
  * Простая (2 балла)
@@ -100,7 +116,7 @@ fun fib(n: Int): Int = TODO()
  * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
  */
 fun minDivisor(n: Int): Int {
-    for (i in 2..n) {
+    for (i in 2..sqrt(n.toDouble()).toInt()) {
         if (n % i == 0) {
             return i
         }
@@ -113,14 +129,7 @@ fun minDivisor(n: Int): Int {
  *
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
-fun maxDivisor(n: Int): Int {
-    for (i in 2..n) {
-        if (n % i == 0) {
-            return n / i
-        }
-    }
-    return 1
-}
+fun maxDivisor(n: Int): Int = n / minDivisor(n)
 
 /**
  * Простая (2 балла)
@@ -277,4 +286,23 @@ fun squareSequenceDigit(n: Int): Int = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun fibSequenceDigit(n: Int): Int = TODO()
+fun fibSequenceDigit(n: Int): Int {
+    var a = BigInteger.ZERO
+    (1..n).forEach {
+        val fib = fib(it)
+        val len = fib.length()
+        a = a.multiply(BigInteger.TEN.pow(len))
+        a = a.add(fib.toBigInteger())
+    }
+    val numbers = ArrayList<Int>()
+    while (!a.equals(BigInteger.ZERO)) {
+        numbers.add(a.remainder(BigInteger.TEN).toInt())
+        a = a.divide(BigInteger.TEN)
+    }
+    return numbers.reversed()[n - 1]
+}
+
+fun Int.length() = when (this) {
+    0 -> 1
+    else -> log10(abs(toDouble())).toInt() + 1
+}
