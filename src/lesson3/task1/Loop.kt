@@ -275,7 +275,7 @@ fun cos(x: Double, eps: Double): Double = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun squareSequenceDigit(n: Int): Int = generateBigSequence(n) { it.toDouble().pow(2).toInt() }.digitAt(n - 1)
+fun squareSequenceDigit(n: Int): Int = sequenceDigit(n) { it.toDouble().pow(2).toInt() }
 
 /**
  * Сложная (5 баллов)
@@ -286,43 +286,28 @@ fun squareSequenceDigit(n: Int): Int = generateBigSequence(n) { it.toDouble().po
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun fibSequenceDigit(n: Int): Int = generateBigSequence(n) { fib(it) }.digitAt(n - 1)
+fun fibSequenceDigit(n: Int): Int = sequenceDigit(n) { fib(it) }
 
 /**
- * generates big sequence using BigInteger and supports custom progressions
- * moved this out of fibSequenceDigit and squareSequenceDigit because only difference is progression function
- * n - 1..n size
- * f - lambda expression - custom progression function
+ * Generates sequence and finds digit at position N
+ * With support for providing custom progression by overriding f lambda expression
  */
-fun generateBigSequence(n: Int, f: (Int) -> Int = { it }): BigInteger {
-    var a = BigInteger.ZERO
+fun sequenceDigit(n: Int, f: (Int) -> Int = { it }): Int {
     var fullLen = 0
     for (i in 1..n) {
-        val number = f.invoke(i)
+        var number = f.invoke(i)
         val len = number.length()
         fullLen += len
-        a = a.multiply(BigInteger.TEN.pow(len))
-        a = a.add(number.toBigInteger())
         if (fullLen >= n) {
-            break
+            while (fullLen > n) {
+                number /= 10
+                fullLen--
+            }
+            return number % 10
         }
     }
-    return a
+    return 0
 }
-
-/**
- * finds digit in a BigInteger at given position
- */
-fun BigInteger.digitAt(n: Int): Int {
-    var tmp = this
-    val numbers = ArrayList<Int>()
-    while (tmp != BigInteger.ZERO) {
-        numbers.add(tmp.remainder(BigInteger.TEN).toInt())
-        tmp = tmp.divide(BigInteger.TEN)
-    }
-    return numbers.reversed()[n]
-}
-
 /**
  * int number length
  */
