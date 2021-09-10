@@ -288,11 +288,16 @@ fun squareSequenceDigit(n: Int): Int = TODO()
  */
 fun fibSequenceDigit(n: Int): Int {
     var a = BigInteger.ZERO
-    (1..n).forEach {
-        val fib = fib(it)
+    var fullLen = 0
+    for (i in 1..n) {
+        val fib = fib(i)
         val len = fib.length()
+        fullLen += len
         a = a.multiply(BigInteger.TEN.pow(len))
         a = a.add(fib.toBigInteger())
+        if (fullLen >= n) {
+            break
+        }
     }
     val numbers = ArrayList<Int>()
     while (!a.equals(BigInteger.ZERO)) {
