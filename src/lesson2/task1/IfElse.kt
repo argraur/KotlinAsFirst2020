@@ -178,11 +178,7 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
 fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
     val ab = (a..b).toMutableList()
     val cd = (c..d).toMutableList()
-    var count = 0
-    ab.forEach {
-        if (cd.binarySearch(it) >= 0)
-            count++
-    }
+    val count = ab.filter { cd.contains(it) }.size
     return if (count != 0) {
         count - 1
     } else {
