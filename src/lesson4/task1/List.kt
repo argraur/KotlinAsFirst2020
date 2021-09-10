@@ -3,6 +3,8 @@
 package lesson4.task1
 
 import lesson1.task1.discriminant
+import java.lang.NumberFormatException
+import kotlin.math.pow
 import kotlin.math.sqrt
 
 // Урок 4: списки
@@ -217,7 +219,13 @@ fun convertToString(n: Int, base: Int): String = TODO()
  * из системы счисления с основанием base в десятичную.
  * Например: digits = (1, 3, 12), base = 14 -> 250
  */
-fun decimal(digits: List<Int>, base: Int): Int = TODO()
+fun decimal(digits: List<Int>, base: Int): Int {
+    var result = 0
+    digits.forEachIndexed { index, i ->
+        result += i * base.toDouble().pow(digits.size - index - 1).toInt()
+    }
+    return result
+}
 
 /**
  * Сложная (4 балла)
@@ -231,7 +239,23 @@ fun decimal(digits: List<Int>, base: Int): Int = TODO()
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, str.toInt(base)), запрещается.
  */
-fun decimalFromString(str: String, base: Int): Int = TODO()
+fun decimalFromString(str: String, base: Int): Int {
+    var result = 0
+    str.forEachIndexed { index, i ->
+        var a = 0
+        println(i + " " + i.code)
+        when {
+            i <= '9' -> {
+                a = i.digitToInt()
+            }
+            i >= 'a' -> {
+                a = i.code - 87
+            }
+        }
+        result += a * base.toDouble().pow(str.length - index - 1).toInt()
+    }
+    return result
+}
 
 /**
  * Сложная (5 баллов)
