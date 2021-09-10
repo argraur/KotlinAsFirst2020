@@ -275,7 +275,26 @@ fun cos(x: Double, eps: Double): Double = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun squareSequenceDigit(n: Int): Int = TODO()
+fun squareSequenceDigit(n: Int): Int {
+    var a = BigInteger.ZERO
+    var fullLen = 0
+    for (i in 1..n) {
+        val square = i.toDouble().pow(2).toInt()
+        val len = square.length()
+        fullLen += len
+        a = a.multiply(BigInteger.TEN.pow(len))
+        a = a.add(square.toBigInteger())
+        if (fullLen >= n) {
+            break
+        }
+    }
+    val numbers = ArrayList<Int>()
+    while (!a.equals(BigInteger.ZERO)) {
+        numbers.add(a.remainder(BigInteger.TEN).toInt())
+        a = a.divide(BigInteger.TEN)
+    }
+    return numbers.reversed()[n - 1]
+}
 
 /**
  * Сложная (5 баллов)
