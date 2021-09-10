@@ -175,13 +175,5 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
  * Найти длину пересечения отрезков AB и CD.
  * Если пересечения нет, вернуть -1.
  */
-fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
-    val ab = (a..b).toMutableList()
-    val cd = (c..d).toMutableList()
-    val count = ab.filter { cd.contains(it) }.size
-    return if (count != 0) {
-        count - 1
-    } else {
-        -1
-    }
-}
+fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int =
+    (a..b).toList().filter { (c..d).toList().binarySearch(it) >= 0 }.size - 1
