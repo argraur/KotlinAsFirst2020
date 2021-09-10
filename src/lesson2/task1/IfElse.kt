@@ -132,10 +132,9 @@ fun rookOrBishopThreatens(
  * Если такой треугольник не существует, вернуть -1.
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int {
-    val p = arrayOf(a, b, c)
-    val ma = p.maxOrNull()
-    val mi = p.minOrNull()
-    val sr = p.sum() - ma!! - mi!!
+    val ma = maxOf(a, b, c)
+    val mi = minOf(a, b, c)
+    val sr = (a + b + c) - ma - mi
     val maxSqr = ma.pow(2)
     val otherSides = mi.pow(2) + sr.pow(2)
     if (ma > mi + sr || ma < sr - mi)
@@ -157,8 +156,17 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
  * Если пересечения нет, вернуть -1.
  */
 fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
-    val AB = IntArray(b - a + 1) { it -> a + it }
-    val CD = IntArray(d - c + 1) { it -> c + it }
-    val common = AB.filter { it -> it in CD }
-    return common.size - 1
+    if (a <= c) {
+        if (c <= b)
+            return b - c
+        if (d <= b && c <= b)
+            return d - c
+    }
+    if (c <= a) {
+        if (b > d)
+            return d - a
+        if (b in c until d)
+            return b - a
+    }
+    return -1
 }
