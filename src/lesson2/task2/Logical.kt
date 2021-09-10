@@ -3,6 +3,7 @@
 package lesson2.task2
 
 import lesson1.task1.sqr
+import kotlin.math.max
 
 /**
  * Пример
@@ -18,7 +19,27 @@ fun pointInsideCircle(x: Double, y: Double, x0: Double, y0: Double, r: Double) =
  * Четырехзначное число назовем счастливым, если сумма первых двух ее цифр равна сумме двух последних.
  * Определить, счастливое ли заданное число, вернуть true, если это так.
  */
-fun isNumberHappy(number: Int): Boolean = TODO()
+fun isNumberHappy(number: Int): Boolean {
+    var n = number
+
+    var last = 0
+    for (x in 1..2) {
+        last += n % 10
+        n /= 10
+    }
+
+    while (n > 100) {
+        n /= 10
+    }
+
+    var first = 0
+    for (x in 1..2) {
+        first += n % 10
+        n /= 10
+    }
+
+    return first == last
+}
 
 /**
  * Простая (2 балла)
@@ -37,7 +58,7 @@ fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean = TODO()
  * Вернуть число дней в этом месяце этого года по григорианскому календарю.
  */
 fun daysInMonth(month: Int, year: Int): Int {
-    var isYearLeap: Boolean = false
+    var isYearLeap = false
     if (year % 4 == 0)
         if (year % 100 != 0)
             isYearLeap = true
@@ -75,4 +96,15 @@ fun circleInside(
  * кирпич 4 х 4 х 4 пройдёт через отверстие 4 х 4.
  * Вернуть true, если кирпич пройдёт
  */
-fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean = TODO()
+fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
+    val brick = arrayOf(a,b,c)
+    val maxSideSize = brick.maxOrNull()
+    val minSideSize = brick.minOrNull()
+    val srSideSize = brick.sum() - minSideSize!! - maxSideSize!!
+    return srSideSize <= r && minSideSize <= s || srSideSize <= s && minSideSize <= r
+}
+
+
+//fun main(): Unit {
+//    println(isNumberHappy(131002))
+//}
