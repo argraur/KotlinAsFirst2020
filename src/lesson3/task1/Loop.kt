@@ -275,26 +275,7 @@ fun cos(x: Double, eps: Double): Double = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun squareSequenceDigit(n: Int): Int {
-    var a = BigInteger.ZERO
-    var fullLen = 0
-    for (i in 1..n) {
-        val square = i.toDouble().pow(2).toInt()
-        val len = square.length()
-        fullLen += len
-        a = a.multiply(BigInteger.TEN.pow(len))
-        a = a.add(square.toBigInteger())
-        if (fullLen >= n) {
-            break
-        }
-    }
-    val numbers = ArrayList<Int>()
-    while (!a.equals(BigInteger.ZERO)) {
-        numbers.add(a.remainder(BigInteger.TEN).toInt())
-        a = a.divide(BigInteger.TEN)
-    }
-    return numbers.reversed()[n - 1]
-}
+fun squareSequenceDigit(n: Int): Int = generateBigSequence(n) { it.toDouble().pow(2).toInt() }.digitAt(n - 1)
 
 /**
  * Сложная (5 баллов)
@@ -305,27 +286,46 @@ fun squareSequenceDigit(n: Int): Int {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun fibSequenceDigit(n: Int): Int {
+fun fibSequenceDigit(n: Int): Int = generateBigSequence(n) { fib(it) }.digitAt(n - 1)
+
+/**
+ * generates big sequence using BigInteger and supports custom progressions
+ * moved this out of fibSequenceDigit and squareSequenceDigit because only difference is progression function
+ * n - 1..n size
+ * f - lambda expression - custom progression function
+ */
+fun generateBigSequence(n: Int, f: (Int) -> Int = { it }): BigInteger {
     var a = BigInteger.ZERO
     var fullLen = 0
     for (i in 1..n) {
-        val fib = fib(i)
-        val len = fib.length()
+        val number = f.invoke(i)
+        val len = number.length()
         fullLen += len
         a = a.multiply(BigInteger.TEN.pow(len))
-        a = a.add(fib.toBigInteger())
+        a = a.add(number.toBigInteger())
         if (fullLen >= n) {
             break
         }
     }
-    val numbers = ArrayList<Int>()
-    while (!a.equals(BigInteger.ZERO)) {
-        numbers.add(a.remainder(BigInteger.TEN).toInt())
-        a = a.divide(BigInteger.TEN)
-    }
-    return numbers.reversed()[n - 1]
+    return a
 }
 
+/**
+ * finds digit in a BigInteger at given position
+ */
+fun BigInteger.digitAt(n: Int): Int {
+    var tmp = this
+    val numbers = ArrayList<Int>()
+    while (tmp != BigInteger.ZERO) {
+        numbers.add(tmp.remainder(BigInteger.TEN).toInt())
+        tmp = tmp.divide(BigInteger.TEN)
+    }
+    return numbers.reversed()[n]
+}
+
+/**
+ * int number length
+ */
 fun Int.length() = when (this) {
     0 -> 1
     else -> log10(abs(toDouble())).toInt() + 1
