@@ -303,7 +303,9 @@ fun russian(n: Int): String {
         val triad = triads[x].reversed()
         var triadResult = ""
         if (x == 0 && triad != "000") {
-            if (triad.length == 1 || triad.length == 3 && triad.substring(0, 2) == "00") {
+            if (triad.length == 1) {
+                triadResult += firstDecade[triad[0].digitToIntOrNull()!! - 1] + " "
+            } else if (triad.length == 3 && triad.substring(0, 2) == "00") {
                 triadResult += firstDecade[triad[2].digitToIntOrNull()!! - 1] + " "
             } else if (triad.length == 2) {
                 if (triad[0] == '1') {
@@ -346,9 +348,12 @@ fun russian(n: Int): String {
                         triadResult += " две тысячи "
                     } else if (triad[1].digitToIntOrNull()!! in 5..9) {
                         firstDecade[triad[0].digitToIntOrNull()!! - 1] + " тысяч "
+                    } else if (triad[1] == '0') {
+                        triadResult += "тысяч"
                     } else {
                         firstDecade[triad[0].digitToIntOrNull()!! - 1] + " тысячи "
                     }
+
                 } else {
                     if (triad[1] == '0' && triad[2] == '0') {
                         triadResult += hundreds[triad[0].digitToIntOrNull()!! - 1] + " тысяч "
