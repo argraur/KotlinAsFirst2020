@@ -250,4 +250,127 @@ fun roman(n: Int): String = TODO()
  * Например, 375 = "триста семьдесят пять",
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
-fun russian(n: Int): String = TODO()
+fun russian(n: Int): String {
+    val firstDecade = arrayOf("один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять")
+    val secondDecade = arrayOf(
+        "десять",
+        "одиннадцать",
+        "двенадцать",
+        "тринадцать",
+        "четырнадцать",
+        "пятнадцать",
+        "шестнадцать",
+        "семнадцать",
+        "восемнадцать",
+        "девятнадцать",
+    )
+    val decades =
+        arrayOf(
+            "",
+            "",
+            "двадцать",
+            "тридцать",
+            "сорок",
+            "пятьдесят",
+            "шестьдесят",
+            "семьдесят",
+            "восемьдесят",
+            "девяносто"
+        )
+    val hundreds =
+        arrayOf("сто", "двести", "триста", "четыреста", "пятьсот", "шестьсот", "семьсот", "восемьсот", "девятьсот")
+    val thousand = "тысяча"
+    val number = n.toString().reversed()
+    val triads: MutableList<String>
+    println(number)
+    if (number.length < 4)
+        triads = mutableListOf(number)
+    else {
+        triads = mutableListOf()
+        for (x in 1..number.length / 3 + 1) {
+            if (number.length > x * 3) {
+                triads.add(number.substring(x * 3 - 3, x * 3))
+            } else {
+                triads.add(number.substring(x * 3 - 3))
+            }
+        }
+    }
+
+    triads.forEach { println("1 $it") }
+    var result = ""
+    for (x in 0 until triads.size) {
+        println(triads[x])
+        val triad = triads[x].reversed()
+        var triadResult = ""
+        if (x == 0 && triad != "000") {
+            if (triad.length == 1 || triad.length == 3 && triad.substring(0, 2) == "00") {
+                triadResult += firstDecade[triad[2].digitToIntOrNull()!! - 1] + " "
+            } else if (triad.length == 2) {
+                if (triad[0] == '1') {
+                    triadResult += secondDecade[triad[1].digitToIntOrNull()!!] + " "
+                } else {
+                    triadResult += decades[triad[0].digitToIntOrNull()!!] + " "
+                    triadResult += firstDecade[triad[1].digitToIntOrNull()!! - 1] + " "
+                }
+            } else {
+                triadResult = hundreds[triad[0].digitToIntOrNull()!! - 1] + " "
+                if (triad[1] == '1') {
+                    triadResult += secondDecade[triad[1].digitToIntOrNull()!!] + " "
+                } else {
+                    triadResult += decades[triad[1].digitToIntOrNull()!!] + " "
+                    triadResult += firstDecade[triad[2].digitToIntOrNull()!! - 1] + " "
+                }
+            }
+
+        }
+        if (x == 1) {
+            if (triad.length == 1) {
+                if (triad[0] == '1') {
+                    triadResult += thousand
+                }
+                triadResult += if (triad[0] == '2') {
+                    "две тысячи "
+                } else {
+                    if (triad[0].digitToIntOrNull()!! in 5..9) {
+                        firstDecade[triad[0].digitToIntOrNull()!! - 1] + " тысяч "
+                    } else {
+                        firstDecade[triad[0].digitToIntOrNull()!! - 1] + " тысячи "
+                    }
+                }
+            } else {
+                if (triad.length == 2) {
+                    triadResult += decades[triad[0].digitToIntOrNull()!!] + " "
+                    if (triad[0] == '1') {
+                        secondDecade[triad[1].digitToIntOrNull()!!] + " тысяч "
+                    } else if (triad[1] == '2') {
+                        triadResult += " две тысячи "
+                    } else if (triad[1].digitToIntOrNull()!! in 5..9) {
+                        firstDecade[triad[0].digitToIntOrNull()!! - 1] + " тысяч "
+                    } else {
+                        firstDecade[triad[0].digitToIntOrNull()!! - 1] + " тысячи "
+                    }
+                } else {
+                    if (triad[1] == '0' && triad[2] == '0') {
+                        triadResult += hundreds[triad[0].digitToIntOrNull()!! - 1] + " тысяч "
+                    } else {
+                        triadResult = hundreds[triad[0].digitToIntOrNull()!! - 1] + " "
+                        if (triad[1] == '1') {
+                            triadResult += secondDecade[triad[2].digitToIntOrNull()!!] + " тысяч "
+                        } else {
+                            triadResult += decades[triad[1].digitToIntOrNull()!!] + " "
+                            triadResult += firstDecade[triad[2].digitToIntOrNull()!! - 1] + " тысяч "
+                        }
+                    }
+                }
+//                triadResult = hundreds[triad[0].digitToIntOrNull()!! - 1] + " "
+//                triadResult += decades[triad[1].digitToIntOrNull()!!] + " "
+//                triadResult += firstDecade[triad[2].digitToIntOrNull()!! - 1] + " "
+            }
+        }
+        result = triadResult + result
+    }
+
+
+    return result.removeSuffix(" ").replace("  ", " ")
+
+}
