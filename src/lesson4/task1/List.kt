@@ -393,6 +393,6 @@ fun russian(n: Int): String {
         return "один"
     }
 
-    return result.replace("  ", " ").removeSuffix(" ")
+    return result.replace("  ", " ").removeSuffix(" ").removePrefix(" ")
 
 }
