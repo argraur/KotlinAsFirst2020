@@ -299,14 +299,17 @@ fun russian(n: Int): String {
     triads.forEach { println("1 $it") }
     var result = ""
     for (x in 0 until triads.size) {
-        println(triads[x])
         val triad = triads[x].reversed()
+        println(triad)
         var triadResult = ""
         if (x == 0 && triad != "000") {
             if (triad.length == 1) {
                 triadResult += firstDecade[triad[0].digitToIntOrNull()!! - 1] + " "
-            } else if (triad.length == 3 && triad.substring(0, 2) == "00") {
-                triadResult += firstDecade[triad[2].digitToIntOrNull()!! - 1] + " "
+            } else if (triad.length == 3 && triad.indexOf("00") > -1) {
+                if (triad.indexOf("00") == 0)
+                    triadResult += firstDecade[triad[2].digitToIntOrNull()!! - 1] + " "
+                else
+                    triadResult += hundreds[triad[0].digitToIntOrNull()!! - 1] + " "
             } else if (triad.length == 2) {
                 if (triad[0] == '1') {
                     triadResult += secondDecade[triad[1].digitToIntOrNull()!!] + " "
