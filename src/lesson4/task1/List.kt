@@ -317,7 +317,7 @@ fun russian(n: Int): String {
             } else {
                 triadResult = hundreds[triad[0].digitToIntOrNull()!! - 1] + " "
                 if (triad[1] == '1') {
-                    triadResult += secondDecade[triad[1].digitToIntOrNull()!!] + " "
+                    triadResult += secondDecade[triad[2].digitToIntOrNull()!!] + " "
                 } else {
                     triadResult += decades[triad[1].digitToIntOrNull()!!] + " "
                     triadResult += firstDecade[triad[2].digitToIntOrNull()!! - 1] + " "
