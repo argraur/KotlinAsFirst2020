@@ -251,7 +251,7 @@ fun roman(n: Int): String = TODO()
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
 fun russian(n: Int): String {
-    val firstDecade = arrayOf("один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять")
+    val firstDecade = arrayOf("", "один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять")
     val secondDecade = arrayOf(
         "десять",
         "одиннадцать",
@@ -305,10 +305,10 @@ fun russian(n: Int): String {
             var triadResult = ""
             if (x == 0 && triad != "000") {
                 if (triad.length == 1) {
-                    triadResult += firstDecade[triad[0].digitToIntOrNull()!! - 1] + " "
+                    triadResult += firstDecade[triad[0].digitToIntOrNull()!!] + " "
                 } else if (triad.length == 3 && triad.indexOf("00") > -1) {
                     if (triad.indexOf("00") == 0)
-                        triadResult += firstDecade[triad[2].digitToIntOrNull()!! - 1] + " "
+                        triadResult += firstDecade[triad[2].digitToIntOrNull()!!] + " "
                     else
                         triadResult += hundreds[triad[0].digitToIntOrNull()!!] + " "
                 } else if (triad.length == 2) {
@@ -316,7 +316,7 @@ fun russian(n: Int): String {
                         triadResult += secondDecade[triad[1].digitToIntOrNull()!!] + " "
                     } else {
                         triadResult += decades[triad[0].digitToIntOrNull()!!] + " "
-                        triadResult += firstDecade[triad[1].digitToIntOrNull()!! - 1] + " "
+                        triadResult += firstDecade[triad[1].digitToIntOrNull()!!] + " "
                     }
                 } else {
                     triadResult = hundreds[triad[0].digitToIntOrNull()!!] + " "
@@ -324,7 +324,7 @@ fun russian(n: Int): String {
                         triadResult += secondDecade[triad[2].digitToIntOrNull()!!] + " "
                     } else {
                         triadResult += decades[triad[1].digitToIntOrNull()!!] + " "
-                        triadResult += firstDecade[triad[2].digitToIntOrNull()!! - 1] + " "
+                        triadResult += firstDecade[triad[2].digitToIntOrNull()!!] + " "
                     }
                 }
 
@@ -351,11 +351,11 @@ fun russian(n: Int): String {
                         } else if (triad[1] == '2') {
                             triadResult += " две тысячи "
                         } else if (triad[1].digitToIntOrNull()!! in 5..9) {
-                            triadResult += firstDecade[triad[1].digitToIntOrNull()!! - 1] + " тысяч "
+                            triadResult += firstDecade[triad[1].digitToIntOrNull()!!] + " тысяч "
                         } else if (triad[1] == '0') {
                             triadResult += " тысяч "
                         } else {
-                            triadResult += firstDecade[triad[1].digitToIntOrNull()!! - 1] + " тысячи "
+                            triadResult += firstDecade[triad[1].digitToIntOrNull()!!] + " тысячи "
                         }
 
                     } else {
@@ -372,12 +372,12 @@ fun russian(n: Int): String {
                                 } else if (triad[2] == '2') {
                                     triadResult += "две тысячи "
                                 } else if (triad[2].digitToIntOrNull()!! in 5..9) {
-                                    triadResult += firstDecade[triad[2].digitToIntOrNull()!! - 1] + " тысяч "
+                                    triadResult += firstDecade[triad[2].digitToIntOrNull()!!] + " тысяч "
                                 } else {
                                     if (triad[2] == '0')
                                         triadResult += " тысяч "
                                     else
-                                        triadResult += firstDecade[triad[2].digitToIntOrNull()!! - 1] + " тысячи "
+                                        triadResult += firstDecade[triad[2].digitToIntOrNull()!!] + " тысячи "
                                 }
                             }
                         }
@@ -393,6 +393,6 @@ fun russian(n: Int): String {
         return "один"
     }
 
-    return result.removeSuffix(" ").replace("  ", " ")
+    return result.replace("  ", " ").removeSuffix(" ")
 
 }
