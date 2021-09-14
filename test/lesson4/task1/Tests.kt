@@ -248,5 +248,6 @@ class Tests {
         assertEquals("сорок пять тысяч восемьсот семьдесят семь", russian(45877))
         assertEquals("десять", russian(10))
         assertEquals("сто", russian(100))
+        assertEquals("семьсот двадцать шесть тысяч тринадцать", russian(726013))
     }
 }
