@@ -353,7 +353,7 @@ fun russian(n: Int): String {
                         } else if (triad[1].digitToIntOrNull()!! in 5..9) {
                             triadResult += firstDecade[triad[1].digitToIntOrNull()!! - 1] + " тысяч "
                         } else if (triad[1] == '0') {
-                            triadResult += "тысяч"
+                            triadResult += " тысяч "
                         } else {
                             triadResult += firstDecade[triad[1].digitToIntOrNull()!! - 1] + " тысячи "
                         }
