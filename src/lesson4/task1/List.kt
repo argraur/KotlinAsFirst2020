@@ -363,7 +363,15 @@ fun russian(n: Int): String {
                             triadResult += secondDecade[triad[2].digitToIntOrNull()!!] + " тысяч "
                         } else {
                             triadResult += decades[triad[1].digitToIntOrNull()!!] + " "
-                            triadResult += firstDecade[triad[2].digitToIntOrNull()!! - 1] + " тысяч "
+                            if (triad[2] == '1') {
+                                triadResult += "одна тысяча "
+                            } else if (triad[2] == '2') {
+                                triadResult += "две тысячи "
+                            } else if (triad[2].digitToIntOrNull()!! in 5..9) {
+                                triadResult += firstDecade[triad[2].digitToIntOrNull()!! - 1] + " тысяч "
+                            } else {
+                                triadResult += firstDecade[triad[2].digitToIntOrNull()!! - 1] + " тысячи "
+                            }
                         }
                     }
                 }
