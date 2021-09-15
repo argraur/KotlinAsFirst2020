@@ -332,7 +332,7 @@ fun russian(n: Int): String {
             if (x == 1) {
                 if (triad.length == 1) {
                     if (triad[0] == '1') {
-                        triadResult += thousand
+                        triadResult += "одна тысяча "
                     }
                     triadResult += if (triad[0] == '2') {
                         "две тысячи "
