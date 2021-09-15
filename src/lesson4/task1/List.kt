@@ -352,12 +352,15 @@ fun russian(n: Int): String {
                             triadResult += " две тысячи "
                         } else if (triad[1].digitToIntOrNull()!! in 5..9) {
                             triadResult += firstDecade[triad[1].digitToIntOrNull()!!] + " тысяч "
-                        } else if (triad[1] == '0') {
-                            triadResult += " тысяч "
                         } else {
-                            triadResult += firstDecade[triad[1].digitToIntOrNull()!!] + " тысячи "
-                        }
+                            triadResult += when (triad[1]) {
+                                '0' -> " тысяч "
+                                '1' -> "одна тысяча "
+                                '2' -> " две тысячи "
+                                else -> firstDecade[triad[1].digitToIntOrNull()!!] + " тысячи "
 
+                            }
+                        }
                     } else {
                         if (triad[1] == '0' && triad[2] == '0') {
                             triadResult += hundreds[triad[0].digitToIntOrNull()!!] + " тысяч "
