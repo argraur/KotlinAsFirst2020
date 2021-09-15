@@ -167,7 +167,7 @@ fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
             return 0
         }
     }
-    if (c < a) {
+    if (c <= a) {
         if (d >= b) {
             return b - a
         }
