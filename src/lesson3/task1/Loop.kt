@@ -140,6 +140,14 @@ fun lcm(m: Int, n: Int): Int = TODO()
  */
 fun isCoPrime(m: Int, n: Int): Boolean = TODO()
 
+fun pow(a: Int, b: Int): Int {
+    var r = a
+    for (x in 1 until b) {
+        r *= a
+    }
+    return r
+}
+
 /**
  * Средняя (3 балла)
  *
@@ -147,7 +155,22 @@ fun isCoPrime(m: Int, n: Int): Boolean = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun revert(n: Int): Int = TODO()
+fun revert(n: Int): Int {
+    if (n == 0)
+        return 0
+    var n = n
+    var a = mutableListOf<Int>()
+    while (n > 0) {
+        a.add(n % 10)
+        n /= 10
+    }
+    a.reverse()
+    var number = a[0]
+    for (x in 1 until a.size) {
+        number += a[x] * pow(10, x)
+    }
+    return number
+}
 
 /**
  * Средняя (3 балла)
@@ -192,6 +215,7 @@ fun sin(x: Double, eps: Double): Double = TODO()
  */
 fun cos(x: Double, eps: Double): Double = TODO()
 
+
 /**
  * Сложная (4 балла)
  *
@@ -212,4 +236,24 @@ fun squareSequenceDigit(n: Int): Int = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun fibSequenceDigit(n: Int): Int = TODO()
+fun fibSequenceDigit(n: Int): Int {
+    var a = mutableListOf(1, 1, 1)
+    var i = 2
+
+    for (x in 3..n) {
+        var number = revert(a[x - 1] + a[x - 2])
+        while (number > 0) {
+            i += 1
+            if (i == n) {
+                return number % 10
+            } else {
+                number /= 10
+            }
+        }
+        a.add(a[x - 1] + a[x - 2])
+    }
+    return when (n) {
+        1, 2 -> 1
+        else -> a[n]
+    }
+}
