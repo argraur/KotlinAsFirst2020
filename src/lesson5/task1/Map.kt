@@ -322,6 +322,13 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
             candidates.add(it.key)
             pWeight = it.value.first
             pPrice = it.value.second
+        } else if (it.value.second > totalPrice && it.value.first <= capacity) {
+            candidates.clear()
+            candidates.add(it.key)
+            totalWeight = it.value.first
+            totalPrice = it.value.second
+            pWeight = it.value.first
+            pPrice = it.value.second
         }
     }
     return candidates.toSet()
