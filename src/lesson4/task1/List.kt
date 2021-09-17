@@ -3,6 +3,7 @@
 package lesson4.task1
 
 import lesson1.task1.discriminant
+import lesson3.task1.pow
 import kotlin.math.sqrt
 
 // Урок 4: списки
@@ -231,7 +232,18 @@ fun decimal(digits: List<Int>, base: Int): Int = TODO()
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, str.toInt(base)), запрещается.
  */
-fun decimalFromString(str: String, base: Int): Int = TODO()
+fun decimalFromString(str: String, base: Int): Int {
+    var result: Int = 0
+    val str = str.reversed()
+    for (x in str.indices) {
+        if (str[x].digitToIntOrNull() == null) {
+            result += (str[x].code - 87) * pow(base, x)
+        } else {
+            result += str[x].digitToIntOrNull()!! * pow(base, x)
+        }
+    }
+    return result
+}
 
 /**
  * Сложная (5 баллов)

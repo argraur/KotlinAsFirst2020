@@ -141,6 +141,8 @@ fun lcm(m: Int, n: Int): Int = TODO()
 fun isCoPrime(m: Int, n: Int): Boolean = TODO()
 
 fun pow(a: Int, b: Int): Int {
+    if (b == 0)
+        return 1
     var r = a
     for (x in 1 until b) {
         r *= a
@@ -227,12 +229,14 @@ fun cos(x: Double, eps: Double): Double = TODO()
  */
 fun squareSequenceDigit(n: Int): Int {
     var i = 0
+    println("num: $n")
     var x = 1
     while (true) {
         var number: Int
         if (x * x % 10 == 0) {
             number = x * x
-            while (number % 10 == 0 && number > 9) {
+            while (number % 10 == 0) {
+                println("x $x i $i n $number P")
                 i += 1
                 if (i == n) {
                     return number % 10
@@ -246,6 +250,7 @@ fun squareSequenceDigit(n: Int): Int {
 
         while (number > 0) {
             i += 1
+            println("x $x i $i n $number")
             if (i == n) {
                 return number % 10
             } else {
