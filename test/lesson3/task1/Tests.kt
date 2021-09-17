@@ -231,6 +231,7 @@ class Tests {
     fun fibSequenceDigit() {
         assertEquals(2, fibSequenceDigit(9))
         assertEquals(7, fibSequenceDigit(45))
+        assertEquals(4, fibSequenceDigit(101))
         assertEquals(1, fibSequenceDigit(1))
         assertEquals(1, fibSequenceDigit(2))
         assertEquals(3, fibSequenceDigit(4))

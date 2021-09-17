@@ -228,38 +228,23 @@ fun cos(x: Double, eps: Double): Double = TODO()
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun squareSequenceDigit(n: Int): Int {
-    var i = 0
-    println("num: $n")
-    var x = 1
-    while (true) {
-        var number: Int
-        if (x * x % 10 == 0) {
-            number = x * x
-            while (number % 10 == 0) {
-                println("x $x i $i n $number P")
-                i += 1
-                if (i == n) {
-                    return number % 10
-                }
-                number /= 10
+    var nums = mutableListOf<Int>()
+    try {
+        for (x in 1..n) {
+            var num = x * x
+            var temp = mutableListOf<Int>()
+            while (num > 0) {
+                temp.add(num % 10)
+                num /= 10
             }
-            number = revert(number)
-        } else {
-            number = revert(x * x)
+            temp.reverse()
+            for (i in 0 until temp.size)
+                nums.add(temp[i])
         }
-
-        while (number > 0) {
-            i += 1
-            println("x $x i $i n $number")
-            if (i == n) {
-                return number % 10
-            } else {
-                number /= 10
-            }
-        }
-        x += 1
+        return nums[n - 1]
+    } catch (e: IndexOutOfBoundsException) {
+        return 1
     }
-    return 0
 }
 
 /**
@@ -273,32 +258,22 @@ fun squareSequenceDigit(n: Int): Int {
  */
 fun fibSequenceDigit(n: Int): Int {
     var a = mutableListOf(1, 1, 1)
-    var i = 2
-
-    for (x in 3..n) {
-        var number = a[x - 1] + a[x - 2]
-        if (number % 10 == 0) {
-            while (number % 10 == 0 && number > 9) {
-                i += 1
-                if (i == n) {
-                    return number % 10
-                }
-                number /= 10
+    var nums = mutableListOf(1, 1)
+    try {
+        for (x in 3..n) {
+            var num = a[x - 1] + a[x - 2]
+            var temp = mutableListOf<Int>()
+            while (num > 0) {
+                temp.add(num % 10)
+                num /= 10
             }
+            temp.reverse()
+            for (i in 0 until temp.size)
+                nums.add(temp[i])
+            a.add(a[x - 1] + a[x - 2])
         }
-        number = revert(number)
-        while (number > 0) {
-            i += 1
-            if (i == n) {
-                return number % 10
-            } else {
-                number /= 10
-            }
-        }
-        a.add(a[x - 1] + a[x - 2])
-    }
-    return when (n) {
-        1, 2 -> 1
-        else -> a[n]
+        return nums[n - 1]
+    } catch (e: IndexOutOfBoundsException) {
+        return 1
     }
 }
