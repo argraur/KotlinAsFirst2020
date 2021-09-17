@@ -315,7 +315,7 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
     var currPrice = 0
     var currRes = ""
     for (x in 0..t.size - 1) {
-        if (t[x].second.first < capacity && t[x].second.second > currPrice) {
+        if (t[x].second.first <= capacity && t[x].second.second > currPrice) {
             currRes = t[x].first
             currPrice = t[x].second.second
         }
