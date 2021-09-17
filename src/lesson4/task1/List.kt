@@ -4,7 +4,6 @@ package lesson4.task1
 
 import lesson1.task1.discriminant
 import lesson3.task1.length
-import java.lang.NumberFormatException
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -279,7 +278,32 @@ fun decimalFromString(str: String, base: Int): Int {
  * 90 = XC, 100 = C, 400 = CD, 500 = D, 900 = CM, 1000 = M.
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
-fun roman(n: Int): String = TODO()
+fun roman(n: Int): String {
+    var mN = n
+    var i = 1
+    var s = ""
+    while (mN > 0) {
+        val a = mN % 10.toDouble().pow(i).toInt()
+        s = when (a) {
+            4 -> "IV"
+            9 -> "IX"
+            40 -> "XL"
+            90 -> "XC"
+            400 -> "CD"
+            900 -> "CM"
+            in 1..3 -> "I".repeat(a)
+            in 5..8 -> "V${"I".repeat(a - 5)}"
+            in 10..30 -> "X".repeat(a / 10)
+            in 50..80 -> "L${"X".repeat((a - 50) / 10)}"
+            in 100..300 -> "C".repeat(a / 100)
+            in 500..800 -> "D${"C".repeat((a - 500) / 100)}"
+            else -> "M".repeat(a / 1000)
+        } + s
+        mN -= a
+        i++
+    }
+    return s
+}
 
 /**
  * Очень сложная (7 баллов)

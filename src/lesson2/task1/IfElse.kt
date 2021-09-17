@@ -139,32 +139,15 @@ fun rookOrBishopThreatens(
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int {
     val max = maxOf(a, b, c)
-    var e = 0.0
-    var f = 0.0
-    when (max) {
-        a -> {
-            e = b
-            f = c
-        }
-        b -> {
-            e = a
-            f = c
-        }
-        c -> {
-            e = a
-            f = b
-        }
-    }
-    if (max + e > f && e + f > max && max + f > e) {
-        if (max.pow(2) == e.pow(2) + f.pow(2)) {
-            return 1
-        } else if (max.pow(2) > e.pow(2) + f.pow(2)) {
-            return 2
-        } else if (max.pow(2) < e.pow(2) + f.pow(2)) {
-            return 0
-        }
-    } else return -1
-    return -1
+    val min = minOf(a, b, c)
+    val mid = a + b + c - max - min
+    return if (max + min > mid && min + mid > max && max + mid > min) {
+        if (max.pow(2) == min.pow(2) + mid.pow(2)) {
+            1
+        } else if (max.pow(2) > min.pow(2) + mid.pow(2)) {
+            2
+        } else 0
+    } else -1
 }
 
 /**
