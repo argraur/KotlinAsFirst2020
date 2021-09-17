@@ -100,13 +100,15 @@ fun fib(n: Int): Int =
         1 -> 1
         2 -> 1
         else -> {
-            val fib = IntArray(n + 1)
-            fib[1] = 1
-            fib[2] = 1
+            var a = 1
+            var b = 1
+            var c = 1
             for (i in 3..n) {
-                fib[i] = fib[i - 2] + fib[i - 1]
+                c = a + b
+                a = b
+                b = c
             }
-            fib[n]
+            c
         }
     }
 
