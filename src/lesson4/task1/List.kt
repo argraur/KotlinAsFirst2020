@@ -280,27 +280,27 @@ fun decimalFromString(str: String, base: Int): Int {
  */
 fun roman(n: Int): String {
     var mN = n
-    var i = 1
+    var t = 1
     var s = ""
     while (mN > 0) {
-        val a = mN % 10.toDouble().pow(i).toInt()
+        val a = mN % 10 * t
         s = when (a) {
-            4 -> "IV"
-            9 -> "IX"
-            40 -> "XL"
-            90 -> "XC"
-            400 -> "CD"
-            900 -> "CM"
             in 1..3 -> "I".repeat(a)
+            4 -> "IV"
             in 5..8 -> "V${"I".repeat(a - 5)}"
+            9 -> "IX"
             in 10..30 -> "X".repeat(a / 10)
+            40 -> "XL"
             in 50..80 -> "L${"X".repeat((a - 50) / 10)}"
+            90 -> "XC"
             in 100..300 -> "C".repeat(a / 100)
+            400 -> "CD"
             in 500..800 -> "D${"C".repeat((a - 500) / 100)}"
+            900 -> "CM"
             else -> "M".repeat(a / 1000)
         } + s
-        mN -= a
-        i++
+        t *= 10
+        mN /= 10
     }
     return s
 }

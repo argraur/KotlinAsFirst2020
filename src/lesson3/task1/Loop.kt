@@ -202,25 +202,7 @@ fun revert(n: Int): Int {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun isPalindrome(n: Int): Boolean {
-    var count = -1
-    var a = 0
-    var b = n
-    while (b != 0) {
-        count++
-        b /= 10
-    }
-    b = n
-    for (i in count downTo 0) {
-        if (i != 0) {
-            a += (b % 10) * 10.0.pow(i).toInt()
-        } else {
-            a += (b % 10)
-        }
-        b /= 10
-    }
-    return a == n
-}
+fun isPalindrome(n: Int): Boolean = revert(n) == n
 
 /**
  * Средняя (3 балла)
