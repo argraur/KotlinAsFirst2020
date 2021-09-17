@@ -2,9 +2,6 @@
 
 package lesson3.task1
 
-import java.lang.Math.pow
-import java.math.BigInteger
-import java.util.*
 import kotlin.math.abs
 import kotlin.math.log10
 import kotlin.math.pow
@@ -176,23 +173,14 @@ fun isCoPrime(m: Int, n: Int): Boolean = TODO()
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun revert(n: Int): Int {
-    var count = -1
-    var a = 0
-    var b = n
-    while (b != 0) {
-        count++
-        b /= 10
+    var res = 0
+    var mN = n
+    while (mN > 0) {
+        res *= 10
+        res += mN % 10
+        mN /= 10
     }
-    b = n
-    for (i in count downTo 0) {
-        if (i != 0) {
-            a += (b % 10) * 10.0.pow(i).toInt()
-        } else {
-            a += (b % 10)
-        }
-        b /= 10
-    }
-    return a
+    return res
 }
 
 /**
