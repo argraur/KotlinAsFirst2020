@@ -306,8 +306,9 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
     var totalWeight = 0
     var pWeight = 0
     var pPrice = 1
-    treasures.toSortedMap(compareBy { treasures[it]!!.first })
-    treasures.forEach {
+    var sorted = treasures.toList().sortedBy { (_, value) -> value.second }.reversed().toMap()
+    sorted = sorted.toList().sortedBy { (_, value) -> value.first }.toMap()
+    sorted.forEach {
         if (totalWeight + it.value.first <= capacity) {
             totalWeight += it.value.first
             totalPrice += it.value.second
