@@ -253,7 +253,73 @@ fun decimalFromString(str: String, base: Int): Int {
  * 90 = XC, 100 = C, 400 = CD, 500 = D, 900 = CM, 1000 = M.
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
-fun roman(n: Int): String = TODO()
+fun roman(n: Int): String {
+    var str = ""
+    var n = n
+    while (n / 1000 > 0) {
+        str += "M"
+        n -= 1000
+    }
+    while (n / 900 > 0) {
+        str += "CM"
+        n -= 900
+    }
+    while (n / 500 > 0) {
+        str += "D"
+        n -= 500
+    }
+    while (n / 400 > 0) {
+        str += "CD"
+        n -= 400
+    }
+    while (n / 100 > 0) {
+        str += "C"
+        n -= 100
+    }
+    while (n / 90 > 0) {
+        str += "XC"
+        n -= 90
+    }
+    while (n / 50 > 0) {
+        str += "L"
+        n -= 50
+    }
+    while (n / 40 > 0) {
+        str += "XL"
+        n -= 40
+    }
+    while (n / 10 > 0) {
+        str += "X"
+        n -= 10
+    }
+    while (n / 9 > 0) {
+        str += "IX"
+        n -= 9
+    }
+    while (n / 5 > 0) {
+        str += "V"
+        n -= 5
+    }
+    while (n / 4 > 0) {
+        str += "IV"
+        n -= 4
+    }
+    while (n / 1 > 0) {
+        str += "I"
+        n -= 1
+    }
+    return str
+//    for (x in 0 until n) {
+//        str += "I"
+//    }
+//    print(str.length)
+//    return str.replace("IIIII", "V")
+//        .replace("IIII", "IV")
+//        .replace("VV", "X")
+//        .replace("XXXXX", "L")
+//        .replace("XXXX", "XL")
+//        .replace("LL", "C")
+}
 
 /**
  * Очень сложная (7 баллов)
