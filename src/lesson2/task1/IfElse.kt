@@ -159,7 +159,11 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
  * Если пересечения нет, вернуть -1.
  */
 fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
-    val ab = (a..b).toList()
-    val cd = (c..d).toList()
-    return ab.filter { cd.binarySearch(it) >= 0 }.size - 1
+    return when {
+        (a == d) or (b == c) -> 0
+        (c in (a + 1) until b) -> if (b < d) b - c else d - c
+        (d in (a + 1) until b) && (c < a) -> d - a
+        (a > c && b < d) -> b - a
+        else -> -1
+    }
 }
