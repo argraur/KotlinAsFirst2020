@@ -374,12 +374,12 @@ fun russian(n: Int): String {
     res = hundred[hundreds] + " " + res
     if (thousands > 0) {
         var suffix = ""
-        if (thousands % 10 == 1) {
+        if (thousands % 100 in 11..19) {
+            suffix = "тысяч"
+        } else if (thousands % 10 == 1) {
             suffix = "тысяча"
         } else if (thousands % 10 in 2 until 5) {
             suffix = "тысячи"
-        } else if (thousands % 100 in 11..19) {
-            suffix = "тысяч"
         } else {
             suffix = "тысяч"
         }
