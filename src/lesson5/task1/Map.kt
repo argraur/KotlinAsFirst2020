@@ -280,14 +280,24 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
     for (a in 0..number) {
         val b = number - a
-        val aSearch = list.binarySearch(a)
-        var bSearch = list.binarySearch(b)
-        if (aSearch >= 0 && bSearch >= 0) {
-            if (aSearch == bSearch)
-                bSearch = list.binarySearch(b, aSearch + 1)
-            if (aSearch != bSearch && bSearch >= 0) {
-                return Pair(aSearch, bSearch)
+        var aIndex = -1
+        var bIndex = -1
+        list.forEachIndexed { index, it ->
+            if (a != b) {
+                when (it) {
+                    a -> if (aIndex == -1) aIndex = index
+                    b -> if (bIndex == -1) bIndex = index
+                }
+            } else if (a == it) {
+                if (aIndex == -1) {
+                    aIndex = index
+                } else {
+                    bIndex = index
+                }
             }
+        }
+        if (aIndex != -1 && bIndex != -1) {
+            return Pair(aIndex, bIndex)
         }
     }
     return Pair(-1, -1)
