@@ -325,12 +325,12 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
         for (x in t.indices) {
             val el = t[x]
             if (a.size > 0) {
-                if (cap >= el.second.first) {
+                if (cap >= el.second.first && !a.contains(el)) {
                     a.add(el)
                     cap -= el.second.first
                 } else {
                     for (y in a.indices) {
-                        if (a[y].second.second < el.second.second && a[y].second.first + cap >= el.second.first) {
+                        if (a[y].second.second < el.second.second && a[y].second.first + cap >= el.second.first && a[y].first != el.first) {
                             cap += (a[y].second.first - el.second.first)
                             a[y] = el
                         }
