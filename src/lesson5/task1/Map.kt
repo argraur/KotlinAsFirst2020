@@ -320,7 +320,8 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
             min = t[x].second.first
         }
     }
-    while (cap > min) {
+    println("$min $cap")
+    while (cap >= min && a.size < t.size) {
         for (x in t.indices) {
             val el = t[x]
             if (a.size > 0) {
