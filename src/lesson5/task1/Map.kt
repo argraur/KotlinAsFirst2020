@@ -314,28 +314,36 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
     val t = treasures.toList().sortedBy { (_, e) -> e.second }
     var cap = capacity
     val a = mutableListOf<Pair<String, Pair<Int, Int>>>()
+    var min = Int.MAX_VALUE
     for (x in t.indices) {
-        println(t[x])
-        val el = t[x]
-        if (a.size > 0) {
-            if (cap >= el.second.first) {
-                a.add(el)
-                cap -= el.second.first
-            } else {
-                for (y in a.indices) {
-                    if (a[y].second.second < el.second.second && a[y].second.first + cap >= el.second.first) {
-                        cap += (a[y].second.first - el.second.first)
-                        a[y] = el
+        if (t[x].second.first < min) {
+            min = t[x].second.first
+        }
+    }
+    while (cap > min) {
+        for (x in t.indices) {
+            val el = t[x]
+            if (a.size > 0) {
+                if (cap >= el.second.first) {
+                    a.add(el)
+                    cap -= el.second.first
+                } else {
+                    for (y in a.indices) {
+                        if (a[y].second.second < el.second.second && a[y].second.first + cap >= el.second.first) {
+                            cap += (a[y].second.first - el.second.first)
+                            a[y] = el
+                        }
                     }
                 }
-            }
 
-        } else {
-            if (cap >= el.second.first) {
-                a.add(el)
-                cap -= el.second.first
+            } else {
+                if (cap >= el.second.first) {
+                    a.add(el)
+                    cap -= el.second.first
+                }
             }
         }
+
     }
     var names = mutableListOf<String>()
 
