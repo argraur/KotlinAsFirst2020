@@ -318,7 +318,7 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
         println(t[x])
         val el = t[x]
         if (a.size > 0) {
-            if (cap > el.second.first) {
+            if (cap >= el.second.first) {
                 a.add(el)
                 cap -= el.second.first
             } else {
@@ -331,7 +331,7 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
             }
 
         } else {
-            if (cap > el.second.first) {
+            if (cap >= el.second.first) {
                 a.add(el)
                 cap -= el.second.first
             }
