@@ -323,7 +323,7 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
                 cap -= el.second.first
             } else {
                 for (y in a.indices) {
-                    if (a[y].second.second < el.second.second && a[y].second.first >= el.second.first) {
+                    if (a[y].second.second < el.second.second && a[y].second.first + cap >= el.second.first) {
                         cap += (a[y].second.first - el.second.first)
                         a[y] = el
                     }
