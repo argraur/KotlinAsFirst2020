@@ -2,8 +2,6 @@
 
 package lesson5.task1
 
-import kotlin.reflect.typeOf
-
 // Урок 5: ассоциативные массивы и множества
 // Максимальное количество баллов = 14
 // Рекомендуемое количество баллов = 9
@@ -311,45 +309,77 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
  *   ) -> emptySet()
  */
 fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
-    val t = treasures.toList().sortedBy { (_, e) -> e.second }
-    var cap = capacity
-    val a = mutableListOf<Pair<String, Pair<Int, Int>>>()
-    var min = Int.MAX_VALUE
-    for (x in t.indices) {
-        if (t[x].second.first < min) {
-            min = t[x].second.first
+    var treasuresList = mutableListOf<Pair<Int, Int>>()
+    var minCapacity = Int.MAX_VALUE
+    for ((k, v) in treasures) {
+        if (v.first > capacity) {
+            continue
         }
+        if (v.first < minCapacity)
+            minCapacity = v.first
+        treasuresList.add(v)
     }
-    println("$min $cap")
-    while (cap >= min && a.size < t.size) {
-        for (x in t.indices) {
-            val el = t[x]
-            if (a.size > 0) {
-                if (cap >= el.second.first && !a.contains(el)) {
-                    a.add(el)
-                    cap -= el.second.first
-                } else {
-                    for (y in a.indices) {
-                        if (a[y].second.second < el.second.second && a[y].second.first + cap >= el.second.first && a[y].first != el.first) {
-                            cap += (a[y].second.first - el.second.first)
-                            a[y] = el
-                        }
-                    }
-                }
+    treasuresList.sortWith(compareBy({ it.second }, { it.second }))
+    treasuresList.reverse()
 
-            } else {
-                if (cap >= el.second.first) {
-                    a.add(el)
-                    cap -= el.second.first
-                }
+    var weight = 0
+    var treasuresToPack = mutableListOf<Pair<Int, Int>>()
+    for (x in treasuresList.indices) {
+        if (weight + treasuresList[x].first > capacity) {
+            break
+        }
+        treasuresToPack.add(treasuresList[x])
+        weight += treasuresList[x].first
+    }
+    var treasuresNames = mutableListOf<String>()
+    var treasures = treasures.toList()
+    for (x in treasuresToPack.indices) {
+        for (y in treasures.indices) {
+            if (treasuresToPack[x] == treasures[y].second) {
+                treasuresNames.add(treasures[y].first)
             }
         }
-
     }
-    var names = mutableListOf<String>()
 
-    for (x in a.indices) {
-        names.add(a[x].first)
-    }
-    return names.toSet()
+//    val t = treasures.toList().sortedBy { (_, e) -> e.second }
+//    var cap = capacity
+//    val a = mutableListOf<Pair<String, Pair<Int, Int>>>()
+//    var min = Int.MAX_VALUE
+//    for (x in t.indices) {
+//        if (t[x].second.first < min) {
+//            min = t[x].second.first
+//        }
+//    }
+//    println("$min $cap")
+//    while (cap >= min && a.size < t.size) {
+//        for (x in t.indices) {
+//            val el = t[x]
+//            if (a.size > 0) {
+//                if (cap >= el.second.first && !a.contains(el)) {
+//                    a.add(el)
+//                    cap -= el.second.first
+//                } else {
+//                    for (y in a.indices) {
+//                        if (a[y].second.second < el.second.second && a[y].second.first + cap >= el.second.first && a[y].first != el.first) {
+//                            cap += (a[y].second.first - el.second.first)
+//                            a[y] = el
+//                        }
+//                    }
+//                }
+//
+//            } else {
+//                if (cap >= el.second.first) {
+//                    a.add(el)
+//                    cap -= el.second.first
+//                }
+//            }
+//        }
+//
+//    }
+//    var names = mutableListOf<String>()
+//
+//    for (x in a.indices) {
+//        names.add(a[x].first)
+//    }
+    return treasuresNames.toSet()
 }
