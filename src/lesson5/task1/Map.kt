@@ -328,6 +328,7 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
         if (weight + treasuresList[x].first > capacity) {
             break
         }
+        println("$weight + ${treasuresList[x].first}")
         treasuresToPack.add(treasuresList[x])
         weight += treasuresList[x].first
     }
@@ -337,6 +338,7 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
         for (y in treasures.indices) {
             if (treasuresToPack[x] == treasures[y].second) {
                 treasuresNames.add(treasures[y].first)
+                break
             }
         }
     }
