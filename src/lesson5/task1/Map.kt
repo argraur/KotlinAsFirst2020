@@ -309,96 +309,39 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
  *   ) -> emptySet()
  */
 fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
-    var treasuresList = mutableListOf<Pair<String, Pair<Int, Int>>>()
-    var minCapacity = Int.MAX_VALUE
+    val values = mutableListOf<Pair<Int, Int>>(Pair(0, 0))
+    val keys = mutableListOf<String>("")
     for ((k, v) in treasures) {
-        if (v.first > capacity) {
-            continue
-        }
-        if (v.first < minCapacity)
-            minCapacity = v.first
-        treasuresList.add(Pair(k, v))
+        values.add(v)
+        keys.add(k)
     }
-    val comparator = compareByDescending<Pair<String, Pair<Int, Int>>> { it.second.second }
-    val byWeightComparatop = comparator.thenBy { it.second.first }
-    val byNameComparator = byWeightComparatop.thenBy { it.first }
-    treasuresList.sortWith(byNameComparator)
-    println("-----------")
-    for (x in treasuresList.indices) {
-        println("i: $x; name: ${treasuresList[x].first}; weight: ${treasuresList[x].second.first}; price: ${treasuresList[x].second.second}")
-    }
-    var currentMaxPrice = 0
-    var currentWeight = 0
-    var currentTreasures = mutableListOf<Pair<String, Pair<Int, Int>>>()
+    val size = values.size
 
-    for (start in treasuresList.indices) {
-        var weight = 0
-        var treasuresToPack = mutableListOf<Pair<String, Pair<Int, Int>>>()
-        var price = 0
-        for (x in start until treasuresList.size) {
-            if (weight + treasuresList[x].second.first > capacity) {
-                continue
+    val backpack = mutableListOf<MutableList<Int>>()
+    println(capacity)
+    for (x in 0..size + 1) {
+        backpack.add(mutableListOf(0))
+        for (y in 1..capacity + 1) {
+            backpack[x].add(0)
+        }
+    }
+    for (i in 1..size) {
+        for (j in 1..capacity) {
+            if (j >= values[i - 1].first) {
+                backpack[i][j] = maxOf(backpack[i - 1][j], backpack[i - 1][j - values[i - 1].first] + values[i - 1].second)
+            } else {
+                backpack[i][j] = backpack[i - 1][j]
             }
-            println("$weight + ${treasuresList[x].second.first}")
-            treasuresToPack.add(treasuresList[x])
-            weight += treasuresList[x].second.first
-            price += treasuresList[x].second.second
-        }
-        if (currentMaxPrice < price) {
-            currentMaxPrice = price
-            currentWeight = weight
-            currentTreasures = treasuresToPack
-        } else if (currentMaxPrice == price && weight < currentWeight) {
-            currentWeight = weight
-            currentTreasures = treasuresToPack
-        } else {
-            break
         }
     }
-    var treasuresNames = mutableListOf<String>()
-    for (x in currentTreasures.indices) {
-        treasuresNames.add(currentTreasures[x].first)
+    var cap = capacity
+    val result = mutableSetOf<String>()
+    for (i in size downTo 1) {
+        var st = "i: $i"
+        if (backpack[i][cap] != backpack[i - 1][cap]) {
+            result.add(keys[i - 1])
+            cap -= values[i - 1].first
+        }
     }
-
-//    val t = treasures.toList().sortedBy { (_, e) -> e.second }
-//    var cap = capacity
-//    val a = mutableListOf<Pair<String, Pair<Int, Int>>>()
-//    var min = Int.MAX_VALUE
-//    for (x in t.indices) {
-//        if (t[x].second.first < min) {
-//            min = t[x].second.first
-//        }
-//    }
-//    println("$min $cap")
-//    while (cap >= min && a.size < t.size) {
-//        for (x in t.indices) {
-//            val el = t[x]
-//            if (a.size > 0) {
-//                if (cap >= el.second.first && !a.contains(el)) {
-//                    a.add(el)
-//                    cap -= el.second.first
-//                } else {
-//                    for (y in a.indices) {
-//                        if (a[y].second.second < el.second.second && a[y].second.first + cap >= el.second.first && a[y].first != el.first) {
-//                            cap += (a[y].second.first - el.second.first)
-//                            a[y] = el
-//                        }
-//                    }
-//                }
-//
-//            } else {
-//                if (cap >= el.second.first) {
-//                    a.add(el)
-//                    cap -= el.second.first
-//                }
-//            }
-//        }
-//
-//    }
-//    var names = mutableListOf<String>()
-//
-//    for (x in a.indices) {
-//        names.add(a[x].first)
-//    }
-    return treasuresNames.toSet()
+    return result
 }
