@@ -337,7 +337,7 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
             prev = Pair(it.value.first, it.value.second)
             prevKey = it.key
             candidates.add(it.key)
-        } else if (prev.second == it.value.second && it.value.first < prev.first) {
+        } else if ((prev.second == it.value.second && it.value.first < prev.first) || (it.value.second > prev.second && total.first - prev.first + it.value.first <= capacity)) {
             total = Pair(total.first - prev.first + it.value.first, total.second)
             prev = Pair(it.value.first, it.value.second)
             candidates.remove(prevKey)
