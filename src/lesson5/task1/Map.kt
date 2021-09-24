@@ -319,8 +319,8 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
             minCapacity = v.first
         treasuresList.add(Pair(k, v))
     }
-    val comparator = compareBy<Pair<String, Pair<Int, Int>>> { it.second.first }
-    val byWeightComparatop = comparator.thenByDescending { it.second.second }
+    val comparator = compareByDescending<Pair<String, Pair<Int, Int>>> { it.second.second }
+    val byWeightComparatop = comparator.thenBy { it.second.first }
     val byNameComparator = byWeightComparatop.thenBy { it.first }
     treasuresList.sortWith(byNameComparator)
     println("-----------")
@@ -331,6 +331,18 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
     var treasuresToPack = mutableListOf<Pair<String, Pair<Int, Int>>>()
     for (x in treasuresList.indices) {
         if (weight + treasuresList[x].second.first > capacity) {
+            continue
+        }
+        var sumOfNext = 0
+        var weightOfNext = 0
+        for (y in x + 1 until treasuresList.size) {
+            if (weightOfNext + treasuresList[y].second.first > treasuresList[x].second.first) {
+                break
+            }
+            sumOfNext += treasuresList[y].second.second
+            weightOfNext += treasuresList[y].second.first
+        }
+        if (sumOfNext > treasuresList[x].second.second) {
             continue
         }
         println("$weight + ${treasuresList[x].second.first}")
