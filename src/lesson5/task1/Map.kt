@@ -325,46 +325,41 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
  *   ) -> emptySet()
  */
 fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
-    val candidates: ArrayList<String> = ArrayList()
-    var total = Pair(0, 0)
-    var prev = Pair(0, 0)
-    var prevKey = ""
+    val aCandidates: ArrayList<String> = ArrayList()
+    val bCandidates: ArrayList<String> = ArrayList()
+    var aTotal = Pair(0, 0)
+    var aPrev = Pair(0, 0)
+    var bTotal = Pair(0, 0)
+    var bPrev = Pair(0, 0)
     val a = treasures.toList().sortedBy { (_, value) -> value.second }.reversed().toMap()
-    // val b = a.toList().sortedBy { (_, value) -> value.first }.toMap()
+    val b = a.toList().sortedBy { (_, value) -> value.first }.toMap()
     a.forEach {
-        if (total.first + it.value.first <= capacity) {
-            total = Pair(total.first + it.value.first, total.second + it.value.second)
-            prev = Pair(it.value.first, it.value.second)
-            prevKey = it.key
-            candidates.add(it.key)
-        } else if ((prev.second == it.value.second && it.value.first < prev.first) || (it.value.second > prev.second && total.first - prev.first + it.value.first <= capacity)) {
-            total = Pair(total.first - prev.first + it.value.first, total.second)
-            prev = Pair(it.value.first, it.value.second)
-            candidates.remove(prevKey)
-            candidates.add(it.key)
+        if (aTotal.first + it.value.first <= capacity) {
+            aTotal = Pair(aTotal.first + it.value.first, aTotal.second + it.value.second)
+            aPrev = Pair(it.value.first, it.value.second)
+            aCandidates.add(it.key)
+        } else if ((aPrev.second == it.value.second && it.value.first < aPrev.first) || (it.value.second > aPrev.second && aTotal.first - aPrev.first + it.value.first <= capacity)) {
+            aTotal = Pair(aTotal.first - aPrev.first + it.value.first, aTotal.second)
+            aPrev = Pair(it.value.first, it.value.second)
+            aCandidates.removeLast()
+            aCandidates.add(it.key)
         }
     }
-    /*b.forEach {
-        if (total.first + it.value.first <= capacity) {
-            total = Pair(total.first + it.value.first, total.second + it.value.second)
-            prev = Pair(it.value.first, it.value.second)
-            prevKey = it.key
-            candidates.add(it.key)
-        } else if (totalPrice - pPrice + it.value.second > totalPrice && totalWeight - pWeight + it.value.first <= capacity) {
-            totalWeight = totalWeight - pWeight + it.value.first
-            totalPrice = totalPrice - pPrice + it.value.second
-            candidates.removeLast()
-            candidates.add(it.key)
-            pWeight = it.value.first
-            pPrice = it.value.second
-        } else if (it.value.second > totalPrice && it.value.first <= capacity) {
-            candidates.clear()
-            candidates.add(it.key)
-            totalWeight = it.value.first
-            totalPrice = it.value.second
-            pWeight = it.value.first
-            pPrice = it.value.second
+    b.forEach {
+        if (bTotal.first + it.value.first <= capacity) {
+            bTotal = Pair(bTotal.first + it.value.first, bTotal.second + it.value.second)
+            bPrev = Pair(it.value.first, it.value.second)
+            bCandidates.add(it.key)
+        } else if (it.value.second > bPrev.second && bTotal.first - bPrev.first + it.value.first <= capacity) {
+            bTotal = Pair(bTotal.first - bPrev.first + it.value.first, bTotal.second)
+            bPrev = Pair(it.value.first, it.value.second)
+            bCandidates.removeLast()
+            bCandidates.add(it.key)
         }
-    }*/
-    return candidates.toSet()
+    }
+    return if (aTotal.second > bTotal.second) {
+        aCandidates.toSet()
+    } else {
+        bCandidates.toSet()
+    }
 }
