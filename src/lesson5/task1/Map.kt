@@ -319,11 +319,14 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
             minCapacity = v.first
         treasuresList.add(Pair(k, v))
     }
-    val comparator = compareBy<Pair<String, Pair<Int, Int>>>({ it.second.second }, { it.second.first })
-    val byNameComparator = comparator.thenByDescending { it.first }
+    val comparator = compareByDescending<Pair<String, Pair<Int, Int>>> { it.second.second }
+    val byWeightComparatop = comparator.thenBy { it.second.first }
+    val byNameComparator = byWeightComparatop.thenBy { it.first }
     treasuresList.sortWith(byNameComparator)
-    treasuresList.reverse()
-
+    println("-----------")
+    for (x in treasuresList.indices) {
+        println("i: $x; name: ${treasuresList[x].first}; weight: ${treasuresList[x].second.first}; price: ${treasuresList[x].second.second}")
+    }
     var weight = 0
     var treasuresToPack = mutableListOf<Pair<String, Pair<Int, Int>>>()
     for (x in treasuresList.indices) {
