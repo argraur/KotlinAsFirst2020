@@ -319,8 +319,8 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
             minCapacity = v.first
         treasuresList.add(Pair(k, v))
     }
-    val comparator = compareByDescending<Pair<String, Pair<Int, Int>>> { it.second.second }
-    val byWeightComparatop = comparator.thenBy { it.second.first }
+    val comparator = compareBy<Pair<String, Pair<Int, Int>>> { it.second.first }
+    val byWeightComparatop = comparator.thenByDescending { it.second.second }
     val byNameComparator = byWeightComparatop.thenBy { it.first }
     treasuresList.sortWith(byNameComparator)
     println("-----------")
