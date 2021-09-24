@@ -331,7 +331,7 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
     var treasuresToPack = mutableListOf<Pair<String, Pair<Int, Int>>>()
     for (x in treasuresList.indices) {
         if (weight + treasuresList[x].second.first > capacity) {
-            break
+            continue
         }
         println("$weight + ${treasuresList[x].second.first}")
         treasuresToPack.add(treasuresList[x])
