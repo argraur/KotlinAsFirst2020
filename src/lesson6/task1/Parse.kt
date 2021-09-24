@@ -175,7 +175,66 @@ fun mostExpensive(description: String): String = TODO()
  *
  * Вернуть -1, если roman не является корректным римским числом
  */
-fun fromRoman(roman: String): Int = TODO()
+fun fromRoman(roman: String): Int {
+    var string = roman
+    var result = 0
+    while (string.indexOf("CM") > -1) {
+        result += 900
+        string = string.replaceFirst("CM", "")
+    }
+    while (string.indexOf("M") > -1) {
+        result += 1000
+        string = string.replaceFirst("M", "")
+    }
+    while (string.indexOf("CD") > -1) {
+        result += 400
+        string = string.replaceFirst("CD", "")
+    }
+    while (string.indexOf("D") > -1) {
+        result += 500
+        string = string.replaceFirst("D", "")
+    }
+    while (string.indexOf("XC") > -1) {
+        result += 90
+        string = string.replaceFirst("XC", "")
+    }
+    while (string.indexOf("C") > -1) {
+        result += 100
+        string = string.replaceFirst("C", "")
+    }
+    while (string.indexOf("XL") > -1) {
+        result += 40
+        string = string.replaceFirst("XL", "")
+    }
+    while (string.indexOf("L") > -1) {
+        result += 50
+        string = string.replaceFirst("L", "")
+    }
+    while (string.indexOf("IX") > -1) {
+        result += 9
+        string =  string.replaceFirst("IX", "")
+    }
+    while (string.indexOf("X") > -1) {
+        result += 10
+        string = string.replaceFirst("X", "")
+    }
+    while (string.indexOf("IV") > -1) {
+        result += 4
+        string = string.replaceFirst("IV", "")
+    }
+    while (string.indexOf("V") > -1) {
+        result += 5
+        string = string.replaceFirst("V", "")
+    }
+    while (string.indexOf("I") > -1) {
+        result += 1
+        string = string.replaceFirst("I", "")
+    }
+    if (string != "") {
+        return -1
+    }
+    return result
+}
 
 /**
  * Очень сложная (7 баллов)

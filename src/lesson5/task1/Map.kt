@@ -309,14 +309,13 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
  *   ) -> emptySet()
  */
 fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
-    val values = mutableListOf<Pair<Int, Int>>(Pair(0, 0))
-    val keys = mutableListOf<String>("")
+    val values = mutableListOf(Pair(0, 0))
+    val keys = mutableListOf("")
     for ((k, v) in treasures) {
         values.add(v)
         keys.add(k)
     }
     val size = values.size
-
     val backpack = mutableListOf<MutableList<Int>>()
     println(capacity)
     for (x in 0..size + 1) {
@@ -328,7 +327,8 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
     for (i in 1..size) {
         for (j in 1..capacity) {
             if (j >= values[i - 1].first) {
-                backpack[i][j] = maxOf(backpack[i - 1][j], backpack[i - 1][j - values[i - 1].first] + values[i - 1].second)
+                backpack[i][j] =
+                    maxOf(backpack[i - 1][j], backpack[i - 1][j - values[i - 1].first] + values[i - 1].second)
             } else {
                 backpack[i][j] = backpack[i - 1][j]
             }
@@ -337,7 +337,6 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
     var cap = capacity
     val result = mutableSetOf<String>()
     for (i in size downTo 1) {
-        var st = "i: $i"
         if (backpack[i][cap] != backpack[i - 1][cap]) {
             result.add(keys[i - 1])
             cap -= values[i - 1].first
