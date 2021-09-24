@@ -178,6 +178,8 @@ fun mostExpensive(description: String): String = TODO()
 fun fromRoman(roman: String): Int {
     var string = roman
     var result = 0
+    if (roman == "")
+        return -1
     while (string.indexOf("CM") > -1) {
         result += 900
         string = string.replaceFirst("CM", "")
