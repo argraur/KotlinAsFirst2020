@@ -351,6 +351,8 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
         } else if (currentMaxPrice == price && weight < currentWeight) {
             currentWeight = weight
             currentTreasures = treasuresToPack
+        } else {
+            break
         }
     }
     var treasuresNames = mutableListOf<String>()
