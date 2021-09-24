@@ -324,4 +324,47 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
  *     450
  *   ) -> emptySet()
  */
-fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> = TODO()
+fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
+    val candidates: ArrayList<String> = ArrayList()
+    var total = Pair(0, 0)
+    var prev = Pair(0, 0)
+    var prevKey = ""
+    val a = treasures.toList().sortedBy { (_, value) -> value.second }.reversed().toMap()
+    // val b = a.toList().sortedBy { (_, value) -> value.first }.toMap()
+    a.forEach {
+        if (total.first + it.value.first <= capacity) {
+            total = Pair(total.first + it.value.first, total.second + it.value.second)
+            prev = Pair(it.value.first, it.value.second)
+            prevKey = it.key
+            candidates.add(it.key)
+        } else if (prev.second == it.value.second && it.value.first < prev.first) {
+            total = Pair(total.first - prev.first + it.value.first, total.second)
+            prev = Pair(it.value.first, it.value.second)
+            candidates.remove(prevKey)
+            candidates.add(it.key)
+        }
+    }
+    /*b.forEach {
+        if (total.first + it.value.first <= capacity) {
+            total = Pair(total.first + it.value.first, total.second + it.value.second)
+            prev = Pair(it.value.first, it.value.second)
+            prevKey = it.key
+            candidates.add(it.key)
+        } else if (totalPrice - pPrice + it.value.second > totalPrice && totalWeight - pWeight + it.value.first <= capacity) {
+            totalWeight = totalWeight - pWeight + it.value.first
+            totalPrice = totalPrice - pPrice + it.value.second
+            candidates.removeLast()
+            candidates.add(it.key)
+            pWeight = it.value.first
+            pPrice = it.value.second
+        } else if (it.value.second > totalPrice && it.value.first <= capacity) {
+            candidates.clear()
+            candidates.add(it.key)
+            totalWeight = it.value.first
+            totalPrice = it.value.second
+            pWeight = it.value.first
+            pPrice = it.value.second
+        }
+    }*/
+    return candidates.toSet()
+}
