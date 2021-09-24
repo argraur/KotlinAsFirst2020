@@ -335,18 +335,20 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
         }
         var sumOfNext = 0
         var weightOfNext = 0
-        for (y in x + 1 until treasuresList.size) {
-            if (treasuresList[y].second.first == treasuresList[x].second.first) {
+        if (treasuresList[x].second.first == capacity) {
+            for (y in x + 1 until treasuresList.size) {
+                if (treasuresList[y].second.first == treasuresList[x].second.first) {
+                    continue
+                }
+                if (weightOfNext + treasuresList[y].second.first > treasuresList[x].second.first) {
+                    break
+                }
+                sumOfNext += treasuresList[y].second.second
+                weightOfNext += treasuresList[y].second.first
+            }
+            if (sumOfNext > treasuresList[x].second.second) {
                 continue
             }
-            if (weightOfNext + treasuresList[y].second.first > treasuresList[x].second.first) {
-                break
-            }
-            sumOfNext += treasuresList[y].second.second
-            weightOfNext += treasuresList[y].second.first
-        }
-        if (sumOfNext > treasuresList[x].second.second) {
-            continue
         }
         println("$weight + ${treasuresList[x].second.first}")
         treasuresToPack.add(treasuresList[x])
