@@ -348,8 +348,7 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
             currentMaxPrice = price
             currentWeight = weight
             currentTreasures = treasuresToPack
-        }
-        else if (currentMaxPrice == price && weight < currentWeight) {
+        } else if (currentMaxPrice == price && weight < currentWeight) {
             currentWeight = weight
             currentTreasures = treasuresToPack
         }
