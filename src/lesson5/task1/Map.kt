@@ -309,7 +309,7 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
  *   ) -> emptySet()
  */
 fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
-    var treasuresList = mutableListOf<Pair<Int, Int>>()
+    var treasuresList = mutableListOf<Pair<String, Pair<Int, Int>>>()
     var minCapacity = Int.MAX_VALUE
     for ((k, v) in treasures) {
         if (v.first > capacity) {
@@ -317,30 +317,26 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
         }
         if (v.first < minCapacity)
             minCapacity = v.first
-        treasuresList.add(v)
+        treasuresList.add(Pair(k, v))
     }
-    treasuresList.sortWith(compareBy({ it.second }, { it.second }))
+    val comparator = compareBy<Pair<String, Pair<Int, Int>>>({ it.second.second }, { it.second.first })
+    val byNameComparator = comparator.thenByDescending { it.first }
+    treasuresList.sortWith(byNameComparator)
     treasuresList.reverse()
 
     var weight = 0
-    var treasuresToPack = mutableListOf<Pair<Int, Int>>()
+    var treasuresToPack = mutableListOf<Pair<String, Pair<Int, Int>>>()
     for (x in treasuresList.indices) {
-        if (weight + treasuresList[x].first > capacity) {
+        if (weight + treasuresList[x].second.first > capacity) {
             break
         }
-        println("$weight + ${treasuresList[x].first}")
+        println("$weight + ${treasuresList[x].second.first}")
         treasuresToPack.add(treasuresList[x])
-        weight += treasuresList[x].first
+        weight += treasuresList[x].second.first
     }
     var treasuresNames = mutableListOf<String>()
-    var treasures = treasures.toList()
     for (x in treasuresToPack.indices) {
-        for (y in treasures.indices) {
-            if (treasuresToPack[x] == treasures[y].second) {
-                treasuresNames.add(treasures[y].first)
-                break
-            }
-        }
+        treasuresNames.add(treasuresToPack[x].first)
     }
 
 //    val t = treasures.toList().sortedBy { (_, e) -> e.second }
