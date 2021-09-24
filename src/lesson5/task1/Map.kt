@@ -327,36 +327,36 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
     for (x in treasuresList.indices) {
         println("i: $x; name: ${treasuresList[x].first}; weight: ${treasuresList[x].second.first}; price: ${treasuresList[x].second.second}")
     }
-    var weight = 0
-    var treasuresToPack = mutableListOf<Pair<String, Pair<Int, Int>>>()
-    for (x in treasuresList.indices) {
-        if (weight + treasuresList[x].second.first > capacity) {
-            continue
-        }
-        var sumOfNext = 0
-        var weightOfNext = 0
-        if (treasuresList[x].second.first == capacity) {
-            for (y in x + 1 until treasuresList.size) {
-                if (treasuresList[y].second.first == treasuresList[x].second.first) {
-                    continue
-                }
-                if (weightOfNext + treasuresList[y].second.first > treasuresList[x].second.first) {
-                    break
-                }
-                sumOfNext += treasuresList[y].second.second
-                weightOfNext += treasuresList[y].second.first
-            }
-            if (sumOfNext > treasuresList[x].second.second) {
+    var currentMaxPrice = 0
+    var currentWeight = 0
+    var currentTreasures = mutableListOf<Pair<String, Pair<Int, Int>>>()
+
+    for (start in treasuresList.indices) {
+        var weight = 0
+        var treasuresToPack = mutableListOf<Pair<String, Pair<Int, Int>>>()
+        var price = 0
+        for (x in start until treasuresList.size) {
+            if (weight + treasuresList[x].second.first > capacity) {
                 continue
             }
+            println("$weight + ${treasuresList[x].second.first}")
+            treasuresToPack.add(treasuresList[x])
+            weight += treasuresList[x].second.first
+            price += treasuresList[x].second.second
         }
-        println("$weight + ${treasuresList[x].second.first}")
-        treasuresToPack.add(treasuresList[x])
-        weight += treasuresList[x].second.first
+        if (currentMaxPrice < price) {
+            currentMaxPrice = price
+            currentWeight = weight
+            currentTreasures = treasuresToPack
+        }
+        else if (currentMaxPrice == price && weight < currentWeight) {
+            currentWeight = weight
+            currentTreasures = treasuresToPack
+        }
     }
     var treasuresNames = mutableListOf<String>()
-    for (x in treasuresToPack.indices) {
-        treasuresNames.add(treasuresToPack[x].first)
+    for (x in currentTreasures.indices) {
+        treasuresNames.add(currentTreasures[x].first)
     }
 
 //    val t = treasures.toList().sortedBy { (_, e) -> e.second }
