@@ -438,7 +438,11 @@ Basic, Ruby, Swift.
                   0
              """
         )
-
+        test(
+            10,
+            2,
+            " 10 | 2\n-10   5\n---\n  0"
+        )
         File("temp.txt").delete()
     }
 }
