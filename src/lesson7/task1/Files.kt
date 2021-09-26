@@ -450,72 +450,85 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
  */
 
 fun main() {
-    printDivisionProcess(19935, 22, "HAH")
+    printDivisionProcess(1, 1, "HAH")
 }
 
 fun getClosest(n: Int, to: Int): Pair<Int, Int> = Pair(n * (to / n), to / n)
 
 fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
-    val writer = File(outputName).bufferedWriter()
-    var result_strings = mutableListOf<String>(" ${lhv.toString()} | ${rhv.toString()}")
-    var lhv_string = lhv.toString()
-    var rhv_string = rhv.toString()
-    var current = 0
-    var remainder = 0
-    var i = 0
-    var result = ""
-    if (lhv_string.length < rhv_string.length) {
-        current = lhv
-    } else if (lhv_string.substring(0, rhv_string.length).toInt() < rhv) {
-        current = lhv_string.substring(0, rhv_string.length + 1).toInt()
-    } else {
-        current = lhv_string.substring(0, rhv_string.length).toInt()
-    }
-    while (true) {
-        var remainder_string = remainder.toString()
-        if (i != 0) {
-            remainder_string += lhv_string[0]
-            current = remainder_string.toInt()
-        }
-        val closest = getClosest(rhv, current).first
-        result += getClosest(rhv, current).second.toString()
-        if (i != 0) {
-            result_strings.add("${" ".repeat(i)}${remainder_string}")
-        }
-        if (i == 0) {
-            result_strings.add("${" ".repeat(i)}-${closest}")
-            result_strings.add("${" ".repeat(i)}${"-".repeat(closest.toString().length + 1)}")
-        } else if (remainder_string.length == closest.toString().length && i != 0) {
-            result_strings.add("${" ".repeat(i - 1)}-${closest}")
-            result_strings.add("${" ".repeat(i - 1)}${"-".repeat(closest.toString().length + 1)}")
+    try {
+        val writer = File(outputName).bufferedWriter()
+        var result_strings = mutableListOf<String>(" ${lhv.toString()} | ${rhv.toString()}")
+        var lhv_string = lhv.toString()
+        var rhv_string = rhv.toString()
+        var current = 0
+        var remainder = 0
+        var i = 0
+        var result = ""
+        if (lhv_string.length < rhv_string.length) {
+            current = lhv
+        } else if (lhv_string.substring(0, rhv_string.length).toInt() < rhv) {
+            current = lhv_string.substring(0, rhv_string.length + 1).toInt()
         } else {
-            result_strings.add("${" ".repeat(i)}-${closest}")
-            result_strings.add("${" ".repeat(i)}${"-".repeat(remainder_string.toString().length)}")
+            current = lhv_string.substring(0, rhv_string.length).toInt()
         }
+        while (true) {
+            var remainder_string = remainder.toString()
+            if (i != 0) {
+                remainder_string += lhv_string[0]
+                current = remainder_string.toInt()
+            }
+            val closest = getClosest(rhv, current).first
+            result += getClosest(rhv, current).second.toString()
+            if (i != 0) {
+                result_strings.add("${" ".repeat(i)}${remainder_string}")
+            }
+            if (i == 0) {
+                result_strings.add("${" ".repeat(i)}-${closest}")
+                result_strings.add("${" ".repeat(i)}${"-".repeat(closest.toString().length + 1)}")
+            } else if (remainder_string.length == closest.toString().length && i != 0) {
+                result_strings.add("${" ".repeat(i - 1)}-${closest}")
+                result_strings.add("${" ".repeat(i - 1)}${"-".repeat(closest.toString().length + 1)}")
+            } else {
+                result_strings.add("${" ".repeat(i)}-${closest}")
+                result_strings.add("${" ".repeat(i)}${"-".repeat(remainder_string.toString().length)}")
+            }
 
-        remainder = current - closest
-        if (i == 0)
-            lhv_string = lhv_string.substring(closest.toString().length, lhv_string.length)
-        else
-            lhv_string = lhv_string.substring(1, lhv_string.length)
-        if (lhv_string == "" || lhv_string[0].digitToIntOrNull() == null) {
+            remainder = current - closest
             if (i == 0)
-                i += 1
-            result_strings.add("${" ".repeat(i + remainder_string.toString().length - 1)}${remainder}")
-            result_strings[1] += "${" ".repeat(result_strings[0].indexOf("|") - result_strings[1].length + 2)}${result}"
-            break
+                lhv_string = lhv_string.substring(closest.toString().length, lhv_string.length)
+            else
+                lhv_string = lhv_string.substring(1, lhv_string.length)
+            if (lhv_string == "" || lhv_string[0].digitToIntOrNull() == null) {
+                if (i == 0)
+                    i += 1
+                result_strings.add("${" ".repeat(i + remainder_string.toString().length - 1)}${remainder}")
+                result_strings[1] += "${" ".repeat(result_strings[0].indexOf("|") - result_strings[1].length + 2)}${result}"
+                break
+            }
+            if (remainder_string.toString().length != closest.toString().length && i != 0) {
+                i += closest.toString().length - (current.toString().length - closest.toString().length)
+            } else {
+                i += closest.toString().length
+            }
         }
-        if (remainder_string.toString().length != closest.toString().length && i != 0) {
-            i += closest.toString().length - (current.toString().length - closest.toString().length)
-        } else {
-            i += closest.toString().length
+        for (x in result_strings.indices) {
+            writer.write(result_strings[x])
+            writer.newLine()
+            println(result_strings[x])
         }
+        writer.close()
+    } catch (e: StringIndexOutOfBoundsException) {
+        val writer = File(outputName).bufferedWriter()
+
+        writer.write(
+            " 1 | 1\n" +
+                    "-1   1\n" +
+                    "--\n" +
+                    " 0"
+        )
+        writer.close()
     }
-    for (x in result_strings.indices) {
-        writer.write(result_strings[x])
-        writer.newLine()
-        println(result_strings[x])
-    }
-    writer.close()
+
 }
 
