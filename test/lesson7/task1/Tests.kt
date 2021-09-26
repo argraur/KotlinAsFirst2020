@@ -443,6 +443,11 @@ Basic, Ruby, Swift.
             2,
             " 10 | 2\n-10   5\n---\n  0"
         )
+        test(
+            8193,
+            2,
+            " 8193 | 2\n-8      4096\n--\n 01\n -0\n --\n  19\n -18\n ---\n   13\n  -12\n  ---\n    1"
+        )
         File("temp.txt").delete()
     }
 }
