@@ -268,15 +268,15 @@ Suspendisse ~~et elit in enim tempus iaculis~~.
  *
  * Соответствующий выходной файл:
 <html>
-    <body>
-        <p>
-            Lorem ipsum <i>dolor sit amet</i>, consectetur <b>adipiscing</b> elit.
-            Vestibulum lobortis. <s>Est vehicula rutrum <i>suscipit</i></s>, ipsum <s>lib</s>ero <i>placerat <b>tortor</b></i>.
-        </p>
-        <p>
-            Suspendisse <s>et elit in enim tempus iaculis</s>.
-        </p>
-    </body>
+<body>
+<p>
+Lorem ipsum <i>dolor sit amet</i>, consectetur <b>adipiscing</b> elit.
+Vestibulum lobortis. <s>Est vehicula rutrum <i>suscipit</i></s>, ipsum <s>lib</s>ero <i>placerat <b>tortor</b></i>.
+</p>
+<p>
+Suspendisse <s>et elit in enim tempus iaculis</s>.
+</p>
+</body>
 </html>
  *
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
@@ -319,65 +319,65 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
  *
  * Пример входного файла:
 ///////////////////////////////начало файла/////////////////////////////////////////////////////////////////////////////
-* Утка по-пекински
-    * Утка
-    * Соус
-* Салат Оливье
-    1. Мясо
-        * Или колбаса
-    2. Майонез
-    3. Картофель
-    4. Что-то там ещё
-* Помидоры
-* Фрукты
-    1. Бананы
-    23. Яблоки
-        1. Красные
-        2. Зелёные
+ * Утка по-пекински
+ * Утка
+ * Соус
+ * Салат Оливье
+1. Мясо
+ * Или колбаса
+2. Майонез
+3. Картофель
+4. Что-то там ещё
+ * Помидоры
+ * Фрукты
+1. Бананы
+23. Яблоки
+1. Красные
+2. Зелёные
 ///////////////////////////////конец файла//////////////////////////////////////////////////////////////////////////////
  *
  *
  * Соответствующий выходной файл:
 ///////////////////////////////начало файла/////////////////////////////////////////////////////////////////////////////
 <html>
-  <body>
-    <p>
-      <ul>
-        <li>
-          Утка по-пекински
-          <ul>
-            <li>Утка</li>
-            <li>Соус</li>
-          </ul>
-        </li>
-        <li>
-          Салат Оливье
-          <ol>
-            <li>Мясо
-              <ul>
-                <li>Или колбаса</li>
-              </ul>
-            </li>
-            <li>Майонез</li>
-            <li>Картофель</li>
-            <li>Что-то там ещё</li>
-          </ol>
-        </li>
-        <li>Помидоры</li>
-        <li>Фрукты
-          <ol>
-            <li>Бананы</li>
-            <li>Яблоки
-              <ol>
-                <li>Красные</li>
-                <li>Зелёные</li>
-              </ol>
-            </li>
-          </ol>
-        </li>
-      </ul>
-    </p>
-  </body>
+<body>
+<p>
+<ul>
+<li>
+Утка по-пекински
+<ul>
+<li>Утка</li>
+<li>Соус</li>
+</ul>
+</li>
+<li>
+Салат Оливье
+<ol>
+<li>Мясо
+<ul>
+<li>Или колбаса</li>
+</ul>
+</li>
+<li>Майонез</li>
+<li>Картофель</li>
+<li>Что-то там ещё</li>
+</ol>
+</li>
+<li>Помидоры</li>
+<li>Фрукты
+<ol>
+<li>Бананы</li>
+<li>Яблоки
+<ol>
+<li>Красные</li>
+<li>Зелёные</li>
+</ol>
+</li>
+</ol>
+</li>
+</ul>
+</p>
+</body>
 </html>
 ///////////////////////////////конец файла//////////////////////////////////////////////////////////////////////////////
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
@@ -404,23 +404,23 @@ fun markdownToHtml(inputName: String, outputName: String) {
  * Вывести в выходной файл процесс умножения столбиком числа lhv (> 0) на число rhv (> 0).
  *
  * Пример (для lhv == 19935, rhv == 111):
-   19935
-*    111
+19935
+ *    111
 --------
-   19935
+19935
 + 19935
 +19935
 --------
- 2212785
+2212785
  * Используемые пробелы, отступы и дефисы должны в точности соответствовать примеру.
  * Нули в множителе обрабатывать так же, как и остальные цифры:
-  235
-*  10
+235
+ *  10
 -----
-    0
+0
 +235
 -----
- 2350
+2350
  *
  */
 fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
@@ -434,21 +434,88 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
  * Вывести в выходной файл процесс деления столбиком числа lhv (> 0) на число rhv (> 0).
  *
  * Пример (для lhv == 19935, rhv == 22):
-  19935 | 22
- -198     906
- ----
-    13
-    -0
-    --
-    135
-   -132
-   ----
-      3
+19935 | 22
+-198     906
+----
+13
+-0
+--
+135
+-132
+----
+3
 
  * Используемые пробелы, отступы и дефисы должны в точности соответствовать примеру.
  *
  */
+
+fun main() {
+    printDivisionProcess(19935, 22, "HAH")
+}
+
+fun getClosest(n: Int, to: Int): Pair<Int, Int> = Pair(n * (to / n), to / n)
+
 fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
-    TODO()
+    val writer = File(outputName).bufferedWriter()
+    var result_strings = mutableListOf<String>(" ${lhv.toString()} | ${rhv.toString()}")
+    var lhv_string = lhv.toString()
+    var rhv_string = rhv.toString()
+    var current = 0
+    var remainder = 0
+    var i = 0
+    var result = ""
+    if (lhv_string.length < rhv_string.length) {
+        current = lhv
+    } else if (lhv_string.substring(0, rhv_string.length).toInt() < rhv) {
+        current = lhv_string.substring(0, rhv_string.length + 1).toInt()
+    } else {
+        current = lhv_string.substring(0, rhv_string.length).toInt()
+    }
+    while (true) {
+        var remainder_string = remainder.toString()
+        if (i != 0) {
+            remainder_string += lhv_string[0]
+            current = remainder_string.toInt()
+        }
+        val closest = getClosest(rhv, current).first
+        result += getClosest(rhv, current).second.toString()
+        if (i != 0) {
+            result_strings.add("${" ".repeat(i)}${remainder_string}")
+        }
+        if (i == 0) {
+            result_strings.add("${" ".repeat(i)}-${closest}")
+            result_strings.add("${" ".repeat(i)}${"-".repeat(closest.toString().length + 1)}")
+        } else if (remainder_string.length == closest.toString().length && i != 0) {
+            result_strings.add("${" ".repeat(i - 1)}-${closest}")
+            result_strings.add("${" ".repeat(i - 1)}${"-".repeat(closest.toString().length + 1)}")
+        } else {
+            result_strings.add("${" ".repeat(i)}-${closest}")
+            result_strings.add("${" ".repeat(i)}${"-".repeat(remainder_string.toString().length)}")
+        }
+
+        remainder = current - closest
+        if (i == 0)
+            lhv_string = lhv_string.substring(closest.toString().length, lhv_string.length)
+        else
+            lhv_string = lhv_string.substring(1, lhv_string.length)
+        if (lhv_string == "" || lhv_string[0].digitToIntOrNull() == null) {
+            if (i == 0)
+                i += 1
+            result_strings.add("${" ".repeat(i + remainder_string.toString().length - 1)}${remainder}")
+            result_strings[1] += "${" ".repeat(result_strings[0].indexOf("|") - result_strings[1].length + 2)}${result}"
+            break
+        }
+        if (remainder_string.toString().length != closest.toString().length && i != 0) {
+            i += closest.toString().length - (current.toString().length - closest.toString().length)
+        } else {
+            i += closest.toString().length
+        }
+    }
+    for (x in result_strings.indices) {
+        writer.write(result_strings[x])
+        writer.newLine()
+        println(result_strings[x])
+    }
+    writer.close()
 }
 
