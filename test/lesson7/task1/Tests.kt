@@ -448,6 +448,12 @@ Basic, Ruby, Swift.
             2,
             " 8193 | 2\n-8      4096\n--\n 01\n -0\n --\n  19\n -18\n ---\n   13\n  -12\n  ---\n    1"
         )
+        test(
+            15,
+            8,
+            "15 | 8\n-8   1\n--\n 7"
+        )
+
         File("temp.txt").delete()
     }
 }

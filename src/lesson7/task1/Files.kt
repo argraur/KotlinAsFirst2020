@@ -450,7 +450,7 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
  */
 
 fun main() {
-    printDivisionProcess(8193, 2, "HAH")
+    printDivisionProcess(15, 8, "HAH")
 }
 
 fun getClosest(n: Int, to: Int): Pair<Int, Int> = Pair(n * (to / n), to / n)
@@ -495,8 +495,16 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
         }
 
         remainder = current - closest
-        if (i == 0)
-            lhv_string = lhv_string.substring(closest.toString().length, lhv_string.length)
+        if (i == 0) {
+            if (current == lhv) {
+                lhv_string = ""
+                if (closest.toString().length < current.toString().length) {
+                    result_strings[0] = result_strings[0].replaceFirst(" ", "")
+                }
+            } else {
+                lhv_string = lhv_string.substring(closest.toString().length, lhv_string.length)
+            }
+        }
         else
             lhv_string = lhv_string.substring(1, lhv_string.length)
         if (lhv_string == "" || lhv_string[0].digitToIntOrNull() == null) {
