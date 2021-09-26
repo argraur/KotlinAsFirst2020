@@ -519,10 +519,7 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
             break
         }
         if (remainder_string.toString().length != closest.toString().length && i != 0) {
-            if (remainder_string.toString().length > closest.toString().length)
-                i += closest.toString().length - (current.toString().length - closest.toString().length)
-            else
-                i += closest.toString().length + (remainder_string.toString().length - closest.toString().length)
+            i += remainder_string.length - (current - closest).toString().length
         } else if (i == 0) {
             i += closest.toString().length
         } else {
