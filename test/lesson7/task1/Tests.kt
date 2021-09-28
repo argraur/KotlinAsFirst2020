@@ -387,7 +387,11 @@ Basic, Ruby, Swift.
             assertFileContent("temp.txt", res.trimIndent())
             File("temp.txt").delete()
         }
-
+        test(
+            108932,
+            3,
+            "108932 | 3\n-9       36310\n--\n 18\n-18\n---\n  09\n  -9\n  --\n   03\n   -3\n   --\n    02\n    -0\n    --\n     2"
+        )
         test(
             19935,
             22,
@@ -457,11 +461,6 @@ Basic, Ruby, Swift.
             435725,
             9,
             " 435725 | 9\n-36       48413\n---\n  75\n -72\n ---\n   37\n  -36\n  ---\n    12\n    -9\n    --\n     35\n    -27\n    ---\n      8"
-        )
-        test(
-            108932,
-            3,
-            "108932 | 3\n-9       36310\n--\n 18\n-18\n---\n  09\n  -9\n  --\n   03\n   -3\n   --\n    02\n    -0\n    --\n     2"
         )
 
         File("temp.txt").delete()

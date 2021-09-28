@@ -504,9 +504,10 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
                 lhv_string = ""
                 if (closest.toString().length < current.toString().length) {
                     result_strings[0] = result_strings[0].replaceFirst(" ", "")
+                    isSdvig = 0
                 }
             } else {
-                lhv_string = lhv_string.substring(closest.toString().length, lhv_string.length)
+                lhv_string = lhv_string.substring(current.toString().length, lhv_string.length)
             }
         }
         else
@@ -518,6 +519,9 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
             } else {
                 result_strings.add("${" ".repeat(i + remainder_string.toString().length - 1)}${remainder}")
 
+            }
+            if (isSdvig == 1) {
+                result_strings[0] = result_strings[0].removePrefix(" ")
             }
             result_strings[1] += "${" ".repeat(result_strings[0].indexOf("|") - result_strings[1].length + 2)}${result}"
             break
@@ -532,7 +536,7 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
     }
     for (x in result_strings.indices) {
         if (isSdvig == 1)
-            writer.write(result_strings[x].removePrefix(" "))
+            writer.write(result_strings[x])
         else
             writer.write(result_strings[x])
         writer.newLine()
