@@ -167,9 +167,14 @@ fun mostExpensive(description: String): String {
     var max: Float = 0F
     var maxName = ""
     for (x in products.indices) {
-        var s = products[x]
-        var price = s.filter { it.isDigit() || it == '.' }.toFloatOrNull()
-        if (price != null) {
+        val s = products[x]
+        val price = s.filter { it.isDigit() || it == '.' }.toFloatOrNull()
+        if (price != null && price > 0) {
+            if (price == 0F) {
+                max = price
+                maxName =
+                    s.filter { !it.isDigit() && it != '.' }.replace("\\s+".toRegex(), " ").removeSuffix(" ").removePrefix(" ")
+            }
             if (price > max) {
                 max = price
                 maxName =
