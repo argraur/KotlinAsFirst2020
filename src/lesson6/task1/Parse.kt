@@ -2,6 +2,10 @@
 
 package lesson6.task1
 
+import java.lang.IllegalArgumentException
+import java.lang.IndexOutOfBoundsException
+import java.lang.NumberFormatException
+
 // Урок 6: разбор строк, исключения
 // Максимальное количество баллов = 13
 // Рекомендуемое количество баллов = 11
@@ -138,7 +142,34 @@ fun bestHighJump(jumps: String): Int = TODO()
  * Вернуть значение выражения (6 для примера).
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
-fun plusMinus(expression: String): Int = TODO()
+fun plusMinus(expression: String): Int {
+    var i = 0
+    var s = ""
+    expression.split(" ").forEachIndexed { index, it ->
+        try {
+            val iti = it.toInt()
+            if (it.startsWith("+") || iti < 0) {
+                throw NumberFormatException()
+            }
+            if (s.isNotBlank()) {
+                when (s) {
+                    "-" -> i -= iti
+                    "+" -> i += iti
+                }
+                s = ""
+            } else {
+                i = iti
+            }
+        } catch (e: NumberFormatException) {
+            if ((index + 1) % 2 == 0 && it in arrayOf("+", "-")) {
+                s = it
+            } else {
+                throw IllegalArgumentException()
+            }
+        }
+    }
+    return i
+}
 
 /**
  * Сложная (6 баллов)
@@ -162,7 +193,20 @@ fun firstDuplicateIndex(str: String): Int = TODO()
  * или пустую строку при нарушении формата строки.
  * Все цены должны быть больше нуля либо равны нулю.
  */
-fun mostExpensive(description: String): String = TODO()
+fun mostExpensive(description: String): String {
+    var s = ""
+    var d = 0.0
+    description.split("; ").forEach {
+        try {
+            val itD = it.split(" ")[1].toDouble()
+            if (itD > d) {
+                s = it.split(" ")[0]
+                d = itD
+            }
+        } catch (ignored: IndexOutOfBoundsException) {}
+    }
+    return s
+}
 
 /**
  * Сложная (6 баллов)
