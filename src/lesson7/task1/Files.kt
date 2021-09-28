@@ -464,6 +464,7 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
     var current = 0
     var remainder = 0
     var i = 0
+    var isSdvig = 0
     var result = ""
     if (lhv_string.length <= rhv_string.length) {
         current = lhv
@@ -496,6 +497,9 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
 
         remainder = current - closest
         if (i == 0) {
+            if (current.toString().length > closest.toString().length) {
+                isSdvig = 1
+            }
             if (current == lhv) {
                 lhv_string = ""
                 if (closest.toString().length < current.toString().length) {
@@ -527,7 +531,10 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
         }
     }
     for (x in result_strings.indices) {
-        writer.write(result_strings[x])
+        if (isSdvig == 1)
+            writer.write(result_strings[x].removePrefix(" "))
+        else
+            writer.write(result_strings[x])
         writer.newLine()
         println(result_strings[x])
     }

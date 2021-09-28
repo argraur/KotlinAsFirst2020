@@ -169,7 +169,7 @@ fun mostExpensive(description: String): String {
     for (x in products.indices) {
         val s = products[x]
         val price = s.filter { it.isDigit() || it == '.' }.toFloatOrNull()
-        if (price != null && price > 0) {
+        if (price != null && price >= 0F) {
             if (price == 0F) {
                 max = price
                 maxName =
@@ -181,6 +181,9 @@ fun mostExpensive(description: String): String {
                     s.filter { !it.isDigit() && it != '.' }.replace("\\s+".toRegex(), " ").removeSuffix(" ").removePrefix(" ")
             }
         }
+    }
+    if (maxName != "" && max == 0F) {
+        return "Any good with price 0.0"
     }
     return maxName
 }
