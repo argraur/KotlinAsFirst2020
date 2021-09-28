@@ -509,12 +509,14 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
             } else {
                 lhv_string = lhv_string.substring(current.toString().length, lhv_string.length)
             }
-        }
-        else
+        } else
             lhv_string = lhv_string.substring(1, lhv_string.length)
         if (lhv_string == "" || lhv_string[0].digitToIntOrNull() == null) {
             if (i == 0) {
-                result_strings.add("${" ".repeat(result_strings[2].lastIndexOf("-"))}${remainder}")
+                if ((current - closest).toString().length == current.toString().length && closest.toString().length != current.toString().length)
+                    result_strings.add("${" ".repeat(result_strings[2].indexOf("-"))}${remainder}")
+                else
+                    result_strings.add("${" ".repeat(result_strings[2].lastIndexOf("-"))}${remainder}")
 
             } else {
                 result_strings.add("${" ".repeat(i + remainder_string.toString().length - 1)}${remainder}")

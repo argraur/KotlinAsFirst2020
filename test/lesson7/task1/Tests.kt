@@ -388,6 +388,11 @@ Basic, Ruby, Swift.
             File("temp.txt").delete()
         }
         test(
+            16,
+            17,
+            "16 | 17\n-0   0\n--\n16"
+        )
+        test(
             108932,
             3,
             "108932 | 3\n-9       36310\n--\n 18\n-18\n---\n  09\n  -9\n  --\n   03\n   -3\n   --\n    02\n    -0\n    --\n     2"
