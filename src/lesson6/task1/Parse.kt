@@ -182,9 +182,6 @@ fun mostExpensive(description: String): String {
             }
         }
     }
-    if (maxName != "" && max == 0F) {
-        return "Any good with price 0.0"
-    }
     return maxName
 }
 
