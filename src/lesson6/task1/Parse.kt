@@ -164,15 +164,15 @@ fun firstDuplicateIndex(str: String): Int = TODO()
  */
 fun mostExpensive(description: String): String {
     val products = description.split(";")
-    var max: Double = 0.0
+    var max: Float = 0F
     var maxName = ""
     for (x in products.indices) {
         var s = products[x].split(" ")
         var price_str = s.last()
         s = s.filter {it != price_str}
-        var price = price_str.toDoubleOrNull()
+        var price = price_str.toFloatOrNull()
         if (price != null && price >= 0F) {
-            if (price == 0.0) {
+            if (max == 0F) {
                 max = price
                 maxName =
                     s.joinToString(" ")
