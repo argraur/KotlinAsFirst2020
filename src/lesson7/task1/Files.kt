@@ -2,6 +2,7 @@
 
 package lesson7.task1
 
+import lesson3.task1.length
 import java.io.File
 
 // Урок 7: работа с файлами
@@ -424,7 +425,38 @@ fun markdownToHtml(inputName: String, outputName: String) {
  *
  */
 fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
-    TODO()
+    val lSize = lhv.toString().length
+    val rSize = rhv.toString().length
+    val fSize = (lhv * rhv).toString().length
+    val sb = StringBuilder()
+    val s = ArrayList<String>()
+    for ((offset, i) in (0 until rSize).withIndex()) {
+        val m = (lhv * rhv.toString()[rSize - 1 - i].digitToInt())
+        s += if (i == 0) {
+            " ".repeat(fSize + 1 - m.length()) + m
+        } else {
+            "+" + " ".repeat(fSize - m.length() - offset) + m
+        }
+    }
+    sb.append(" ".repeat(fSize - lSize + 1) + lhv)
+    sb.append("\n")
+    sb.append("*" + " ".repeat(fSize - rSize) + rhv)
+    sb.append("\n")
+    sb.append("-".repeat(fSize + 1))
+    sb.append("\n")
+    sb.append(s[0])
+    sb.append("\n")
+    s.forEachIndexed { index, it ->
+        if (index != 0) {
+            sb.append(it)
+            sb.append("\n")
+        }
+    }
+    sb.append("-".repeat(fSize + 1))
+    sb.append("\n")
+    sb.append(" ${lhv * rhv}")
+    val file = File(outputName)
+    file.writeText(sb.toString())
 }
 
 
