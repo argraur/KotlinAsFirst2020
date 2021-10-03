@@ -233,13 +233,13 @@ fun decimal(digits: List<Int>, base: Int): Int = TODO()
  * (например, str.toInt(base)), запрещается.
  */
 fun decimalFromString(str: String, base: Int): Int {
-    var result: Int = 0
+    var result = 0
     val str = str.reversed()
     for (x in str.indices) {
-        if (str[x].digitToIntOrNull() == null) {
-            result += (str[x].code - 87) * pow(base, x)
+        result += if (str[x].digitToIntOrNull() == null) {
+            (str[x].code - 87) * pow(base, x)
         } else {
-            result += str[x].digitToIntOrNull()!! * pow(base, x)
+            str[x].digitToIntOrNull()!! * pow(base, x)
         }
     }
     return result
@@ -254,61 +254,17 @@ fun decimalFromString(str: String, base: Int): Int {
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
 fun roman(n: Int): String {
-    var str = ""
+    val str = StringBuilder()
     var n = n
-    while (n / 1000 > 0) {
-        str += "M"
-        n -= 1000
+    val nums = arrayOf("M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I")
+    val numsDecade = arrayOf(1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1)
+    for (x in numsDecade.indices) {
+        while (n / numsDecade[x] > 0) {
+            str.append(nums[x])
+            n -= numsDecade[x]
+        }
     }
-    while (n / 900 > 0) {
-        str += "CM"
-        n -= 900
-    }
-    while (n / 500 > 0) {
-        str += "D"
-        n -= 500
-    }
-    while (n / 400 > 0) {
-        str += "CD"
-        n -= 400
-    }
-    while (n / 100 > 0) {
-        str += "C"
-        n -= 100
-    }
-    while (n / 90 > 0) {
-        str += "XC"
-        n -= 90
-    }
-    while (n / 50 > 0) {
-        str += "L"
-        n -= 50
-    }
-    while (n / 40 > 0) {
-        str += "XL"
-        n -= 40
-    }
-    while (n / 10 > 0) {
-        str += "X"
-        n -= 10
-    }
-    while (n / 9 > 0) {
-        str += "IX"
-        n -= 9
-    }
-    while (n / 5 > 0) {
-        str += "V"
-        n -= 5
-    }
-    while (n / 4 > 0) {
-        str += "IV"
-        n -= 4
-    }
-    while (n / 1 > 0) {
-        str += "I"
-        n -= 1
-    }
-    return str
+    return str.toString()
 }
 
 /**
@@ -386,5 +342,5 @@ fun russian(n: Int): String {
         res = (russian(thousands) + " " + suffix + " ").replace("один ", "одна ").replace("два ", "две ") + res
     }
 
-    return res.replace("\\s+".toRegex(), " ").removeSuffix(" ").removePrefix(" ")
+    return res.replace("\\s+".toRegex(), " ").trim()
 }

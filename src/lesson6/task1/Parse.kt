@@ -164,13 +164,13 @@ fun firstDuplicateIndex(str: String): Int = TODO()
  */
 fun mostExpensive(description: String): String {
     val products = description.split(";")
-    var max: Float = 0F
+    var max = 0F
     var maxName = ""
     for (x in products.indices) {
         var s = products[x].split(" ")
-        var price_str = s.last()
-        s = s.filter {it != price_str}
-        var price = price_str.toFloatOrNull()
+        val priceStr = s.last()
+        s = s.dropLast(1)
+        val price = priceStr.toFloatOrNull()
         if (price != null && price >= 0F) {
             if (max == 0F) {
                 max = price
@@ -184,7 +184,7 @@ fun mostExpensive(description: String): String {
             }
         }
     }
-    return maxName.removePrefix(" ").removeSuffix(" ")
+    return maxName.trim()
 }
 
 /**
@@ -199,65 +199,20 @@ fun mostExpensive(description: String): String {
  * Вернуть -1, если roman не является корректным римским числом
  */
 fun fromRoman(roman: String): Int {
-    var string = roman
-    var result = 0
     if (roman == "")
         return -1
-    while (string.indexOf("CM") > -1) {
-        result += 900
-        string = string.replaceFirst("CM", "")
+    var str = roman
+    var result = 0
+    val nums = arrayOf("CM", "M", "CD", "D", "XC", "C", "XL", "L", "IX", "X", "IV", "V", "I")
+    val numsDecade = arrayOf(900, 1000, 400, 500, 90, 100, 40, 50, 9, 10, 4, 5, 1)
+    for (x in numsDecade.indices) {
+        while (str.indexOf(nums[x]) > -1) {
+            result += numsDecade[x]
+            str = str.replaceFirst(nums[x], "")
+        }
     }
-    while (string.indexOf("M") > -1) {
-        result += 1000
-        string = string.replaceFirst("M", "")
-    }
-    while (string.indexOf("CD") > -1) {
-        result += 400
-        string = string.replaceFirst("CD", "")
-    }
-    while (string.indexOf("D") > -1) {
-        result += 500
-        string = string.replaceFirst("D", "")
-    }
-    while (string.indexOf("XC") > -1) {
-        result += 90
-        string = string.replaceFirst("XC", "")
-    }
-    while (string.indexOf("C") > -1) {
-        result += 100
-        string = string.replaceFirst("C", "")
-    }
-    while (string.indexOf("XL") > -1) {
-        result += 40
-        string = string.replaceFirst("XL", "")
-    }
-    while (string.indexOf("L") > -1) {
-        result += 50
-        string = string.replaceFirst("L", "")
-    }
-    while (string.indexOf("IX") > -1) {
-        result += 9
-        string = string.replaceFirst("IX", "")
-    }
-    while (string.indexOf("X") > -1) {
-        result += 10
-        string = string.replaceFirst("X", "")
-    }
-    while (string.indexOf("IV") > -1) {
-        result += 4
-        string = string.replaceFirst("IV", "")
-    }
-    while (string.indexOf("V") > -1) {
-        result += 5
-        string = string.replaceFirst("V", "")
-    }
-    while (string.indexOf("I") > -1) {
-        result += 1
-        string = string.replaceFirst("I", "")
-    }
-    if (string != "") {
+    if (str != "")
         return -1
-    }
     return result
 }
 

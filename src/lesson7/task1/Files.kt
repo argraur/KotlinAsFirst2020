@@ -458,91 +458,35 @@ fun getClosest(n: Int, to: Int): Pair<Int, Int> = Pair(n * (to / n), to / n)
 fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
 //    try {
     val writer = File(outputName).bufferedWriter()
-    var result_strings = mutableListOf<String>(" ${lhv.toString()} | ${rhv.toString()}")
-    var lhv_string = lhv.toString()
-    var rhv_string = rhv.toString()
-    var current = 0
-    var remainder = 0
+    var lhvString = lhv.toString()
+    val rhvString = rhv.toString()
+    var resultString = mutableListOf<String>()
     var i = 0
-    var isSdvig = 0
-    var result = ""
-    if (lhv_string.length <= rhv_string.length) {
-        current = lhv
-    } else if (lhv_string.substring(0, rhv_string.length).toInt() < rhv) {
-        current = lhv_string.substring(0, rhv_string.length + 1).toInt()
+    var isShift = false
+    var current: Int
+    if (lhvString.substring(0, rhvString.length).toInt() < rhv) {
+        current = lhvString.substring(0, rhvString.length + 1).toInt()
     } else {
-        current = lhv_string.substring(0, rhv_string.length).toInt()
+        current = lhvString.substring(0, rhvString.length).toInt()
     }
-    while (true) {
-        var remainder_string = remainder.toString()
-        if (i != 0) {
-            remainder_string += lhv_string[0]
-            current = remainder_string.toInt()
-        }
-        val closest = getClosest(rhv, current).first
-        result += getClosest(rhv, current).second.toString()
-        if (i != 0) {
-            result_strings.add("${" ".repeat(i)}${remainder_string}")
-        }
-        if (i == 0) {
-            result_strings.add("${" ".repeat(i)}-${closest}")
-            result_strings.add("${" ".repeat(i)}${"-".repeat(closest.toString().length + 1)}")
-        } else if (remainder_string.length == closest.toString().length && i != 0) {
-            result_strings.add("${" ".repeat(i - 1)}-${closest}")
-            result_strings.add("${" ".repeat(i - 1)}${"-".repeat(closest.toString().length + 1)}")
-        } else {
-            result_strings.add("${" ".repeat(i)}-${closest}")
-            result_strings.add("${" ".repeat(i)}${"-".repeat(remainder_string.toString().length)}")
-        }
-
-        remainder = current - closest
-        if (i == 0) {
-            if (current.toString().length > closest.toString().length) {
-                isSdvig = 1
-            }
-            if (current == lhv) {
-                lhv_string = ""
-                if (closest.toString().length < current.toString().length) {
-                    result_strings[0] = result_strings[0].replaceFirst(" ", "")
-                    isSdvig = 0
-                }
-            } else {
-                lhv_string = lhv_string.substring(current.toString().length, lhv_string.length)
-            }
-        } else
-            lhv_string = lhv_string.substring(1, lhv_string.length)
-        if (lhv_string == "" || lhv_string[0].digitToIntOrNull() == null) {
-            if (i == 0) {
-                if ((current - closest).toString().length == current.toString().length && closest.toString().length != current.toString().length)
-                    result_strings.add("${" ".repeat(result_strings[2].indexOf("-"))}${remainder}")
-                else
-                    result_strings.add("${" ".repeat(result_strings[2].lastIndexOf("-"))}${remainder}")
-
-            } else {
-                result_strings.add("${" ".repeat(i + remainder_string.toString().length - 1)}${remainder}")
-
-            }
-            if (isSdvig == 1) {
-                result_strings[0] = result_strings[0].removePrefix(" ")
-            }
-            result_strings[1] += "${" ".repeat(result_strings[0].indexOf("|") - result_strings[1].length + 2)}${result}"
-            break
-        }
-        if (remainder_string.toString().length != closest.toString().length && i != 0) {
-            i += remainder_string.length - (current - closest).toString().length
-        } else if (i == 0) {
-            i += closest.toString().length
-        } else {
-            i += closest.toString().length - 1
-        }
+    var firstClosest = getClosest(rhv, current)
+    if (firstClosest.toString().length < current.toString().length) {
+        resultString.add("${lhv} | ${rhv}")
+        resultString.add("-${firstClosest}")
+        resultString.add("-".repeat(firstClosest.toString().length + 1))
+    } else {
+        resultString.add(" ${lhv} | ${rhv}")
+        resultString.add("-${firstClosest}")
+        resultString.add("-".repeat(firstClosest.toString().length + 1))
     }
-    for (x in result_strings.indices) {
-        if (isSdvig == 1)
-            writer.write(result_strings[x])
-        else
-            writer.write(result_strings[x])
+//    while (rhvString != "") {
+//
+//    }
+
+    for (x in resultString.indices) {
+        writer.write(resultString[x])
         writer.newLine()
-        println(result_strings[x])
+        println(resultString[x])
     }
     writer.close()
 ////    } catch (e: StringIndexOutOfBoundsException) {

@@ -81,13 +81,16 @@ fun digitNumber(n: Int): Int = TODO()
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
 fun fib(n: Int): Int {
-    var a = mutableListOf(1, 1, 1)
+    var a1 = 1
+    var a2 = 1
     for (x in 3..n) {
-        a.add(a[x - 1] + a[x - 2])
+        val t = a1 + a2
+        a1 = a2
+        a2 = t
     }
     return when (n) {
         1, 2 -> 1
-        else -> a[n]
+        else -> a2
     }
 }
 
@@ -161,7 +164,7 @@ fun revert(n: Int): Int {
     if (n == 0)
         return 0
     var n = n
-    var a = mutableListOf<Int>()
+    val a = mutableListOf<Int>()
     while (n > 0) {
         a.add(n % 10)
         n /= 10
@@ -228,20 +231,23 @@ fun cos(x: Double, eps: Double): Double = TODO()
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun squareSequenceDigit(n: Int): Int {
-    var nums = mutableListOf<Int>()
+    var counter = 1
     try {
         for (x in 1..n) {
             var num = x * x
-            var temp = mutableListOf<Int>()
+            val temp = mutableListOf<Int>()
             while (num > 0) {
                 temp.add(num % 10)
                 num /= 10
             }
-            temp.reverse()
-            for (i in 0 until temp.size)
-                nums.add(temp[i])
+            if (n - counter < temp.size) {
+                temp.reverse()
+                return temp[n - counter]
+            } else {
+                counter += temp.size
+            }
         }
-        return nums[n - 1]
+        return 1
     } catch (e: IndexOutOfBoundsException) {
         return 1
     }
@@ -257,22 +263,27 @@ fun squareSequenceDigit(n: Int): Int {
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun fibSequenceDigit(n: Int): Int {
-    var a = mutableListOf(1, 1, 1)
-    var nums = mutableListOf(1, 1)
     try {
+        var counter = 3
+        var a1 = 1
+        var a2 = 1
         for (x in 3..n) {
-            var num = a[x - 1] + a[x - 2]
-            var temp = mutableListOf<Int>()
+            var num = a1 + a2
+            a1 = a2
+            a2 = num
+            val temp = mutableListOf<Int>()
             while (num > 0) {
                 temp.add(num % 10)
                 num /= 10
             }
-            temp.reverse()
-            for (i in 0 until temp.size)
-                nums.add(temp[i])
-            a.add(a[x - 1] + a[x - 2])
+            if (n - counter < temp.size) {
+                temp.reverse()
+                return temp[n - counter]
+            } else {
+                counter += temp.size
+            }
         }
-        return nums[n - 1]
+        return 1
     } catch (e: IndexOutOfBoundsException) {
         return 1
     }
