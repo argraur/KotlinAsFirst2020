@@ -88,10 +88,7 @@ fun fib(n: Int): Int {
         a1 = a2
         a2 = t
     }
-    return when (n) {
-        1, 2 -> 1
-        else -> a2
-    }
+    return a2
 }
 
 /**
