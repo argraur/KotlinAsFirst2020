@@ -3,6 +3,7 @@
 package lesson7.task1
 
 import lesson3.task1.length
+import ru.spbstu.wheels.out
 import java.io.File
 
 // Урок 7: работа с файлами
@@ -283,7 +284,82 @@ Suspendisse ~~et elit in enim tempus iaculis~~.
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
-    TODO()
+    val builder = StringBuilder()
+    val file = File(inputName)
+    val lines = file.readLines()
+    var ongoingParagraph = false
+
+    builder.append("<html>")
+    builder.append("<body>")
+
+    lines.forEach {
+        if (!ongoingParagraph) {
+            builder.append("<p>")
+            ongoingParagraph = true
+        } else if (it == "") {
+            builder.append("</p>")
+            ongoingParagraph = false
+        }
+
+        if (ongoingParagraph) {
+            builder.append(md(it))
+        }
+    }
+
+    builder.append("</p>")
+
+    builder.append("</body>")
+    builder.append("</html>")
+
+    File(outputName).writeText(builder.toString())
+}
+
+fun md(s: String): String {
+    // *word* - italic
+    // **word** - bold
+    // ~~word~~ - strikethrough
+    val curr = ArrayList<Char>()
+    val builder = StringBuilder()
+    s.forEachIndexed { idx, c ->
+        when (c) {
+            '*' -> {
+                if (s[idx - 1] != '*' || s[idx - 2] == '*') {
+                    if (s[idx + 1] == '*') {
+                        if (!curr.contains('b')) {
+                            curr.add('b')
+                            builder.append("<b>")
+                        } else {
+                            curr.remove('b')
+                            builder.append("</b>")
+                        }
+                    } else {
+                        if (!curr.contains('i')) {
+                            curr.add('i')
+                            builder.append("<i>")
+                        } else {
+                            curr.remove('i')
+                            builder.append("</i>")
+                        }
+                    }
+                }
+            }
+            '~' -> {
+                if (s[idx - 1] != '~' && s[idx - 2] != '~') {
+                    if (!curr.contains('s')) {
+                        curr.add('s')
+                        builder.append("<s>")
+                    } else {
+                        builder.append("</s>")
+                        curr.remove('s')
+                    }
+                }
+            }
+            else -> {
+                builder.append(c)
+            }
+        }
+    }
+    return builder.toString()
 }
 
 /**
