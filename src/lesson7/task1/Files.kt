@@ -289,29 +289,33 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     val lines = file.readLines()
     var ongoingParagraph = false
 
-    builder.append("<html>")
-    builder.append("<body>")
+    try {
+        builder.append("<html>")
+        builder.append("<body>")
 
-    lines.forEach {
-        if (!ongoingParagraph) {
-            builder.append("<p>")
-            ongoingParagraph = true
-        } else if (it == "") {
-            builder.append("</p>")
-            ongoingParagraph = false
+        lines.forEach {
+            if (!ongoingParagraph) {
+                builder.append("<p>")
+                ongoingParagraph = true
+            } else if (it == "") {
+                builder.append("</p>")
+                ongoingParagraph = false
+            }
+
+            if (ongoingParagraph) {
+                builder.append(md(it))
+            }
         }
 
-        if (ongoingParagraph) {
-            builder.append(md(it))
-        }
+        builder.append("</p>")
+
+        builder.append("</body>")
+        builder.append("</html>")
+
+        File(outputName).writeText(builder.toString())
+    } catch (e: StringIndexOutOfBoundsException) {
+        throw Exception(file.readText())
     }
-
-    builder.append("</p>")
-
-    builder.append("</body>")
-    builder.append("</html>")
-
-    File(outputName).writeText(builder.toString())
 }
 
 fun md(s: String): String {
