@@ -232,10 +232,18 @@ Basic, Ruby, Swift.
     }
 
 
-    private fun checkHtmlSimpleExample() {
+    private fun checkHtmlSimpleExample(expected: String) {
         val result = File("temp.html").readText().replace(Regex("[\\s\\n\\t]"), "")
-        val expected =
-            """
+        assertEquals(expected, result)
+
+        File("temp.html").delete()
+    }
+
+    @Test
+    @Tag("22")
+    fun markdownToHtmlSimple() {
+        markdownToHtmlSimple("input/markdown_simple.md", "temp.html")
+        checkHtmlSimpleExample("""
                     <html>
                         <body>
                             <p>
@@ -247,17 +255,11 @@ Basic, Ruby, Swift.
                             </p>
                         </body>
                     </html>
-                    """.trimIndent().replace(Regex("[\\s\\n\\t]"), "")
-        assertEquals(expected, result)
-
-        File("temp.html").delete()
-    }
-
-    @Test
-    @Tag("22")
-    fun markdownToHtmlSimple() {
-        markdownToHtmlSimple("input/markdown_simple.md", "temp.html")
-        checkHtmlSimpleExample()
+                    """.trimIndent().replace(Regex("[\\s\\n\\t]"), ""))
+        markdownToHtmlSimple("input/markdown1.md", "temp.html")
+        checkHtmlSimpleExample("""
+                    <html><body><p>Gtjf8k<i>qdhW</i>B0Nbjjtz<b></b>=w#l%&(uSD5uP}AB<s>^</s>A3pP4Gr<b>3w</b><i>URt}%ahgI</i>yOBmW4}%GlXtC,'G3Qx=}<i>9J_2FgGI@)</i>2#|_!x2_eGkRAvhXZ^CD|Ze;n.XRmc5Hdj?<i>1gS/4@He;RC[<s>o</s>0A[}N<b>@</b></i>H<b>w9-VJ.<i>MprNE<s>Q(</s>%J:</i>iu!s{</b>G'%<i></i>`xnOp9RlY</p></body></html>
+                    """.trimIndent().replace(Regex("[\\s\\n\\t]"), ""))
     }
 
     private fun checkHtmlListsExample() {
@@ -319,7 +321,19 @@ Basic, Ruby, Swift.
     @Tag("30")
     fun markdownToHtml() {
         markdownToHtml("input/markdown_simple.md", "temp.html")
-        checkHtmlSimpleExample()
+        checkHtmlSimpleExample("""
+                    <html>
+                        <body>
+                            <p>
+                                Lorem ipsum <i>dolor sit amet</i>, consectetur <b>adipiscing</b> elit.
+                                Vestibulum lobortis. <s>Est vehicula rutrum <i>suscipit</i></s>, ipsum <s>lib</s>ero <i>placerat <b>tortor</b></i>.
+                            </p>
+                            <p>
+                                Suspendisse <s>et elit in enim tempus iaculis</s>.
+                            </p>
+                        </body>
+                    </html>
+                    """.trimIndent().replace(Regex("[\\s\\n\\t]"), ""))
 
         markdownToHtml("input/markdown_lists.md", "temp.html")
         checkHtmlListsExample()

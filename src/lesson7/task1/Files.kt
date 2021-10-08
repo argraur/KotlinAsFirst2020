@@ -291,12 +291,21 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     )
     val lines = mutableListOf<String>()
     val result = mutableListOf("<html>", "<body>", "<p>")
+    val currentOpened = mutableListOf<String>()
     for (x in reader.indices) {
-        var line = reader[x]
+        var line = reader[x].replace("\n", "").replace("\t", "")
         for (v in tags.keys) {
             while (line.indexOf(v) > -1) {
-                line = line.replaceFirst(v, tags.getValue(v))
-                line = line.replaceFirst(v, tags.getValue(v).replaceFirst("<", "</"))
+                if (v in currentOpened) {
+                    line = line.replaceFirst(v, tags.getValue(v).replaceFirst("<", "</"))
+                    currentOpened.remove(v)
+                }
+                if (line.indexOf(v) > -1) {
+                    line = line.replaceFirst(v, tags.getValue(v))
+                    if (line.indexOf(v) == -1)
+                        currentOpened.add(v)
+                    line = line.replaceFirst(v, tags.getValue(v).replaceFirst("<", "</"))
+                }
             }
         }
         lines.add(line)
