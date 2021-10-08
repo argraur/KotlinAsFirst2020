@@ -282,7 +282,52 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
-    TODO()
+    val reader = File(inputName).readLines()
+    val writer = File(outputName).bufferedWriter()
+    val tags = mapOf(
+        "**" to "<b>",
+        "*" to "<i>",
+        "~~" to "<s>",
+    )
+    val lines = mutableListOf<String>()
+    val result = mutableListOf("<html>", "<body>", "<p>")
+    for (x in reader.indices) {
+        var line = reader[x]
+        for (v in tags.keys) {
+            while (line.indexOf(v) > -1) {
+                line = line.replaceFirst(v, tags.getValue(v))
+                line = line.replaceFirst(v, tags.getValue(v).replaceFirst("<", "</"))
+            }
+        }
+        lines.add(line)
+        println(line == "")
+        println(line)
+    }
+    var x = 0
+    while (x < lines.size) {
+        if (x + 1 < lines.size) {
+            if (lines[x + 1] == "") {
+                result.add(lines[x] + "</p>")
+                if (x + 2 < lines.size) {
+                    result.add("<p>")
+                }
+                x += 1
+            } else {
+                result.add(lines[x])
+            }
+        } else if (x + 1 == lines.size) {
+            result.add(lines[x] + "</p></body></html>")
+        } else {
+            result.add(lines[x])
+        }
+        x += 1
+    }
+
+    for (y in result.indices) {
+        writer.write(result[y] + " ")
+        writer.newLine()
+    }
+    writer.close()
 }
 
 /**
