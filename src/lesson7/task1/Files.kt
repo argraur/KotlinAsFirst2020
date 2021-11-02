@@ -285,8 +285,8 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
 fun createHTML(body: String): String = "<html><body>$body</body></html>"
 
 fun preprocessString(text: String): String = text
-    .replace(Regex("\r\n/g"), "\n")
-    .replace(Regex("/\r/g"), "\n")
+    .replace(Regex("\r\n/g"), "_??_")
+    .replace(Regex("/\r/g"), "_??_")
     .replace(Regex("/\u00A0/g"), "&nbsp;")
     .replace(Regex("\\n"), "_??_")
     .replace(Regex("\t"), "")
@@ -325,7 +325,7 @@ fun checkTag(text: String, tag: String, index: Int, isOpening: Boolean): Boolean
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
     val lines = preprocessString(File(inputName).readText())
     val writer = File(outputName).bufferedWriter()
-
+    println(lines)
     val tags = mapOf(
         "**" to ("<b>" to "</b>"),
         "*" to ("<i>" to "</i>"),
@@ -339,6 +339,9 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     }
     processed = Regex("~~(.*?)~~").replace(processed) { m ->
         "<s>" + m.value.replace("~~", "") + "</s>"
+    }
+    processed = Regex("\\_\\?\\?\\_( )?\\_\\?\\?\\_(.*?)\\_\\?\\?\\_( )?\\_\\?\\?\\_").replace(processed) { m ->
+        "</p><p>" + m.value.replace("_??_", "") + "</p><p>"
     }
     val result = processed.split("_??_")
 
