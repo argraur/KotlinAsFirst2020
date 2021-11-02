@@ -289,7 +289,7 @@ fun preprocessString(text: String): String = text
     .replace(Regex("/\r/g"), "_??_")
     .replace(Regex("/\u00A0/g"), "&nbsp;")
     .replace(Regex("\\n"), "_??_")
-    .replace(Regex("\t"), "")
+    .replace(Regex("\t"), " ")
 
 fun count(string: String, text: String): Int {
     var counter = 0
@@ -340,9 +340,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     processed = Regex("~~(.*?)~~").replace(processed) { m ->
         "<s>" + m.value.replace("~~", "") + "</s>"
     }
-    processed = Regex("\\_\\?\\?\\_( )?\\_\\?\\?\\_(.*?)\\_\\?\\?\\_( )?\\_\\?\\?\\_").replace(processed) { m ->
-        "</p><p>" + m.value.replace("_??_", "") + "</p><p>"
-    }
+
     val result = processed.split("_??_")
 
     var x = 0
