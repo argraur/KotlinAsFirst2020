@@ -281,61 +281,97 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
  *
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
+
+fun createHTML(body: String): String = "<html><body>$body</body></html>"
+
+fun preprocessString(text: String): List<String> = text
+    .replace(Regex("\r\n/g"), "\n")
+    .replace(Regex("/\r/g"), "\n")
+    .replace(Regex("/\u00A0/g"), "&nbsp;")
+    .replace(Regex("\\n"), "\n")
+    .replace(Regex("\t"), "")
+    .split("\n")
+
+fun count(string: String, text: String): Int {
+    var counter = 0
+    var lastIndex = -1
+
+    while (true) {
+        lastIndex = string.indexOf(text, lastIndex + 1)
+        if (lastIndex == -1)
+            return counter
+        else
+            if (checkTag(string, text, lastIndex, true))
+                counter += 1
+            else
+                lastIndex += 1
+    }
+
+}
+
+fun checkTag(text: String, tag: String, index: Int, isOpening: Boolean): Boolean {
+    if (text.length > index + tag.length)
+        println("${text.substring(index, index + tag.length)} $tag")
+    if (index + tag.length < text.length && ((text.indexOf(tag, index + 1) > index + 1 && isOpening) || (text.indexOf(
+            tag,
+            index + 1
+        ) != index + 1 && !isOpening)) && text.substring(index, index + tag.length) == tag
+    ) {
+        if (text.substring(index + 1, index + tag.length) != tag)
+            return true
+    }
+    return false
+}
+
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
-    val reader = File(inputName).readLines()
+    val lines = preprocessString(File(inputName).readText())
     val writer = File(outputName).bufferedWriter()
+
+    val result: MutableList<String> = mutableListOf()
+
     val tags = mapOf(
-        "**" to "<b>",
-        "*" to "<i>",
-        "~~" to "<s>",
+        "**" to ("<b>" to "</b>"),
+        "*" to ("<i>" to "</i>"),
+        "~~" to ("<s>" to "</s>"),
     )
-    val lines = mutableListOf<String>()
-    val result = mutableListOf("<html>", "<body>", "<p>")
-    val currentOpened = mutableListOf<String>()
-    for (x in reader.indices) {
-        var line = reader[x].replace("\n", "").replace("\t", "")
-        for (v in tags.keys) {
-            while (line.indexOf(v) > -1) {
-                if (v in currentOpened) {
-                    line = line.replaceFirst(v, tags.getValue(v).replaceFirst("<", "</"))
-                    currentOpened.remove(v)
-                }
-                if (line.indexOf(v) > -1) {
-                    line = line.replaceFirst(v, tags.getValue(v))
-                    if (line.indexOf(v) == -1)
-                        currentOpened.add(v)
-                    line = line.replaceFirst(v, tags.getValue(v).replaceFirst("<", "</"))
-                }
-            }
-        }
-        lines.add(line)
-        println(line == "")
+
+    for (line in lines) {
+        var processed = line
         println(line)
+        processed = Regex("\\*\\*(.*?)\\*\\*").replace(processed) { m ->
+            "<b>" + m.value.replace("**", "") + "</b>"
+        }
+        processed = Regex("\\*(.*?)\\*").replace(processed) { m ->
+            "<i>" + m.value.replace("*", "") + "</i>"
+        }
+        processed = Regex("~~(.*?)~~").replace(processed) { m ->
+            "<s>" + m.value.replace("~~", "") + "</s>"
+        }
+        println(processed)
+        result.add(processed)
     }
     var x = 0
-    while (x < lines.size) {
-        if (x + 1 < lines.size) {
-            if (lines[x + 1] == "") {
-                result.add(lines[x] + "</p>")
-                if (x + 2 < lines.size) {
-                    result.add("<p>")
+
+    val linesToWrite = mutableListOf("<p>")
+    while (x < result.size) {
+        if (x + 1 < result.size) {
+            if (result[x + 1] == "") {
+                linesToWrite.add(result[x] + "</p>")
+                if (x + 2 < result.size) {
+                    linesToWrite.add("<p>")
                 }
                 x += 1
             } else {
-                result.add(lines[x])
+                linesToWrite.add(result[x])
             }
-        } else if (x + 1 == lines.size) {
-            result.add(lines[x] + "</p></body></html>")
+        } else if (x + 1 == result.size) {
+            linesToWrite.add(result[x] + "</p>")
         } else {
-            result.add(lines[x])
+            linesToWrite.add(result[x])
         }
         x += 1
     }
-
-    for (y in result.indices) {
-        writer.write(result[y] + " ")
-        writer.newLine()
-    }
+    writer.write(createHTML(linesToWrite.joinToString(separator = "\n")))
     writer.close()
 }
 

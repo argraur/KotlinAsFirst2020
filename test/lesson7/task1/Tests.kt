@@ -256,10 +256,8 @@ Basic, Ruby, Swift.
                         </body>
                     </html>
                     """.trimIndent().replace(Regex("[\\s\\n\\t]"), ""))
-        markdownToHtmlSimple("input/markdown1.md", "temp.html")
-        checkHtmlSimpleExample("""
-                    <html><body><p>Gtjf8k<i>qdhW</i>B0Nbjjtz<b></b>=w#l%&(uSD5uP}AB<s>^</s>A3pP4Gr<b>3w</b><i>URt}%ahgI</i>yOBmW4}%GlXtC,'G3Qx=}<i>9J_2FgGI@)</i>2#|_!x2_eGkRAvhXZ^CD|Ze;n.XRmc5Hdj?<i>1gS/4@He;RC[<s>o</s>0A[}N<b>@</b></i>H<b>w9-VJ.<i>MprNE<s>Q(</s>%J:</i>iu!s{</b>G'%<i></i>`xnOp9RlY</p></body></html>
-                    """.trimIndent().replace(Regex("[\\s\\n\\t]"), ""))
+        markdownToHtmlSimple("input/md1.md", "temp.html")
+        checkHtmlSimpleExample(File("input/md1.html").readText().replace(Regex("[\\s\\n\\t]"), ""))
     }
 
     private fun checkHtmlListsExample() {
