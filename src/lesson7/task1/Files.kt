@@ -348,15 +348,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     val linesToWrite = mutableListOf("<p>")
     while (x < result.size) {
         if (x + 1 < result.size) {
-            if (result[x + 1] == "") {
-                linesToWrite.add(result[x] + "</p>")
-                if (x + 2 < result.size) {
-                    linesToWrite.add("<p>")
-                }
-                x += 1
-            } else {
                 linesToWrite.add(result[x])
-            }
         } else if (x + 1 == result.size) {
             linesToWrite.add(result[x] + "</p>")
         } else {
