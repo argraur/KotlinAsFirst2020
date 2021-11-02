@@ -284,13 +284,12 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
 
 fun createHTML(body: String): String = "<html><body>$body</body></html>"
 
-fun preprocessString(text: String): List<String> = text
+fun preprocessString(text: String): String = text
     .replace(Regex("\r\n/g"), "\n")
     .replace(Regex("/\r/g"), "\n")
     .replace(Regex("/\u00A0/g"), "&nbsp;")
-    .replace(Regex("\\n"), "\n")
+    .replace(Regex("\\n"), "_??_")
     .replace(Regex("\t"), "")
-    .split("\n")
 
 fun count(string: String, text: String): Int {
     var counter = 0
@@ -327,29 +326,22 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     val lines = preprocessString(File(inputName).readText())
     val writer = File(outputName).bufferedWriter()
 
-    val result: MutableList<String> = mutableListOf()
-
     val tags = mapOf(
         "**" to ("<b>" to "</b>"),
         "*" to ("<i>" to "</i>"),
         "~~" to ("<s>" to "</s>"),
     )
-
-    for (line in lines) {
-        var processed = line
-        println(line)
-        processed = Regex("\\*\\*(.*?)\\*\\*").replace(processed) { m ->
-            "<b>" + m.value.replace("**", "") + "</b>"
-        }
-        processed = Regex("\\*(.*?)\\*").replace(processed) { m ->
-            "<i>" + m.value.replace("*", "") + "</i>"
-        }
-        processed = Regex("~~(.*?)~~").replace(processed) { m ->
-            "<s>" + m.value.replace("~~", "") + "</s>"
-        }
-        println(processed)
-        result.add(processed)
+    var processed = Regex("\\*\\*(.*?)\\*\\*").replace(lines) { m ->
+        "<b>" + m.value.replace("**", "") + "</b>"
     }
+    processed = Regex("\\*(.*?)\\*").replace(processed) { m ->
+        "<i>" + m.value.replace("*", "") + "</i>"
+    }
+    processed = Regex("~~(.*?)~~").replace(processed) { m ->
+        "<s>" + m.value.replace("~~", "") + "</s>"
+    }
+    val result = processed.split("_??_")
+
     var x = 0
 
     val linesToWrite = mutableListOf("<p>")
