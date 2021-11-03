@@ -323,32 +323,40 @@ fun checkTag(text: String, tag: String, index: Int, isOpening: Boolean): Boolean
 }
 
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
-    val lines = preprocessString(File(inputName).readText())
+    val file = preprocessString(File(inputName).readText())
     val writer = File(outputName).bufferedWriter()
-    println(lines)
+    var linesArr: MutableList<String> = mutableListOf()
+    println(file)
     val tags = mapOf(
         "**" to ("<b>" to "</b>"),
         "*" to ("<i>" to "</i>"),
         "~~" to ("<s>" to "</s>"),
     )
-    var processed = Regex("\\*\\*(.*?)\\*\\*").replace(lines) { m ->
-        "<b>" + m.value.replace("**", "") + "</b>"
-    }
-    processed = Regex("\\*(.*?)\\*").replace(processed) { m ->
-        "<i>" + m.value.replace("*", "") + "</i>"
-    }
-    processed = Regex("~~(.*?)~~").replace(processed) { m ->
-        "<s>" + m.value.replace("~~", "") + "</s>"
+    val lines = (Regex("\\_\\?\\?\\_( )?\\_\\?\\?\\_(.*?)\\_\\?\\?\\_( )?\\_\\?\\?\\_").replace(file) { m->
+        "</p><p>" + m.value.replace("**", "") + "<p></p>"
+    }).split("</p>")
+    for (line in lines) {
+        var processed = Regex("\\*\\*(.*?)\\*\\*").replace(line) { m ->
+            "<b>" + m.value.replace("**", "") + "</b>"
+        }
+        processed = Regex("\\*(.*?)\\*").replace(processed) { m ->
+            "<i>" + m.value.replace("*", "") + "</i>"
+        }
+        processed = Regex("~~(.*?)~~").replace(processed) { m ->
+            "<s>" + m.value.replace("~~", "") + "</s>"
+        }
+        linesArr.add(processed)
     }
 
-    val result = processed.split("_??_")
+
+    val result = linesArr.joinToString(separator = "").split("_??_")
 
     var x = 0
 
     val linesToWrite = mutableListOf("<p>")
     while (x < result.size) {
         if (x + 1 < result.size) {
-                linesToWrite.add(result[x])
+            linesToWrite.add(result[x])
         } else if (x + 1 == result.size) {
             linesToWrite.add(result[x] + "</p>")
         } else {
