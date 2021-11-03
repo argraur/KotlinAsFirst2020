@@ -323,7 +323,7 @@ fun checkTag(text: String, tag: String, index: Int, isOpening: Boolean): Boolean
 }
 
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
-    val file = preprocessString(File(inputName).readText())
+    var file = preprocessString(File(inputName).readText())
     val writer = File(outputName).bufferedWriter()
     var linesArr: MutableList<String> = mutableListOf()
     println(file)
@@ -332,10 +332,13 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
         "*" to ("<i>" to "</i>"),
         "~~" to ("<s>" to "</s>"),
     )
-    val lines = (Regex("\\_\\?\\?\\_( )?\\_\\?\\?\\_(.*?)\\_\\?\\?\\_( )?\\_\\?\\?\\_").replace(file) { m->
-        "</p><p>" + m.value.replace("**", "") + "<p></p>"
-    }).split("</p>")
+    file = (Regex("_\\?\\?_( )?_\\?\\?_").replace(file) { _ ->
+        "</p><p>"
+    })
+    println(file)
+    val lines = file.split(Regex("</p><p>"))
     for (line in lines) {
+        println(line)
         var processed = Regex("\\*\\*(.*?)\\*\\*").replace(line) { m ->
             "<b>" + m.value.replace("**", "") + "</b>"
         }
@@ -349,7 +352,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     }
 
 
-    val result = linesArr.joinToString(separator = "").split("_??_")
+    val result = linesArr.joinToString(separator = "</p><p>").split("_??_")
 
     var x = 0
 
