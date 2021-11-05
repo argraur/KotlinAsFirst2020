@@ -308,6 +308,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
         }
     } catch (e: IndexOutOfBoundsException) {
         builder.append("<p>")
+        ongoingParagraph = true
     }
 
     lines.forEachIndexed { idx, it ->
