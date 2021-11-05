@@ -312,7 +312,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
 
     lines.forEach {
         if (!ongoingParagraph) {
-            if (it != "" && it != "") {
+            if (it != "\n" && it != " ") {
                 builder.append("<p>")
                 ongoingParagraph = true
             }
