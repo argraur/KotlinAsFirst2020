@@ -328,7 +328,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                 }
             }
         }
-        builder.append(md(str))
+        builder.append(md(it))
     }
 
     if (ongoingParagraph) {
