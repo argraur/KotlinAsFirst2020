@@ -319,11 +319,12 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     File(outputName).writeText(builder.toString())
 }
 
+val curr = ArrayList<Char>()
+
 fun md(s: String): String {
     // *word* - italic
     // **word** - bold
     // ~~word~~ - strikethrough
-    val curr = ArrayList<Char>()
     val builder = StringBuilder()
     var idx = 0
     while (idx < s.length) {
