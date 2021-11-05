@@ -288,6 +288,9 @@ Suspendisse ~~et elit in enim tempus iaculis~~.
  *
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
+
+val curr = ArrayList<Char>()
+
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
     val builder = StringBuilder()
     val file = File(inputName)
@@ -318,8 +321,6 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
 
     File(outputName).writeText(builder.toString())
 }
-
-val curr = ArrayList<Char>()
 
 fun md(s: String): String {
     // *word* - italic
@@ -370,8 +371,13 @@ fun md(s: String): String {
                         idx++
                     }
                 } catch (e: StringIndexOutOfBoundsException) {
-                    curr.remove('i')
-                    builder.append("</i>")
+                    if (!curr.contains('i')) {
+                        curr.add('i')
+                        builder.append("<i>")
+                    } else {
+                        curr.remove('i')
+                        builder.append("</i>")
+                    }
                     idx++
                 }
             }
