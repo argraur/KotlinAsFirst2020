@@ -295,7 +295,7 @@ val curr = ArrayList<Char>()
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
     val builder = StringBuilder()
     val file = File(inputName)
-    val lines = file.readLines()
+    var lines = file.readLines()
     var ongoingParagraph = false
 
     builder.append("<html>")
@@ -312,13 +312,15 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     }
 
     lines.forEachIndexed { idx, it ->
+        val str = it.replace("\t", "")
         if (idx > 0) {
-            if (lines[idx - 1] == "" || lines[idx - 1] == " " || lines[idx - 1] == "\t") {
+            val strPrev = lines[idx - 1].replace("\t", "")
+            if (strPrev == "" || strPrev == " ") {
                 if (ongoingParagraph) {
                     builder.append("</p>")
                     ongoingParagraph = false
                 }
-                if (lines[idx] != "" && lines[idx] != " " && lines[idx] != "\t") {
+                if (str != "" && str != " ") {
                     if (!ongoingParagraph) {
                         builder.append("<p>")
                         ongoingParagraph = true
@@ -326,7 +328,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                 }
             }
         }
-        builder.append(md(it))
+        builder.append(md(str))
     }
 
     if (ongoingParagraph) {
