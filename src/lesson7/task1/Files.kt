@@ -317,7 +317,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                     builder.append("</p>")
                     ongoingParagraph = false
                 }
-                if (lines[idx] != "" && lines[idx] != " ") {
+                if (lines[idx] != "" && lines[idx] != " " && lines[idx] != "\t") {
                     if (!ongoingParagraph) {
                         builder.append("<p>")
                         ongoingParagraph = true
