@@ -313,7 +313,10 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     lines.forEachIndexed { idx, it ->
         if (idx > 0) {
             if (lines[idx - 1] == "" || lines[idx - 1] == " ") {
-                builder.append("</p><p>")
+                builder.append("</p>")
+                if (lines[idx] != "" && lines[idx] != " ") {
+                    builder.append("<p>")
+                }
             }
         }
 
