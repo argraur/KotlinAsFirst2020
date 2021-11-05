@@ -328,7 +328,9 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
         builder.append(md(it))
     }
 
-    builder.append("</p>")
+    if (ongoingParagraph) {
+        builder.append("</p>")
+    }
 
     builder.append("</body>")
     builder.append("</html>")
