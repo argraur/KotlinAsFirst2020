@@ -9,6 +9,7 @@ import java.io.FileNotFoundException
 import java.io.IOException
 import java.io.InputStream
 import java.lang.IllegalArgumentException
+import java.lang.IndexOutOfBoundsException
 import java.lang.NullPointerException
 
 // Урок 7: работа с файлами
@@ -295,12 +296,19 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     val builder = StringBuilder()
     val file = File(inputName)
     val lines = file.readLines()
-    var ongoingParagraph = true
+    var ongoingParagraph = false
 
     builder.append("<html>")
     builder.append("<body>")
 
-    builder.append("<p>")
+    try {
+        if (lines[0] != "") {
+            builder.append("<p>")
+            ongoingParagraph = true
+        }
+    } catch (e: IndexOutOfBoundsException) {
+        builder.append("<p>")
+    }
 
     lines.forEach {
         if (!ongoingParagraph) {
