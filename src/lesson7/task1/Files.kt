@@ -325,29 +325,40 @@ fun md(s: String): String {
     // ~~word~~ - strikethrough
     val curr = ArrayList<Char>()
     val builder = StringBuilder()
-    s.forEachIndexed { idx, c ->
-        when (c) {
+    var idx = 0
+    while (idx < s.length) {
+        when (val c = s[idx]) {
             '*' -> {
-                if (s[idx - 1] != '*' || s[idx - 2] == '*') {
-                    try {
-                        if (s[idx + 1] == '*') {
-                            if (!curr.contains('b')) {
-                                curr.add('b')
-                                builder.append("<b>")
-                            } else {
-                                curr.remove('b')
-                                builder.append("</b>")
+                try {
+                    if (s[idx + 1] == '*') {
+                        try {
+                            if (s[idx + 2] == '*') {
+                                if (!curr.contains('b') && !curr.contains('i')) {
+                                    curr.add('b')
+                                    curr.add('i')
+                                    builder.append("<b><i>")
+                                } else {
+                                    if (curr.indexOf('b') < curr.indexOf('i')) {
+                                        builder.append("</i></b>")
+                                    } else {
+                                        builder.append("</b></i>")
+                                    }
+                                    curr.remove('b')
+                                    curr.remove('i')
+                                }
+                                idx += 3
+                                continue
                             }
+                        } catch (e: StringIndexOutOfBoundsException) {}
+                        if (!curr.contains('b')) {
+                            curr.add('b')
+                            builder.append("<b>")
                         } else {
-                            if (!curr.contains('i')) {
-                                curr.add('i')
-                                builder.append("<i>")
-                            } else {
-                                curr.remove('i')
-                                builder.append("</i>")
-                            }
+                            curr.remove('b')
+                            builder.append("</b>")
                         }
-                    } catch (e: StringIndexOutOfBoundsException) {
+                        idx += 2
+                    } else {
                         if (!curr.contains('i')) {
                             curr.add('i')
                             builder.append("<i>")
@@ -355,22 +366,33 @@ fun md(s: String): String {
                             curr.remove('i')
                             builder.append("</i>")
                         }
+                        idx++
                     }
+                } catch (e: StringIndexOutOfBoundsException) {
+                    curr.remove('i')
+                    builder.append("</i>")
+                    idx++
                 }
             }
             '~' -> {
-                if (s[idx - 1] != '~' && s[idx - 2] != '~') {
-                    if (!curr.contains('s')) {
-                        curr.add('s')
-                        builder.append("<s>")
-                    } else {
-                        builder.append("</s>")
-                        curr.remove('s')
+                try {
+                    if (s[idx + 1] == '~') {
+                        if (!curr.contains('s')) {
+                            curr.add('s')
+                            builder.append("<s>")
+                        } else {
+                            curr.remove('s')
+                            builder.append("</s>")
+                        }
+                        idx += 2
                     }
+                } catch (e: StringIndexOutOfBoundsException) {
+                    idx++
                 }
             }
             else -> {
                 builder.append(c)
+                idx++
             }
         }
     }
