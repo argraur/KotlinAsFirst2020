@@ -304,7 +304,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
         if (!ongoingParagraph) {
             builder.append("<p>")
             ongoingParagraph = true
-        } else if (it == "") {
+        } else if (it == "" || it == " ") {
             builder.append("</p>")
             ongoingParagraph = false
         }
