@@ -295,24 +295,18 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     val builder = StringBuilder()
     val file = File(inputName)
     val lines = file.readLines()
-    var ongoingParagraph = false
 
     builder.append("<html>")
     builder.append("<body>")
 
+    builder.append("<p>")
+
     lines.forEach {
-        if (!ongoingParagraph) {
-            builder.append("<p>")
-            ongoingParagraph = true
-        }
         if (it == "" || it == " ") {
-            builder.append("</p>")
-            ongoingParagraph = false
+            builder.append("</p><p>")
         }
 
-        if (ongoingParagraph) {
-            builder.append(md(it))
-        }
+        builder.append(md(it))
     }
 
     builder.append("</p>")
