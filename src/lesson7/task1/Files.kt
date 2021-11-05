@@ -5,6 +5,11 @@ package lesson7.task1
 import lesson3.task1.length
 import ru.spbstu.wheels.out
 import java.io.File
+import java.io.FileNotFoundException
+import java.io.IOException
+import java.io.InputStream
+import java.lang.IllegalArgumentException
+import java.lang.NullPointerException
 
 // Урок 7: работа с файлами
 // Урок интегральный, поэтому его задачи имеют сильно увеличенную стоимость
@@ -324,15 +329,25 @@ fun md(s: String): String {
         when (c) {
             '*' -> {
                 if (s[idx - 1] != '*' || s[idx - 2] == '*') {
-                    if (s[idx + 1] == '*') {
-                        if (!curr.contains('b')) {
-                            curr.add('b')
-                            builder.append("<b>")
+                    try {
+                        if (s[idx + 1] == '*') {
+                            if (!curr.contains('b')) {
+                                curr.add('b')
+                                builder.append("<b>")
+                            } else {
+                                curr.remove('b')
+                                builder.append("</b>")
+                            }
                         } else {
-                            curr.remove('b')
-                            builder.append("</b>")
+                            if (!curr.contains('i')) {
+                                curr.add('i')
+                                builder.append("<i>")
+                            } else {
+                                curr.remove('i')
+                                builder.append("</i>")
+                            }
                         }
-                    } else {
+                    } catch (e: StringIndexOutOfBoundsException) {
                         if (!curr.contains('i')) {
                             curr.add('i')
                             builder.append("<i>")
@@ -559,4 +574,3 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
 fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
     TODO()
 }
-
