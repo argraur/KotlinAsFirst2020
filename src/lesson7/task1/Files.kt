@@ -310,16 +310,30 @@ fun main() {
     var str = "OZ1\n\n\n\n\nnOzx"
     str = preprocessString(str)
     println(str)
-    str = (Regex("_\\?\\?_( )?_\\?\\?_").replace(str) { _ ->
-        "</p><p>"
-    })
-    println(str)
-    var lines = str.split(Regex("</p><p>"))
-    for (line in lines) {
-        println(line)
+    val result = str.split("_??_")
+    var x = 0
+
+    val linesToWrite = mutableListOf("<p>")
+    while (x < result.size) {
+        println(result[x])
+        if (x + 1 < result.size) {
+            if (result[x + 1].trim() == "") {
+                linesToWrite.add(result[x] + "</p>")
+                if (x + 2 < result.size) {
+                    linesToWrite.add("<p>")
+                }
+                x += 1
+            } else {
+                linesToWrite.add(result[x])
+            }
+        } else if (x + 1 == result.size) {
+            linesToWrite.add(result[x] + "</p>")
+        } else {
+            linesToWrite.add(result[x])
+        }
+        x += 1
     }
-    lines = lines.joinToString(separator = "</p><p>").split("_??_")
-    for (line in lines) {
+    for (line in linesToWrite) {
         println(line)
     }
 }
@@ -357,27 +371,24 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
 //    val result = (Regex("_\\?\\?_( )?_\\?\\?_").replace(file) { _ ->
 //        "</p><p>"
 //    })
-    var x = 0
 
     val linesToWrite = mutableListOf("<p>")
-    while (x < result.size) {
-        if (x + 1 < result.size) {
-            if (result[x + 1].trim() == "") {
-                linesToWrite.add(result[x] + "</p>")
-                if (x + 2 < result.size) {
-                    linesToWrite.add("<p>")
-                }
-                x += 1
-            } else {
-                linesToWrite.add(result[x])
-            }
-        } else if (x + 1 == result.size) {
-            linesToWrite.add(result[x] + "</p>")
+    var counter = 0
+    var x = 0
+    for (line in result) {
+//        println("$line, $x, ${result.size}")
+        if (line.trim() != "") {
+            linesToWrite.add(line)
+            counter += 1
         } else {
-            linesToWrite.add(result[x])
+            if (linesToWrite[counter] != "</p><p>" && x + 1 != result.size) {
+                linesToWrite.add("</p><p>")
+                counter += 1
+            }
         }
         x += 1
     }
+    linesToWrite.add("</p>")
     writer.write(createHTML(linesToWrite.joinToString(separator = "\n")))
     writer.close()
 }

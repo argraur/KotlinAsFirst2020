@@ -256,8 +256,8 @@ Basic, Ruby, Swift.
                         </body>
                     </html>
                     """.trimIndent().replace(Regex("[\\s\\n\\t]"), ""))
-//        markdownToHtmlSimple("input/md2.md", "temp.html")
-//        checkHtmlSimpleExample(File("input/md2.html").readText().replace(Regex("[\\s\\n\\t]"), ""))
+        markdownToHtmlSimple("input/md2.md", "temp.html")
+        checkHtmlSimpleExample(File("input/md2.html").readText().replace(Regex("[\\s\\n\\t]"), ""))
     }
 
     private fun checkHtmlListsExample() {
