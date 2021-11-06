@@ -285,70 +285,12 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
 fun createHTML(body: String): String = "<html><body>$body</body></html>"
 
 fun preprocessString(text: String): String = text
-    .replace(Regex("\r\n/g"), "_??_")
-    .replace(Regex("/\r/g"), "_??_")
-    .replace(Regex("/\u00A0/g"), "&nbsp;")
     .replace(Regex("\\n"), "_??_")
-
-
-fun checkTag(text: String, tag: String, index: Int, isOpening: Boolean): Boolean {
-    if (text.length > index + tag.length)
-        println("${text.substring(index, index + tag.length)} $tag")
-    if (index + tag.length < text.length && ((text.indexOf(tag, index + 1) > index + 1 && isOpening) || (text.indexOf(
-            tag,
-            index + 1
-        ) != index + 1 && !isOpening)) && text.substring(index, index + tag.length) == tag
-    ) {
-        if (text.substring(index + 1, index + tag.length) != tag)
-            return true
-    }
-    return false
-}
-
-fun main() {
-    var str = "Kaqx3~~\\\\&~~=\\n \\n6**Bp=T,"
-    str = preprocessString(str)
-    println(str)
-    val result = str.split("_??_")
-    var x = 0
-
-    val linesToWrite = mutableListOf("<p>")
-    while (x < result.size) {
-        println(result[x])
-        if (x + 1 < result.size) {
-            if (result[x + 1].trim() == "") {
-                linesToWrite.add(result[x] + "</p>")
-                if (x + 2 < result.size) {
-                    linesToWrite.add("<p>")
-                }
-                x += 1
-            } else {
-                linesToWrite.add(result[x])
-            }
-        } else if (x + 1 == result.size) {
-            linesToWrite.add(result[x] + "</p>")
-        } else {
-            linesToWrite.add(result[x])
-        }
-        x += 1
-    }
-    for (line in linesToWrite) {
-        println(line)
-    }
-}
 
 
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
     val file = preprocessString(File(inputName).readText())
     val writer = File(outputName).bufferedWriter()
-    var linesArr: MutableList<String> = mutableListOf()
-    println(file)
-    val tags = mapOf(
-        "**" to ("<b>" to "</b>"),
-        "*" to ("<i>" to "</i>"),
-        "~~" to ("<s>" to "</s>"),
-    )
-    println(file)
     var processed = Regex("\\*\\*(.*?)\\*\\*").replace(file) { m ->
         "<b>" + m.value.replace("**", "") + "</b>"
     }
@@ -365,11 +307,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     var counterInParagraph = 0
     var x = 0
     for (line in result) {
-        println("$line, ${line.replace("\\t", "")}, ${line.replace(Regex(" "), "")}.")
-        if ((line.replace("\\t", "") != "") && (line.replace(Regex("\\s"), "") != "")) {
-//            linesToWrite.add(Regex("[^\\\\]\\\\t").replace(line) {m ->
-//                "${m.value[0]}"
-//            })
+        if ((line.replace("\t", "") != "") && (line.replace(Regex("\\s"), "") != "")) {
             linesToWrite.add(line.replace("\t", ""))
             counterInParagraph += 1
         } else {
