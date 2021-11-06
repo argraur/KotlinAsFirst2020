@@ -276,15 +276,15 @@ Suspendisse ~~et elit in enim tempus iaculis~~.
  *
  * Соответствующий выходной файл:
 <html>
-    <body>
-        <p>
-            Lorem ipsum <i>dolor sit amet</i>, consectetur <b>adipiscing</b> elit.
-            Vestibulum lobortis. <s>Est vehicula rutrum <i>suscipit</i></s>, ipsum <s>lib</s>ero <i>placerat <b>tortor</b></i>.
-        </p>
-        <p>
-            Suspendisse <s>et elit in enim tempus iaculis</s>.
-        </p>
-    </body>
+<body>
+<p>
+Lorem ipsum <i>dolor sit amet</i>, consectetur <b>adipiscing</b> elit.
+Vestibulum lobortis. <s>Est vehicula rutrum <i>suscipit</i></s>, ipsum <s>lib</s>ero <i>placerat <b>tortor</b></i>.
+</p>
+<p>
+Suspendisse <s>et elit in enim tempus iaculis</s>.
+</p>
+</body>
 </html>
  *
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
@@ -292,17 +292,16 @@ Suspendisse ~~et elit in enim tempus iaculis~~.
 
 val curr = ArrayList<Char>()
 
+private fun String.removeSpacesAndTabs(): String = this.replace("\t", "").replace(" ", "")
+
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
-    val builder = StringBuilder()
     val file = File(inputName)
     val lines = file.readLines()
+    val builder = StringBuilder("<html><body>")
     var ongoingParagraph = false
 
-    builder.append("<html>")
-    builder.append("<body>")
-
     try {
-        if (lines[0].replace("\t", "") != "" && lines[0] != " ") {
+        if (lines[0].removeSpacesAndTabs() != "") {
             builder.append("<p>")
             ongoingParagraph = true
         }
@@ -312,15 +311,15 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     }
 
     lines.forEachIndexed { idx, it ->
-        val str = it.replace("\t", "").replace(" ", "")
+        val str = it.removeSpacesAndTabs()
         if (idx > 0) {
-            val strPrev = lines[idx - 1].replace("\t", "").replace(" ", "")
-            if (strPrev == "" || strPrev == " ") {
+            val strPrev = lines[idx - 1].removeSpacesAndTabs()
+            if (strPrev.isBlank()) {
                 if (ongoingParagraph) {
                     builder.append("</p>")
                     ongoingParagraph = false
                 }
-                if (str != "" && str != " ") {
+                if (str.isNotBlank()) {
                     if (!ongoingParagraph) {
                         builder.append("<p>")
                         ongoingParagraph = true
@@ -331,14 +330,10 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
         builder.append(md(it))
     }
 
-    if (ongoingParagraph) {
+    if (ongoingParagraph)
         builder.append("</p>")
-    }
 
-    builder.append("</body>")
-    builder.append("</html>")
-
-    File(outputName).writeText(builder.toString())
+    File(outputName).writeText(builder.append("</body></html>").toString())
 }
 
 fun md(s: String): String {
@@ -370,7 +365,8 @@ fun md(s: String): String {
                                 idx += 3
                                 continue
                             }
-                        } catch (e: StringIndexOutOfBoundsException) {}
+                        } catch (e: StringIndexOutOfBoundsException) {
+                        }
                         if (!curr.contains('b')) {
                             curr.add('b')
                             builder.append("<b>")
@@ -459,65 +455,65 @@ fun md(s: String): String {
  *
  * Пример входного файла:
 ///////////////////////////////начало файла/////////////////////////////////////////////////////////////////////////////
-* Утка по-пекински
-    * Утка
-    * Соус
-* Салат Оливье
-    1. Мясо
-        * Или колбаса
-    2. Майонез
-    3. Картофель
-    4. Что-то там ещё
-* Помидоры
-* Фрукты
-    1. Бананы
-    23. Яблоки
-        1. Красные
-        2. Зелёные
+ * Утка по-пекински
+ * Утка
+ * Соус
+ * Салат Оливье
+1. Мясо
+ * Или колбаса
+2. Майонез
+3. Картофель
+4. Что-то там ещё
+ * Помидоры
+ * Фрукты
+1. Бананы
+23. Яблоки
+1. Красные
+2. Зелёные
 ///////////////////////////////конец файла//////////////////////////////////////////////////////////////////////////////
  *
  *
  * Соответствующий выходной файл:
 ///////////////////////////////начало файла/////////////////////////////////////////////////////////////////////////////
 <html>
-  <body>
-    <p>
-      <ul>
-        <li>
-          Утка по-пекински
-          <ul>
-            <li>Утка</li>
-            <li>Соус</li>
-          </ul>
-        </li>
-        <li>
-          Салат Оливье
-          <ol>
-            <li>Мясо
-              <ul>
-                <li>Или колбаса</li>
-              </ul>
-            </li>
-            <li>Майонез</li>
-            <li>Картофель</li>
-            <li>Что-то там ещё</li>
-          </ol>
-        </li>
-        <li>Помидоры</li>
-        <li>Фрукты
-          <ol>
-            <li>Бананы</li>
-            <li>Яблоки
-              <ol>
-                <li>Красные</li>
-                <li>Зелёные</li>
-              </ol>
-            </li>
-          </ol>
-        </li>
-      </ul>
-    </p>
-  </body>
+<body>
+<p>
+<ul>
+<li>
+Утка по-пекински
+<ul>
+<li>Утка</li>
+<li>Соус</li>
+</ul>
+</li>
+<li>
+Салат Оливье
+<ol>
+<li>Мясо
+<ul>
+<li>Или колбаса</li>
+</ul>
+</li>
+<li>Майонез</li>
+<li>Картофель</li>
+<li>Что-то там ещё</li>
+</ol>
+</li>
+<li>Помидоры</li>
+<li>Фрукты
+<ol>
+<li>Бананы</li>
+<li>Яблоки
+<ol>
+<li>Красные</li>
+<li>Зелёные</li>
+</ol>
+</li>
+</ol>
+</li>
+</ul>
+</p>
+</body>
 </html>
 ///////////////////////////////конец файла//////////////////////////////////////////////////////////////////////////////
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
@@ -607,23 +603,23 @@ fun markdownToHtml(inputName: String, outputName: String) {
  * Вывести в выходной файл процесс умножения столбиком числа lhv (> 0) на число rhv (> 0).
  *
  * Пример (для lhv == 19935, rhv == 111):
-   19935
-*    111
+19935
+ *    111
 --------
-   19935
+19935
 + 19935
 +19935
 --------
- 2212785
+2212785
  * Используемые пробелы, отступы и дефисы должны в точности соответствовать примеру.
  * Нули в множителе обрабатывать так же, как и остальные цифры:
-  235
-*  10
+235
+ *  10
 -----
-    0
+0
 +235
 -----
- 2350
+2350
  *
  */
 fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
@@ -668,16 +664,16 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
  * Вывести в выходной файл процесс деления столбиком числа lhv (> 0) на число rhv (> 0).
  *
  * Пример (для lhv == 19935, rhv == 22):
-  19935 | 22
- -198     906
- ----
-    13
-    -0
-    --
-    135
-   -132
-   ----
-      3
+19935 | 22
+-198     906
+----
+13
+-0
+--
+135
+-132
+----
+3
 
  * Используемые пробелы, отступы и дефисы должны в точности соответствовать примеру.
  *
