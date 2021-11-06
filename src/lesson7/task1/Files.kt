@@ -547,14 +547,15 @@ fun markdownToHtmlLists(inputName: String, outputName: String) {
                 }
             }
         }
+        val value = it.substring(spaces).replace((it.substring(spaces).split(" ")[0] + " "), "")
         if (spaces == currentSpaces) {
-            builder.append("</li><li>" + it.substring(spaces).replace((it.substring(spaces).split(" ")[0] + " "), ""))
+            builder.append("</li><li>$value")
         } else if (spaces > currentSpaces) {
             if (!levels.contains(spaces)) {
                 levels[spaces] = !it.substring(spaces).startsWith("*")
                 builder.append(if (!it.substring(spaces).startsWith("*")) "<ol>" else "<ul>")
             } else builder.append("</li>")
-            builder.append("<li>" + it.substring(spaces).replace((it.substring(spaces).split(" ")[0] + " "), ""))
+            builder.append("<li>$value")
             currentSpaces = spaces
         } else if (spaces < currentSpaces) {
             builder.append("</li>")
@@ -568,19 +569,16 @@ fun markdownToHtmlLists(inputName: String, outputName: String) {
                     levels.remove(currentSpaces)
                 }
             }
-            builder.append("</li><li>" + it.substring(spaces).replace((it.substring(spaces).split(" ")[0] + " "), ""))
+            builder.append("</li><li>$value")
         }
     }
 
-    builder.append("</li>")
-    builder.append(if (levels[currentSpaces] == true) "</ol>" else "</ul>")
-    builder.append("</li>")
+    builder.append("</li>" + (if (levels[currentSpaces] == true) "</ol>" else "</ul>") + "</li>")
 
     while (currentSpaces != 0) {
         currentSpaces -= 4
-        builder.append(if (levels[currentSpaces] == true) "</ol>" else "</ul>")
+        builder.append((if (levels[currentSpaces] == true) "</ol>" else "</ul>") + "</li>")
         levels.remove(currentSpaces)
-        builder.append("</li>")
     }
 
     builder = StringBuilder(builder.removeSuffix("</li>"))
