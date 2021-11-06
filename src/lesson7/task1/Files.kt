@@ -290,6 +290,7 @@ fun preprocessString(text: String): String = text
     .replace(Regex("/\u00A0/g"), "&nbsp;")
     .replace(Regex("\\n"), "_??_")
     .replace(Regex("\t"), " ")
+    .trim()
 
 
 fun checkTag(text: String, tag: String, index: Int, isOpening: Boolean): Boolean {
