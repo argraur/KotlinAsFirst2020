@@ -318,7 +318,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
         }
         x += 1
     }
-    if (counterInParagraph == 0) {
+    if (counterInParagraph == 0 && processed.trim() != "") {
         linesToWrite.removeLast()
     }
     linesToWrite.add("</p>")
