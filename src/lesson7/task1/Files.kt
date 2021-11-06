@@ -339,7 +339,7 @@ fun main() {
 
 
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
-    var file = preprocessString(File(inputName).readText())
+    val file = preprocessString(File(inputName).readText())
     val writer = File(outputName).bufferedWriter()
     var linesArr: MutableList<String> = mutableListOf()
     println(file)
@@ -377,7 +377,10 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     for (line in result) {
         println("$line, ${line.replace("\\t", "")}, ${line.replace(Regex(" "), "")}.")
         if ((line.replace("\\t", "") != "") && (line.replace(Regex("\\s"), "") != "")) {
-            linesToWrite.add(line.replace("\\t", ""))
+            linesToWrite.add(Regex("[^\\\\]\\\\t").replace(line) {m ->
+                "${m.value[0]}"
+            })
+//            linesToWrite.add(line.replace(Regex("\\t"), ""))
             counterInParagraph += 1
         } else {
             if (counterInParagraph != 0 && x + 1 != result.size) {
