@@ -285,12 +285,12 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
 fun createHTML(body: String): String = "<html><body>$body</body></html>"
 
 fun preprocessString(text: String): String = text
+    .trim()
     .replace(Regex("\r\n/g"), "_??_")
     .replace(Regex("/\r/g"), "_??_")
     .replace(Regex("/\u00A0/g"), "&nbsp;")
     .replace(Regex("\\n"), "_??_")
     .replace(Regex("\t"), " ")
-    .trim()
 
 
 fun checkTag(text: String, tag: String, index: Int, isOpening: Boolean): Boolean {
@@ -492,9 +492,15 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
 fun markdownToHtmlLists(inputName: String, outputName: String) {
-    var file = File(inputName).readText()
+    var file = File(inputName).readText().split("\\n")
     val writer = File(outputName).bufferedWriter()
-    println(file)
+    val linesToWrite: MutableList<String> = mutableListOf()
+    var before: Pair<Int, String> = -1 to ""
+    for (x in file.indices) {
+        val line = file[x]
+        val dot = line.trim()[0].toString()
+
+    }
 }
 
 /**
