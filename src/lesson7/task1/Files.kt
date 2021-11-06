@@ -312,9 +312,9 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     }
 
     lines.forEachIndexed { idx, it ->
-        val str = it.replace("\t", "")
+        val str = it.replace("\t", "").replace(" ", "")
         if (idx > 0) {
-            val strPrev = lines[idx - 1].replace("\t", "")
+            val strPrev = lines[idx - 1].replace("\t", "").replace(" ", "")
             if (strPrev == "" || strPrev == " ") {
                 if (ongoingParagraph) {
                     builder.append("</p>")
