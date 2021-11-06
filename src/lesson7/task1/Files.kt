@@ -335,9 +335,6 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
         "*" to ("<i>" to "</i>"),
         "~~" to ("<s>" to "</s>"),
     )
-    file = (Regex("_\\?\\?_( )?_\\?\\?_").replace(file) { _ ->
-        "</p><p>"
-    })
     println(file)
     var processed = Regex("\\*\\*(.*?)\\*\\*").replace(file) { m ->
         "<b>" + m.value.replace("**", "") + "</b>"
@@ -357,13 +354,23 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
 //
 
     val result = processed.split("_??_")
-
+//    val result = (Regex("_\\?\\?_( )?_\\?\\?_").replace(file) { _ ->
+//        "</p><p>"
+//    })
     var x = 0
 
     val linesToWrite = mutableListOf("<p>")
     while (x < result.size) {
         if (x + 1 < result.size) {
-            linesToWrite.add(result[x])
+            if (result[x + 1].trim() == "") {
+                linesToWrite.add(result[x] + "</p>")
+                if (x + 2 < result.size) {
+                    linesToWrite.add("<p>")
+                }
+                x += 1
+            } else {
+                linesToWrite.add(result[x])
+            }
         } else if (x + 1 == result.size) {
             linesToWrite.add(result[x] + "</p>")
         } else {
