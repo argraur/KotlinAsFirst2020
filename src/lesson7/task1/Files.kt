@@ -358,18 +358,8 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     processed = Regex("~~(.*?)~~").replace(processed) { m ->
         "<s>" + m.value.replace("~~", "") + "</s>"
     }
-//    val lines = file.split(Regex("</p><p>"))
-//    for (line in lines) {
-//        println(line)
-//
-//        linesArr.add(processed)
-//    }
-//
 
     val result = processed.split("_??_")
-//    val result = (Regex("_\\?\\?_( )?_\\?\\?_").replace(file) { _ ->
-//        "</p><p>"
-//    })
 
     val linesToWrite = mutableListOf("<p>")
     var counterInParagraph = 0
@@ -377,10 +367,10 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     for (line in result) {
         println("$line, ${line.replace("\\t", "")}, ${line.replace(Regex(" "), "")}.")
         if ((line.replace("\\t", "") != "") && (line.replace(Regex("\\s"), "") != "")) {
-            linesToWrite.add(Regex("[^\\\\]\\\\t").replace(line) {m ->
-                "${m.value[0]}"
-            })
-//            linesToWrite.add(line.replace(Regex("\\t"), ""))
+//            linesToWrite.add(Regex("[^\\\\]\\\\t").replace(line) {m ->
+//                "${m.value[0]}"
+//            })
+            linesToWrite.add(line.replace("\t", ""))
             counterInParagraph += 1
         } else {
             if (counterInParagraph != 0 && x + 1 != result.size) {
