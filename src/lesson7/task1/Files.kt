@@ -291,22 +291,6 @@ fun preprocessString(text: String): String = text
     .replace(Regex("\\n"), "_??_")
     .replace(Regex("\t"), " ")
 
-fun count(string: String, text: String): Int {
-    var counter = 0
-    var lastIndex = -1
-
-    while (true) {
-        lastIndex = string.indexOf(text, lastIndex + 1)
-        if (lastIndex == -1)
-            return counter
-        else
-            if (checkTag(string, text, lastIndex, true))
-                counter += 1
-            else
-                lastIndex += 1
-    }
-
-}
 
 fun checkTag(text: String, tag: String, index: Int, isOpening: Boolean): Boolean {
     if (text.length > index + tag.length)
@@ -322,6 +306,25 @@ fun checkTag(text: String, tag: String, index: Int, isOpening: Boolean): Boolean
     return false
 }
 
+fun main() {
+    var str = "OZ1\n\n\n\n\nnOzx"
+    str = preprocessString(str)
+    println(str)
+    str = (Regex("_\\?\\?_( )?_\\?\\?_").replace(str) { _ ->
+        "</p><p>"
+    })
+    println(str)
+    var lines = str.split(Regex("</p><p>"))
+    for (line in lines) {
+        println(line)
+    }
+    lines = lines.joinToString(separator = "</p><p>").split("_??_")
+    for (line in lines) {
+        println(line)
+    }
+}
+
+
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
     var file = preprocessString(File(inputName).readText())
     val writer = File(outputName).bufferedWriter()
@@ -336,23 +339,24 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
         "</p><p>"
     })
     println(file)
-    val lines = file.split(Regex("</p><p>"))
-    for (line in lines) {
-        println(line)
-        var processed = Regex("\\*\\*(.*?)\\*\\*").replace(line) { m ->
-            "<b>" + m.value.replace("**", "") + "</b>"
-        }
-        processed = Regex("\\*(.*?)\\*").replace(processed) { m ->
-            "<i>" + m.value.replace("*", "") + "</i>"
-        }
-        processed = Regex("~~(.*?)~~").replace(processed) { m ->
-            "<s>" + m.value.replace("~~", "") + "</s>"
-        }
-        linesArr.add(processed)
+    var processed = Regex("\\*\\*(.*?)\\*\\*").replace(file) { m ->
+        "<b>" + m.value.replace("**", "") + "</b>"
     }
+    processed = Regex("\\*(.*?)\\*").replace(processed) { m ->
+        "<i>" + m.value.replace("*", "") + "</i>"
+    }
+    processed = Regex("~~(.*?)~~").replace(processed) { m ->
+        "<s>" + m.value.replace("~~", "") + "</s>"
+    }
+//    val lines = file.split(Regex("</p><p>"))
+//    for (line in lines) {
+//        println(line)
+//
+//        linesArr.add(processed)
+//    }
+//
 
-
-    val result = linesArr.joinToString(separator = "</p><p>").split("_??_")
+    val result = processed.split("_??_")
 
     var x = 0
 
@@ -535,9 +539,9 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
  *
  */
 
-fun main() {
-    printDivisionProcess(15, 8, "HAH")
-}
+//fun main() {
+//    printDivisionProcess(15, 8, "HAH")
+//}
 
 fun getClosest(n: Int, to: Int): Pair<Int, Int> = Pair(n * (to / n), to / n)
 
