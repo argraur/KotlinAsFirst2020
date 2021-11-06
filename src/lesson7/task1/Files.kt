@@ -381,7 +381,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
             linesToWrite.add(line)
             counter += 1
         } else {
-            if (linesToWrite[counter] != "</p><p>" && x + 1 != result.size) {
+            if (linesToWrite[counter] != "</p><p>" && x + 1 != result.size && x != 0) {
                 linesToWrite.add("</p><p>")
                 counter += 1
             }
@@ -491,7 +491,8 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
 fun markdownToHtmlLists(inputName: String, outputName: String) {
-    TODO()
+    var file = preprocessString(File(inputName).readText())
+    val writer = File(outputName).bufferedWriter()
 }
 
 /**
