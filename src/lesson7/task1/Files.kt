@@ -295,7 +295,7 @@ val curr = ArrayList<Char>()
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
     val builder = StringBuilder()
     val file = File(inputName)
-    var lines = file.readLines()
+    val lines = file.readLines()
     var ongoingParagraph = false
 
     builder.append("<html>")
@@ -528,7 +528,6 @@ fun markdownToHtmlLists(inputName: String, outputName: String) {
     val lines = file.readLines()
 
     val levels = mutableMapOf<Int, Boolean>() // <spaces, numerated: true | non-numerated: false>
-    val currentLevel = 0
     var currentSpaces = 0
     builder.append("<html><body><p>")
 
