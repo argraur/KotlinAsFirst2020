@@ -285,7 +285,6 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
 fun createHTML(body: String): String = "<html><body>$body</body></html>"
 
 fun preprocessString(text: String): String = text
-    .trim()
     .replace(Regex("\r\n/g"), "_??_")
     .replace(Regex("/\r/g"), "_??_")
     .replace(Regex("/\u00A0/g"), "&nbsp;")
@@ -374,20 +373,23 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
 //    })
 
     val linesToWrite = mutableListOf("<p>")
-    var counter = 0
+    var counterInParagraph = 0
     var x = 0
     for (line in result) {
-//        println("$line, $x, ${result.size}")
-        if (line.trim() != "") {
+        println("$line, $counterInParagraph, ${result.size}")
+        if (line.replace("\n", "") != "") {
             linesToWrite.add(line)
-            counter += 1
+            counterInParagraph += 1
         } else {
-            if (linesToWrite[counter] != "</p><p>" && x + 1 != result.size && counter != 0) {
+            if (counterInParagraph != 0 && x + 1 != result.size) {
                 linesToWrite.add("</p><p>")
-                counter += 1
+                counterInParagraph = 0
             }
         }
         x += 1
+    }
+    if (counterInParagraph == 0) {
+        linesToWrite.removeLast()
     }
     linesToWrite.add("</p>")
     writer.write(createHTML(linesToWrite.joinToString(separator = "\n")))
@@ -492,14 +494,15 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
 fun markdownToHtmlLists(inputName: String, outputName: String) {
-    var file = File(inputName).readText().split("\\n")
+    var file = File(inputName).readText().split("\n")
     val writer = File(outputName).bufferedWriter()
     val linesToWrite: MutableList<String> = mutableListOf()
     var before: Pair<Int, String> = -1 to ""
     for (x in file.indices) {
         val line = file[x]
         val dot = line.trim()[0].toString()
-
+        val tabs = line.indexOf(dot)
+        println("$dot, $tabs")
     }
 }
 
