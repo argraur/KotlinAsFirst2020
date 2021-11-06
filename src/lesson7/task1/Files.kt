@@ -289,7 +289,7 @@ fun preprocessString(text: String): String = text
     .replace(Regex("/\r/g"), "_??_")
     .replace(Regex("/\u00A0/g"), "&nbsp;")
     .replace(Regex("\\n"), "_??_")
-    .replace(Regex("\t"), " ")
+    .replace(Regex("\\t"), "\\t")
 
 
 fun checkTag(text: String, tag: String, index: Int, isOpening: Boolean): Boolean {
@@ -307,7 +307,7 @@ fun checkTag(text: String, tag: String, index: Int, isOpening: Boolean): Boolean
 }
 
 fun main() {
-    var str = "OZ1\n\n\n\n\nnOzx"
+    var str = "Kaqx3~~\\\\&~~=\\n \\n6**Bp=T,"
     str = preprocessString(str)
     println(str)
     val result = str.split("_??_")
@@ -376,8 +376,8 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     var counterInParagraph = 0
     var x = 0
     for (line in result) {
-        println("$line, $counterInParagraph, ${result.size}")
-        if (line.replace("\n", "") != "") {
+        println("$line, ${line.replace("\\t", "")}, ${line.replace(Regex(" "), "")}.")
+        if ((line.replace("\\t", "") != "") && (line.replace(Regex("\\s"), "") != "")) {
             linesToWrite.add(line)
             counterInParagraph += 1
         } else {
@@ -502,6 +502,11 @@ fun markdownToHtmlLists(inputName: String, outputName: String) {
         val line = file[x]
         val dot = line.trim()[0].toString()
         val tabs = line.indexOf(dot)
+        if (before.first != tabs) {
+            if (dot == "*") {
+                linesToWrite.add("<ul>")
+            }
+        }
         println("$dot, $tabs")
     }
 }
