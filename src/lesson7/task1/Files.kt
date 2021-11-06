@@ -523,7 +523,73 @@ fun md(s: String): String {
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
 fun markdownToHtmlLists(inputName: String, outputName: String) {
-    TODO()
+    var builder = StringBuilder()
+    val file = File(inputName)
+    val lines = file.readLines()
+
+    val levels = mutableMapOf<Int, Boolean>() // <spaces, numerated: true | non-numerated: false>
+    val currentLevel = 0
+    var currentSpaces = 0
+    builder.append("<html><body><p>")
+
+    levels[0] = !lines[0].startsWith("*")
+    builder.append(if (!lines[0].startsWith("*")) "<ol>" else "<ul>")
+    builder.append("<li>" + lines[0].replace((lines[0].split(" ")[0] + " "), ""))
+
+    for (idx in 1 until lines.size) {
+        val it = lines[idx]
+        var spaces = 0
+        if (it.startsWith(" ")) {
+            for (i in it.indices) {
+                if (it[i] == ' ') {
+                    spaces++
+                } else {
+                    break
+                }
+            }
+        }
+        if (spaces == currentSpaces) {
+            builder.append("</li><li>" + it.substring(spaces).replace((it.substring(spaces).split(" ")[0] + " "), ""))
+        } else if (spaces > currentSpaces) {
+            if (!levels.contains(spaces)) {
+                levels[spaces] = !it.substring(spaces).startsWith("*")
+                builder.append(if (!it.substring(spaces).startsWith("*")) "<ol>" else "<ul>")
+            } else builder.append("</li>")
+            builder.append("<li>" + it.substring(spaces).replace((it.substring(spaces).split(" ")[0] + " "), ""))
+            currentSpaces = spaces
+        } else if (spaces < currentSpaces) {
+            builder.append("</li>")
+            builder.append(if (levels[currentSpaces] == true) "</ol>" else "</ul>")
+            levels.remove(currentSpaces)
+            currentSpaces -= 4
+            if (currentSpaces != spaces) {
+                while (currentSpaces != spaces) {
+                    currentSpaces -= 4
+                    builder.append(if (levels[currentSpaces] == true) "</ol>" else "</ul>")
+                    levels.remove(currentSpaces)
+                }
+            }
+            builder.append("</li><li>" + it.substring(spaces).replace((it.substring(spaces).split(" ")[0] + " "), ""))
+        }
+    }
+
+    builder.append("</li>")
+    builder.append(if (levels[currentSpaces] == true) "</ol>" else "</ul>")
+    builder.append("</li>")
+
+    while (currentSpaces != 0) {
+        currentSpaces -= 4
+        builder.append(if (levels[currentSpaces] == true) "</ol>" else "</ul>")
+        levels.remove(currentSpaces)
+        builder.append("</li>")
+    }
+
+    builder = StringBuilder(builder.removeSuffix("</li>"))
+
+    builder.append("</p></body></html>")
+
+    val outputFile = File(outputName)
+    outputFile.writeText(builder.toString())
 }
 
 /**
