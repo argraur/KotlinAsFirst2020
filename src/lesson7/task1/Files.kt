@@ -302,7 +302,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     builder.append("<body>")
 
     try {
-        if (lines[0] != "") {
+        if (lines[0].replace("\t", "") != "" && lines[0] != " ") {
             builder.append("<p>")
             ongoingParagraph = true
         }
