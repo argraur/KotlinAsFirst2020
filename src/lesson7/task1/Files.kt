@@ -424,8 +424,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
 fun markdownToHtmlLists(inputName: String, outputName: String) {
-    var file = File(inputName).readText().trim().split("\n")
-    val writer = File(outputName).bufferedWriter()
+    val file = File(inputName).readText().trim().split("\n")
     val notClosedLists = mutableListOf<String>()
     val linesToWrite: MutableList<String> = mutableListOf()
     val dots = mapOf(
@@ -438,7 +437,6 @@ fun markdownToHtmlLists(inputName: String, outputName: String) {
         var dot = line.trim().split(" ")[0]
         val tabs = line.indexOf(dot)
         val text = line.substring(tabs + dot.length + 1)
-        println("$dot, $tabs $text")
         if (dot != "*") {
             dot = "1"
         }
@@ -447,7 +445,6 @@ fun markdownToHtmlLists(inputName: String, outputName: String) {
             if (linesToWrite.isNotEmpty() && linesToWrite[lastIndex].isNotEmpty())
                 linesToWrite[lastIndex] =
                     linesToWrite[lastIndex].substring(0, linesToWrite[lastIndex].length - 5)
-            println(text)
             notClosedLists.add("li")
             linesToWrite.add("<${dots[dot]}>")
             notClosedLists.add("${dots[dot]}")
@@ -468,7 +465,6 @@ fun markdownToHtmlLists(inputName: String, outputName: String) {
     }
     notClosedLists.removeFirst()
     for (element in notClosedLists.reversed()) {
-        println(element)
         linesToWrite.add("</$element>")
     }
     File(outputName).writeText(createHTML("<p>" + linesToWrite.joinToString(separator = "\n") + "</p>"))
@@ -544,50 +540,51 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
 fun getClosest(n: Int, to: Int): Pair<Int, Int> = Pair(n * (to / n), to / n)
 
 fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
-//    try {
-    val writer = File(outputName).bufferedWriter()
-    var lhvString = lhv.toString()
-    val rhvString = rhv.toString()
-    var resultString = mutableListOf<String>()
-    var i = 0
-    var isShift = false
-    var current: Int
-    if (lhvString.substring(0, rhvString.length).toInt() < rhv) {
-        current = lhvString.substring(0, rhvString.length + 1).toInt()
-    } else {
-        current = lhvString.substring(0, rhvString.length).toInt()
-    }
-    var firstClosest = getClosest(rhv, current)
-    if (firstClosest.toString().length < current.toString().length) {
-        resultString.add("${lhv} | ${rhv}")
-        resultString.add("-${firstClosest}")
-        resultString.add("-".repeat(firstClosest.toString().length + 1))
-    } else {
-        resultString.add(" ${lhv} | ${rhv}")
-        resultString.add("-${firstClosest}")
-        resultString.add("-".repeat(firstClosest.toString().length + 1))
-    }
-//    while (rhvString != "") {
-//
+    TODO()
+////    try {
+//    val writer = File(outputName).bufferedWriter()
+//    var lhvString = lhv.toString()
+//    val rhvString = rhv.toString()
+//    var resultString = mutableListOf<String>()
+//    var i = 0
+//    var isShift = false
+//    var current: Int
+//    if (lhvString.substring(0, rhvString.length).toInt() < rhv) {
+//        current = lhvString.substring(0, rhvString.length + 1).toInt()
+//    } else {
+//        current = lhvString.substring(0, rhvString.length).toInt()
 //    }
-
-    for (x in resultString.indices) {
-        writer.write(resultString[x])
-        writer.newLine()
-        println(resultString[x])
-    }
-    writer.close()
-////    } catch (e: StringIndexOutOfBoundsException) {
-//        val writer = File(outputName).bufferedWriter()
-//
-//        writer.write(
-//            " 1 | 1\n" +
-//                    "-1   1\n" +
-//                    "--\n" +
-//                    " 0"
-//        )
-//        writer.close()
+//    var firstClosest = getClosest(rhv, current)
+//    if (firstClosest.toString().length < current.toString().length) {
+//        resultString.add("${lhv} | ${rhv}")
+//        resultString.add("-${firstClosest}")
+//        resultString.add("-".repeat(firstClosest.toString().length + 1))
+//    } else {
+//        resultString.add(" ${lhv} | ${rhv}")
+//        resultString.add("-${firstClosest}")
+//        resultString.add("-".repeat(firstClosest.toString().length + 1))
 //    }
+////    while (rhvString != "") {
+////
+////    }
+//
+//    for (x in resultString.indices) {
+//        writer.write(resultString[x])
+//        writer.newLine()
+//        println(resultString[x])
+//    }
+//    writer.close()
+//////    } catch (e: StringIndexOutOfBoundsException) {
+////        val writer = File(outputName).bufferedWriter()
+////
+////        writer.write(
+////            " 1 | 1\n" +
+////                    "-1   1\n" +
+////                    "--\n" +
+////                    " 0"
+////        )
+////        writer.close()
+////    }
 
 }
 
