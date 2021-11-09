@@ -3,6 +3,7 @@
 package lesson7.task1
 
 import java.io.File
+import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType
 
 // Урок 7: работа с файлами
 // Урок интегральный, поэтому его задачи имеют сильно увеличенную стоимость
@@ -290,7 +291,7 @@ fun preprocessString(text: String): String = text
 
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
     val file = preprocessString(File(inputName).readText())
-    val writer = File(outputName).bufferedWriter()
+
     var processed = Regex("\\*\\*(.*?)\\*\\*").replace(file) { m ->
         "<b>" + m.value.replace("**", "") + "</b>"
     }
@@ -322,8 +323,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
         linesToWrite.removeLast()
     }
     linesToWrite.add("</p>")
-    writer.write(createHTML(linesToWrite.joinToString(separator = "\n")))
-    writer.close()
+    File(outputName).writeText(createHTML(linesToWrite.joinToString(separator = "\n")))
 }
 
 /**
@@ -424,21 +424,54 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
 fun markdownToHtmlLists(inputName: String, outputName: String) {
-    var file = File(inputName).readText().split("\n")
+    var file = File(inputName).readText().trim().split("\n")
     val writer = File(outputName).bufferedWriter()
+    val notClosedLists = mutableListOf<String>()
     val linesToWrite: MutableList<String> = mutableListOf()
+    val dots = mapOf(
+        "*" to "ul",
+        "1" to "ol"
+    )
     var before: Pair<Int, String> = -1 to ""
     for (x in file.indices) {
         val line = file[x]
-        val dot = line.trim()[0].toString()
+        var dot = line.trim().split(" ")[0]
         val tabs = line.indexOf(dot)
-        if (before.first != tabs) {
-            if (dot == "*") {
-                linesToWrite.add("<ul>")
-            }
+        val text = line.substring(tabs + dot.length + 1)
+        println("$dot, $tabs $text")
+        if (dot != "*") {
+            dot = "1"
         }
-        println("$dot, $tabs")
+        if (tabs > before.first) {
+            val lastIndex = linesToWrite.lastIndex
+            if (linesToWrite.isNotEmpty() && linesToWrite[lastIndex].isNotEmpty())
+                linesToWrite[lastIndex] =
+                    linesToWrite[lastIndex].substring(0, linesToWrite[lastIndex].length - 5)
+            println(text)
+            notClosedLists.add("li")
+            linesToWrite.add("<${dots[dot]}>")
+            notClosedLists.add("${dots[dot]}")
+            linesToWrite.add("<li>${text}</li>")
+        } else if (tabs < before.first) {
+            linesToWrite.add("</${dots[before.second]}></li>")
+            notClosedLists.remove("li")
+            notClosedLists.remove("${dots[before.second]}")
+            linesToWrite.add("<li>${text}</li>")
+        } else if (before.second != dot) {
+            linesToWrite.add("</${dots[before.second]}>")
+            notClosedLists.remove("${dots[before.second]}")
+            linesToWrite.add("<li>${text}</li>")
+        } else {
+            linesToWrite.add("<li>${text}</li>")
+        }
+        before = tabs to dot
     }
+    notClosedLists.removeFirst()
+    for (element in notClosedLists.reversed()) {
+        println(element)
+        linesToWrite.add("</$element>")
+    }
+    File(outputName).writeText(createHTML("<p>" + linesToWrite.joinToString(separator = "\n") + "</p>"))
 }
 
 /**
