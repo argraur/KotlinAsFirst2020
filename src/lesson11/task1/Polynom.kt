@@ -2,6 +2,8 @@
 
 package lesson11.task1
 
+import java.lang.IllegalArgumentException
+import java.lang.Math.max
 import java.lang.Math.pow
 import kotlin.math.pow
 
@@ -28,7 +30,19 @@ class Polynom(vararg coeffs: Double) {
     /**
      * Геттер: вернуть значение коэффициента при x^i
      */
-    fun coeff(i: Int): Double = coefArray[i]
+    fun coeff(i: Int): Double {
+        if (i >= coefArray.size) {
+            throw IllegalArgumentException()
+        }
+        return coefArray[i]
+    }
+
+    fun coeffOrNull(i: Int): Double {
+        if (i >= coefArray.size) {
+            return 0.0
+        }
+        return coefArray[i]
+    }
 
     /**
      * Расчёт значения при заданном x
@@ -60,7 +74,16 @@ class Polynom(vararg coeffs: Double) {
     /**
      * Сложение
      */
-    operator fun plus(other: Polynom): Polynom = TODO()
+    operator fun plus(other: Polynom): Polynom {
+        val newCoefs = mutableListOf<Double>()
+        val maxDegree = this.degree().coerceAtLeast(other.degree())
+
+        for (i in maxDegree downTo 0) {
+            val coef = this.coeffOrNull(i) + other.coeffOrNull(i)
+            newCoefs.add(coef)
+        }
+        return Polynom(*newCoefs.toDoubleArray())
+    }
 
     /**
      * Смена знака (при всех слагаемых)

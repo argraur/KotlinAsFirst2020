@@ -23,6 +23,16 @@ class PolynomTest {
 
     @Test
     @Tag("4")
+    fun coeffOrNull() {
+        val p = Polynom(1.0, 3.0, 2.0)
+        assertEquals(3.0, p.coeffOrNull(1), 1e-10)
+        assertEquals(1.0, p.coeffOrNull(2), 1e-10)
+        assertEquals(2.0, p.coeffOrNull(0), 1e-10)
+        assertEquals(0.0, p.coeffOrNull(5), 1e-10)
+    }
+
+    @Test
+    @Tag("4")
     fun degree() {
         val p = Polynom(1.0, 1.0, 1.0)
         assertEquals(2, p.degree())
