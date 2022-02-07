@@ -48,7 +48,14 @@ class Polynom(vararg coeffs: Double) {
      * Слагаемые с нулевыми коэффициентами игнорировать, т.е.
      * степень 0x^2+0x+2 также равна 0.
      */
-    fun degree(): Int = TODO()
+    fun degree(): Int {
+        for (i in coefArray.size - 1 downTo 0) {
+            if (coefArray[i] != 0.0) {
+                return i
+            }
+        }
+        return 0
+    }
 
     /**
      * Сложение
