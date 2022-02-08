@@ -173,7 +173,23 @@ class FixedPointNumber(val int: Int, val frac: String) : Comparable<FixedPointNu
     /**
      * Деление
      */
-    operator fun div(other: FixedPointNumber): FixedPointNumber = TODO()
+    operator fun div(other: FixedPointNumber): FixedPointNumber {
+        val sign = int.sign * other.int.sign
+        val a = "$int.$frac".removePrefix("-").toDouble()
+        val b = "${other.int}.${other.frac}".removePrefix("-").toDouble()
+        val c = 1.0 * a / b
+        val newFrac = c.toString().split(".")[1]
+        val prec = precision.coerceAtMost(other.precision)
+        var tmp = newFrac.substring(0, prec)
+        if (newFrac[prec].digitToInt() >= 5) {
+            tmp = tmp.dropLast(1) + (tmp[prec - 1].digitToInt() + 1)
+        }
+        return if (sign > 0) {
+            FixedPointNumber(c.toString().replace(newFrac, tmp))
+        } else {
+            -FixedPointNumber(c.toString().replace(newFrac, tmp))
+        }
+    }
 
     /**
      * Сравнение на равенство
