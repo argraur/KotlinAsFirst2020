@@ -23,7 +23,21 @@ import kotlin.math.pow
  * Старшие коэффициенты, равные нулю, игнорировать, например Polynom(0.0, 0.0, 5.0, 3.0) соответствует 5x+3
  */
 class Polynom(vararg coeffs: Double) {
-    private val coeffArray = coeffs.asList().reversed()
+
+    private val coeffArray: List<Double>
+
+    init {
+        val Array = coeffs.toMutableList()
+        while (Array[0] == 0.0) {
+            if (Array.size != 1)
+                Array.removeFirstOrNull()
+            else
+                break
+        }
+        this.coeffArray = Array.reversed()
+    }
+
+
 
     /**
      * Геттер: вернуть значение коэффициента при x^i,
@@ -56,13 +70,6 @@ class Polynom(vararg coeffs: Double) {
             result += coeffArray[i] * x.pow(i.toDouble())
         }
         return result
-    }
-
-    /**
-     * Геттер: Вернуть все коэфициенты
-     */
-    fun getCoeffsList(x: Double): List<Double> {
-        return coeffArray
     }
 
     /**
@@ -159,13 +166,18 @@ class Polynom(vararg coeffs: Double) {
      */
     operator fun rem(other: Polynom): Polynom = TODO()
 
-    /**
-     * Сравнение на равенство
-     */
-    override fun equals(other: Any?): Boolean = TODO()
 
-    /**
-     * Получение хеш-кода
-     */
-    override fun hashCode(): Int = TODO()
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Polynom
+
+        if (coeffArray.hashCode() != other.coeffArray.hashCode()) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int = coeffArray.hashCode()
+
 }
