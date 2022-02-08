@@ -27,6 +27,11 @@ class FixedPointNumber(val int: Int, val frac: String) : Comparable<FixedPointNu
     val precision: Int get() = frac.length
 
     /**
+     * Отрицательно ли число
+     */
+    val negative: Boolean get() = int < 0
+
+    /**
      * Конструктор из строки, точность выбирается в соответствии
      * с числом цифр после десятичной точки.
      * Если строка некорректна или цифр слишком много,
@@ -54,6 +59,11 @@ class FixedPointNumber(val int: Int, val frac: String) : Comparable<FixedPointNu
      * Лишние знаки отрбрасываются, число округляется по правилам арифметики.
      */
     operator fun plus(other: FixedPointNumber): FixedPointNumber {
+        if (other.negative) {
+            return this - -other
+        } else if (negative) {
+            return other - -this
+        }
         var newInt = int + other.int
         var newFrac = ""
         var frac1 = if (frac.isNotEmpty()) frac.toInt() else 0
@@ -82,6 +92,11 @@ class FixedPointNumber(val int: Int, val frac: String) : Comparable<FixedPointNu
      * Вычитание
      */
     operator fun minus(other: FixedPointNumber): FixedPointNumber {
+        if (other.negative) {
+            return this + (-other)
+        } else if (negative) {
+            return -(-this + other)
+        }
         var newInt = int - other.int
         var newFracInt = 0
         var newFrac = ""
