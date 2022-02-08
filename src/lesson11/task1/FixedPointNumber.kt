@@ -5,6 +5,7 @@ package lesson11.task1
 import lesson3.task1.length
 import java.lang.Math.pow
 import kotlin.math.pow
+import kotlin.math.sign
 
 /**
  * Класс "вещественное число с фиксированной точкой"
@@ -132,7 +133,42 @@ class FixedPointNumber(val int: Int, val frac: String) : Comparable<FixedPointNu
     /**
      * Умножение
      */
-    operator fun times(other: FixedPointNumber): FixedPointNumber = TODO()
+    operator fun times(other: FixedPointNumber): FixedPointNumber {
+        val a = "$int$frac".removePrefix("-").toCharArray().map { it.digitToInt() }
+        val b = "${other.int}${other.frac}".removePrefix("-").toCharArray().map { it.digitToInt() }
+        val res = object {
+            val sign = int.sign * other.int.sign
+            var digits = IntArray(a.size + b.size)
+        }
+        var i2 = 0
+        for ((i1, i) in ((a.size - 1) downTo 0).withIndex()) {
+            var carry = 0
+            i2 = 0
+            for (j in (b.size - 1) downTo 0) {
+                val sum = a[i] * b[j] + res.digits[i1 + i2] + carry
+                carry = sum / 10
+                res.digits[i1 + i2] = sum % 10
+                i2++
+            }
+            if (carry > 0) {
+                res.digits[i1 + i2] += carry
+            }
+        }
+        var s = res.digits.reversed().joinToString("").removePrefix("0")
+        s = StringBuilder(s).insert(s.length - (precision + other.precision), ".").toString()
+        val newFrac = s.split(".")[1]
+        val prec = precision.coerceAtLeast(other.precision)
+        var tmp = newFrac.substring(0, prec)
+        if (newFrac[prec].digitToInt() >= 5) {
+            tmp = tmp.dropLast(1) + (tmp[prec - 1].digitToInt() + 1)
+        }
+        s = s.replace(newFrac, tmp)
+        return if (res.sign > 0) {
+            FixedPointNumber(s)
+        } else {
+            -FixedPointNumber(s)
+        }
+    }
 
     /**
      * Деление
