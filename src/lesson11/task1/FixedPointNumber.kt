@@ -2,8 +2,6 @@
 
 package lesson11.task1
 
-import lesson3.task1.length
-import java.lang.Math.pow
 import kotlin.math.pow
 import kotlin.math.sign
 
@@ -24,21 +22,22 @@ import kotlin.math.sign
 class FixedPointNumber(val int: Int, val frac: String) : Comparable<FixedPointNumber> {
     companion object {
         fun getIntFromString(s: String): Int {
-            if (s.contains(".")) {
-                return s.split(".")[0].toInt()
+            return if (s.contains(".")) {
+                s.split(".")[0].toInt()
             } else {
-                return s.toInt()
+                s.toInt()
             }
         }
 
         fun getFracFromString(s: String): String {
-            if (s.contains(".")) {
-                return s.split(".")[1]
+            return if (s.contains(".")) {
+                s.split(".")[1]
             } else {
-                return ""
+                ""
             }
         }
     }
+
     /**
      * Точность - число десятичных цифр после запятой.
      */
@@ -47,7 +46,8 @@ class FixedPointNumber(val int: Int, val frac: String) : Comparable<FixedPointNu
     /**
      * Отрицательно ли число
      */
-    val negative: Boolean get() = int < 0
+    private val negative: Boolean get() = int < 0
+
     /**
      * Конструктор из строки, точность выбирается в соответствии
      * с числом цифр после десятичной точки.
@@ -57,10 +57,14 @@ class FixedPointNumber(val int: Int, val frac: String) : Comparable<FixedPointNu
      * Внимание: этот или другой конструктор можно сделать основным
      */
     constructor(s: String) : this(getIntFromString(s), getFracFromString(s))
+
     /**
      * Конструктор из вещественного числа с заданной точностью
      */
-    constructor(d: Double, p: Int) : this(d.toString().split(".")[0].toInt(), d.toString().split(".")[1].substring(0, p))
+    constructor(d: Double, p: Int) : this(
+        d.toString().split(".")[0].toInt(),
+        d.toString().split(".")[1].substring(0, p)
+    )
 
     /**
      * Конструктор из целого числа (предполагает нулевую точность)
@@ -81,7 +85,7 @@ class FixedPointNumber(val int: Int, val frac: String) : Comparable<FixedPointNu
             return other - -this
         }
         var newInt = int + other.int
-        var newFrac = ""
+        var newFrac: String
         var frac1 = if (frac.isNotEmpty()) frac.toInt() else 0
         var frac2 = if (other.frac.isNotEmpty()) other.frac.toInt() else 0
         val mainPrecision = precision.coerceAtLeast(other.precision)
@@ -114,8 +118,8 @@ class FixedPointNumber(val int: Int, val frac: String) : Comparable<FixedPointNu
             return -(-this + other)
         }
         var newInt = int - other.int
-        var newFracInt = 0
-        var newFrac = ""
+        val newFracInt: Int
+        var newFrac: String
         var frac1 = if (frac.isNotEmpty()) frac.toInt() else 0
         var frac2 = if (other.frac.isNotEmpty()) other.frac.toInt() else 0
         val mainPrecision = precision.coerceAtLeast(other.precision)
@@ -155,7 +159,7 @@ class FixedPointNumber(val int: Int, val frac: String) : Comparable<FixedPointNu
             val sign = int.sign * other.int.sign
             var digits = IntArray(a.size + b.size)
         }
-        var i2 = 0
+        var i2: Int
         for ((i1, i) in ((a.size - 1) downTo 0).withIndex()) {
             var carry = 0
             i2 = 0
