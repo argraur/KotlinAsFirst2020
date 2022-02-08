@@ -100,7 +100,16 @@ class Polynom(vararg coeffs: Double) {
     /**
      * Вычитание
      */
-    operator fun minus(other: Polynom): Polynom = TODO()
+    operator fun minus(other: Polynom): Polynom {
+        val newCoeffs = mutableListOf<Double>()
+        val maxDegree = this.degree().coerceAtLeast(other.degree())
+
+        for (i in maxDegree downTo 0) {
+            val coeff = this.coeffOrNull(i) - other.coeffOrNull(i)
+            newCoeffs.add(coeff)
+        }
+        return Polynom(*newCoeffs.toDoubleArray())
+    }
 
     /**
      * Умножение
