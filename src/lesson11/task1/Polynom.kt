@@ -75,20 +75,27 @@ class Polynom(vararg coeffs: Double) {
      * Сложение
      */
     operator fun plus(other: Polynom): Polynom {
-        val newCoefs = mutableListOf<Double>()
+        val newCoeffs = mutableListOf<Double>()
         val maxDegree = this.degree().coerceAtLeast(other.degree())
 
         for (i in maxDegree downTo 0) {
-            val coef = this.coeffOrNull(i) + other.coeffOrNull(i)
-            newCoefs.add(coef)
+            val coeff = this.coeffOrNull(i) + other.coeffOrNull(i)
+            newCoeffs.add(coeff)
         }
-        return Polynom(*newCoefs.toDoubleArray())
+        return Polynom(*newCoeffs.toDoubleArray())
     }
 
     /**
      * Смена знака (при всех слагаемых)
      */
-    operator fun unaryMinus(): Polynom = TODO()
+    operator fun unaryMinus(): Polynom {
+        val newCoeffs = mutableListOf<Double>()
+
+        for (coeff in coefArray) {
+            newCoeffs.add(-coeff)
+        }
+        return Polynom(*newCoeffs.reversed().toDoubleArray())
+    }
 
     /**
      * Вычитание
