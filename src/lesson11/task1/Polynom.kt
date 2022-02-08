@@ -3,8 +3,6 @@
 package lesson11.task1
 
 import java.lang.IllegalArgumentException
-import java.lang.Math.max
-import java.lang.Math.pow
 import kotlin.math.pow
 
 /**
@@ -25,23 +23,28 @@ import kotlin.math.pow
  * Старшие коэффициенты, равные нулю, игнорировать, например Polynom(0.0, 0.0, 5.0, 3.0) соответствует 5x+3
  */
 class Polynom(vararg coeffs: Double) {
-    private val coefArray = coeffs.asList().reversed()
+    private val coeffArray = coeffs.asList().reversed()
+
+    /**
+     * Геттер: вернуть значение коэффициента при x^i,
+     * если такой степени нет, throw IllegalArgumentException
+     */
+    fun coeff(i: Int): Double {
+        if (i >= coeffArray.size) {
+            throw IllegalArgumentException()
+        }
+        return coeffArray[i]
+    }
 
     /**
      * Геттер: вернуть значение коэффициента при x^i
+     * если такой степени нет, вернуть ноль
      */
-    fun coeff(i: Int): Double {
-        if (i >= coefArray.size) {
-            throw IllegalArgumentException()
-        }
-        return coefArray[i]
-    }
-
     fun coeffOrNull(i: Int): Double {
-        if (i >= coefArray.size) {
+        if (i >= coeffArray.size) {
             return 0.0
         }
-        return coefArray[i]
+        return coeffArray[i]
     }
 
     /**
@@ -49,10 +52,17 @@ class Polynom(vararg coeffs: Double) {
      */
     fun getValue(x: Double): Double {
         var result = 0.0
-        for (i in coefArray.indices) {
-            result += coefArray[i] * x.pow(i.toDouble())
+        for (i in coeffArray.indices) {
+            result += coeffArray[i] * x.pow(i.toDouble())
         }
         return result
+    }
+
+    /**
+     * Геттер: Вернуть все коэфициенты
+     */
+    fun getCoeffsList(x: Double): List<Double> {
+        return coeffArray
     }
 
     /**
@@ -63,8 +73,8 @@ class Polynom(vararg coeffs: Double) {
      * степень 0x^2+0x+2 также равна 0.
      */
     fun degree(): Int {
-        for (i in coefArray.size - 1 downTo 0) {
-            if (coefArray[i] != 0.0) {
+        for (i in coeffArray.size - 1 downTo 0) {
+            if (coeffArray[i] != 0.0) {
                 return i
             }
         }
@@ -91,7 +101,7 @@ class Polynom(vararg coeffs: Double) {
     operator fun unaryMinus(): Polynom {
         val newCoeffs = mutableListOf<Double>()
 
-        for (coeff in coefArray) {
+        for (coeff in coeffArray) {
             newCoeffs.add(-coeff)
         }
         return Polynom(*newCoeffs.reversed().toDoubleArray())
@@ -114,7 +124,25 @@ class Polynom(vararg coeffs: Double) {
     /**
      * Умножение
      */
-    operator fun times(other: Polynom): Polynom = TODO()
+    operator fun times(other: Polynom): Polynom {
+        val maxDegree = this.degree() * other.degree()
+        val newCoeffs = mutableListOf<Double>()
+
+        for (i in 0 until maxDegree) {
+            newCoeffs.add(0.0)
+        }
+
+        val thisReversed = this.coeffArray.reversed()
+        val otherReversed = other.coeffArray.reversed()
+
+        for (x in thisReversed.indices) {
+            for (y in otherReversed.indices) {
+                newCoeffs[x + y] += thisReversed[x] * otherReversed[y]
+            }
+        }
+
+        return Polynom(*newCoeffs.toDoubleArray())
+    }
 
     /**
      * Деление
