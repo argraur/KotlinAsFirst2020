@@ -22,6 +22,23 @@ import kotlin.math.sign
  * Представление числа должно позволять хранить числа с общим числом десятичных цифр не менее 9.
  */
 class FixedPointNumber(val int: Int, val frac: String) : Comparable<FixedPointNumber> {
+    companion object {
+        fun getIntFromString(s: String): Int {
+            if (s.contains(".")) {
+                return s.split(".")[0].toInt()
+            } else {
+                return s.toInt()
+            }
+        }
+
+        fun getFracFromString(s: String): String {
+            if (s.contains(".")) {
+                return s.split(".")[1]
+            } else {
+                return ""
+            }
+        }
+    }
     /**
      * Точность - число десятичных цифр после запятой.
      */
@@ -31,7 +48,6 @@ class FixedPointNumber(val int: Int, val frac: String) : Comparable<FixedPointNu
      * Отрицательно ли число
      */
     val negative: Boolean get() = int < 0
-
     /**
      * Конструктор из строки, точность выбирается в соответствии
      * с числом цифр после десятичной точки.
@@ -40,8 +56,7 @@ class FixedPointNumber(val int: Int, val frac: String) : Comparable<FixedPointNu
      *
      * Внимание: этот или другой конструктор можно сделать основным
      */
-    constructor(s: String) : this(s.split(".")[0].toInt(), s.toString().split(".")[1])
-
+    constructor(s: String) : this(getIntFromString(s), getFracFromString(s))
     /**
      * Конструктор из вещественного числа с заданной точностью
      */
