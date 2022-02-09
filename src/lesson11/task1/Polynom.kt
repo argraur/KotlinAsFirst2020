@@ -2,6 +2,7 @@
 
 package lesson11.task1
 
+import ru.spbstu.wheels.defaultCopy
 import java.lang.IllegalArgumentException
 import kotlin.math.pow
 
@@ -22,21 +23,83 @@ import kotlin.math.pow
  * Нули в середине и в конце пропускаться не должны, например: x^3+2x+1 --> Polynom(1.0, 2.0, 0.0, 1.0)
  * Старшие коэффициенты, равные нулю, игнорировать, например Polynom(0.0, 0.0, 5.0, 3.0) соответствует 5x+3
  */
+
 class Polynom(vararg coeffs: Double) {
 
     private val coeffArray: List<Double>
 
+    /**
+     * Игнорируем старшие коэффициенты, равные нулю и приводим аргументы к виду List<Double>
+     */
+
     init {
-        val Array = coeffs.toMutableList()
-        while (Array[0] == 0.0) {
-            if (Array.size != 1)
-                Array.removeFirstOrNull()
+        val list = coeffs.toMutableList()
+        while (list[0] == 0.0) {
+            if (list.size != 1)
+                list.removeFirstOrNull()
             else
                 break
         }
-        this.coeffArray = Array.reversed()
+        this.coeffArray = list.reversed()
     }
 
+    /**
+     * Методы для функции деления и взятия остатка
+     */
+
+    private fun polyDegree(p: DoubleArray): Int {
+        for (i in p.size - 1 downTo 0) {
+            if (p[i] != 0.0) return i
+        }
+        return 0
+    }
+
+    /**
+     * Сдвиг вправо на *places* символов
+     */
+
+    private fun shiftRight(p: DoubleArray, places: Int = 1, md: Int): DoubleArray {
+        if (places <= 0) return p
+        val pd = polyDegree(p)
+        if (pd + places >= p.size) {
+            return p
+        }
+        val d = p.copyOf()
+        for (i in pd downTo 0) {
+            d[i + places] = d[i]
+            d[i] = 0.0
+        }
+        return d
+    }
+
+    /**
+     * Умножить весь массив на число
+     */
+
+    private fun mulitpyCoeffs(list: DoubleArray, i: Double = 1.0) {
+        for (x in list.indices) list[x] *= i
+    }
+
+    /**
+     * Поэлементное вычитание
+     */
+
+    private fun substractCoeffs(list: DoubleArray, other: DoubleArray) {
+        for (x in list.indices) list[x] -= other[x]
+    }
+
+    /**
+     * привести входной массив делителя к форме делимого
+     * Пример: [-3, 1] -> [-3, 1, 0, 0], если максимальная степень делимого x^3
+     */
+
+    private fun normalize(x: List<Double>, y: List<Double>): DoubleArray {
+        val res = DoubleArray(x.size)
+        for (i in y.indices) {
+            res[i] = y[i]
+        }
+        return res
+    }
 
 
     /**
@@ -132,12 +195,8 @@ class Polynom(vararg coeffs: Double) {
      * Умножение
      */
     operator fun times(other: Polynom): Polynom {
-        val maxDegree = this.degree() * other.degree()
-        val newCoeffs = mutableListOf<Double>()
-
-        for (i in 0 until maxDegree) {
-            newCoeffs.add(0.0)
-        }
+        val maxDegree = this.degree() + other.degree()
+        val newCoeffs = DoubleArray(maxDegree + 1)
 
         val thisReversed = this.coeffArray.reversed()
         val otherReversed = other.coeffArray.reversed()
@@ -148,7 +207,32 @@ class Polynom(vararg coeffs: Double) {
             }
         }
 
-        return Polynom(*newCoeffs.toDoubleArray())
+        return Polynom(*newCoeffs)
+    }
+
+    private fun division(other: Polynom, returnRem: Boolean? = false): Polynom {
+        var thisDegree = this.degree()
+        var otherDegree = other.degree()
+
+        val thisCoeffs = this.coeffArray.toDoubleArray()
+        val otherCoeffs = normalize(this.coeffArray, other.coeffArray)
+
+        if (thisDegree > otherDegree) {
+            val newCoeffs = DoubleArray(thisCoeffs.size)
+            while (thisDegree >= otherDegree) {
+                val t = shiftRight(otherCoeffs, thisDegree - otherDegree, thisCoeffs.size)
+                newCoeffs[thisDegree - otherDegree] += thisCoeffs[thisDegree] / t[thisDegree]
+                mulitpyCoeffs(t, newCoeffs[thisDegree - otherDegree])
+                substractCoeffs(thisCoeffs, t)
+                thisDegree = polyDegree(thisCoeffs)
+            }
+            println(thisCoeffs.joinToString(separator = ","))
+            if (returnRem == true) {
+                return Polynom(*thisCoeffs.reversedArray())
+            }
+            return Polynom(*newCoeffs.reversedArray())
+        }
+        return Polynom(0.0)
     }
 
     /**
@@ -159,12 +243,13 @@ class Polynom(vararg coeffs: Double) {
      *
      * Если A / B = C и A % B = D, то A = B * C + D и степень D меньше степени B
      */
-    operator fun div(other: Polynom): Polynom = TODO()
+
+    operator fun div(other: Polynom) = division(other, false)
 
     /**
      * Взятие остатка
      */
-    operator fun rem(other: Polynom): Polynom = TODO()
+    operator fun rem(other: Polynom): Polynom = division(other, true)
 
 
     override fun equals(other: Any?): Boolean {
