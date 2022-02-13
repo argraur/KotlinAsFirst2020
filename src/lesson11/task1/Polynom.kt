@@ -2,7 +2,6 @@
 
 package lesson11.task1
 
-import ru.spbstu.wheels.defaultCopy
 import java.lang.IllegalArgumentException
 import kotlin.math.pow
 
@@ -58,7 +57,7 @@ class Polynom(vararg coeffs: Double) {
      * Сдвиг вправо на *places* символов
      */
 
-    private fun shiftRight(p: DoubleArray, places: Int = 1, md: Int): DoubleArray {
+    private fun shiftRight(p: DoubleArray, places: Int = 1): DoubleArray {
         if (places <= 0) return p
         val pd = polyDegree(p)
         if (pd + places >= p.size) {
@@ -76,15 +75,13 @@ class Polynom(vararg coeffs: Double) {
      * Умножить весь массив на число
      */
 
-    private fun mulitpyCoeffs(list: DoubleArray, i: Double = 1.0) {
-        for (x in list.indices) list[x] *= i
-    }
+    private fun mulitpyCoeffs(list: List<Double>, i: Double = 1.0): List<Double> = list.map { c -> c * i}
 
     /**
      * Поэлементное вычитание
      */
 
-    private fun substractCoeffs(list: DoubleArray, other: DoubleArray) {
+    private fun substractCoeffs(list: MutableList<Double>, other: DoubleArray) {
         for (x in list.indices) list[x] -= other[x]
     }
 
@@ -210,30 +207,47 @@ class Polynom(vararg coeffs: Double) {
         return Polynom(*newCoeffs)
     }
 
+//    private fun division(other: Polynom, returnRem: Boolean? = false): Polynom {
+//        var thisDegree = this.degree()
+//        val otherDegree = other.degree()
+//
+//        val thisCoeffs = this.coeffArray.toDoubleArray()
+//        val otherCoeffs = normalize(this.coeffArray, other.coeffArray)
+//
+//        if (thisDegree > otherDegree) {
+//            val newCoeffs = DoubleArray(thisCoeffs.size)
+//            while (thisDegree >= otherDegree) {
+//                val t = shiftRight(otherCoeffs, thisDegree - otherDegree, thisCoeffs.size)
+//                newCoeffs[thisDegree - otherDegree] += thisCoeffs[thisDegree] / t[thisDegree]
+//                mulitpyCoeffs(t, newCoeffs[thisDegree - otherDegree])
+//                substractCoeffs(thisCoeffs, t)
+//                thisDegree = polyDegree(thisCoeffs)
+//            }
+//            println(thisCoeffs.joinToString(separator = ","))
+//            if (returnRem == true) {
+//                return Polynom(*thisCoeffs.reversedArray())
+//            }
+//            return Polynom(*newCoeffs.reversedArray())
+//        }
+//        return Polynom(0.0)
+//    }
     private fun division(other: Polynom, returnRem: Boolean? = false): Polynom {
-        var thisDegree = this.degree()
-        var otherDegree = other.degree()
-
-        val thisCoeffs = this.coeffArray.toDoubleArray()
-        val otherCoeffs = normalize(this.coeffArray, other.coeffArray)
-
-        if (thisDegree > otherDegree) {
-            val newCoeffs = DoubleArray(thisCoeffs.size)
-            while (thisDegree >= otherDegree) {
-                val t = shiftRight(otherCoeffs, thisDegree - otherDegree, thisCoeffs.size)
-                newCoeffs[thisDegree - otherDegree] += thisCoeffs[thisDegree] / t[thisDegree]
-                mulitpyCoeffs(t, newCoeffs[thisDegree - otherDegree])
-                substractCoeffs(thisCoeffs, t)
-                thisDegree = polyDegree(thisCoeffs)
-            }
-            println(thisCoeffs.joinToString(separator = ","))
-            if (returnRem == true) {
-                return Polynom(*thisCoeffs.reversedArray())
-            }
-            return Polynom(*newCoeffs.reversedArray())
+        val degrees = this.degree() - other.degree()
+        val result = mutableListOf<Double>()
+        val thisCoeffs = this.coeffArray.reversed().toMutableList()
+        val otherCoeffs = other.coeffArray.reversed()
+        for (i in 0..degrees) {
+            val d = thisCoeffs[i] / otherCoeffs[0]
+            val toMinus = shiftRight(normalize(thisCoeffs, mulitpyCoeffs(otherCoeffs, d)), i)
+            substractCoeffs(thisCoeffs, toMinus)
+            result.add(d)
         }
-        return Polynom(0.0)
+        if (returnRem == true) {
+            return Polynom(*thisCoeffs.toDoubleArray())
+        }
+        return Polynom(*result.toDoubleArray())
     }
+
 
     /**
      * Деление
