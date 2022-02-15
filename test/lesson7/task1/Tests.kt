@@ -232,10 +232,18 @@ Basic, Ruby, Swift.
     }
 
 
-    private fun checkHtmlSimpleExample() {
+    private fun checkHtmlSimpleExample(expected: String) {
         val result = File("temp.html").readText().replace(Regex("[\\s\\n\\t]"), "")
-        val expected =
-            """
+        assertEquals(expected, result)
+
+        File("temp.html").delete()
+    }
+
+    @Test
+    @Tag("22")
+    fun markdownToHtmlSimple() {
+        markdownToHtmlSimple("input/markdown_simple.md", "temp.html")
+        checkHtmlSimpleExample("""
                     <html>
                         <body>
                             <p>
@@ -247,17 +255,9 @@ Basic, Ruby, Swift.
                             </p>
                         </body>
                     </html>
-                    """.trimIndent().replace(Regex("[\\s\\n\\t]"), "")
-        assertEquals(expected, result)
-
-        File("temp.html").delete()
-    }
-
-    @Test
-    @Tag("22")
-    fun markdownToHtmlSimple() {
-        markdownToHtmlSimple("input/markdown_simple.md", "temp.html")
-        checkHtmlSimpleExample()
+                    """.trimIndent().replace(Regex("[\\s\\n\\t]"), ""))
+        markdownToHtmlSimple("input/md2.md", "temp.html")
+        checkHtmlSimpleExample(File("input/md2.html").readText().replace(Regex("[\\s\\n\\t]"), ""))
     }
 
     private fun checkHtmlListsExample() {
@@ -319,7 +319,19 @@ Basic, Ruby, Swift.
     @Tag("30")
     fun markdownToHtml() {
         markdownToHtml("input/markdown_simple.md", "temp.html")
-        checkHtmlSimpleExample()
+        checkHtmlSimpleExample("""
+                    <html>
+                        <body>
+                            <p>
+                                Lorem ipsum <i>dolor sit amet</i>, consectetur <b>adipiscing</b> elit.
+                                Vestibulum lobortis. <s>Est vehicula rutrum <i>suscipit</i></s>, ipsum <s>lib</s>ero <i>placerat <b>tortor</b></i>.
+                            </p>
+                            <p>
+                                Suspendisse <s>et elit in enim tempus iaculis</s>.
+                            </p>
+                        </body>
+                    </html>
+                    """.trimIndent().replace(Regex("[\\s\\n\\t]"), ""))
 
         markdownToHtml("input/markdown_lists.md", "temp.html")
         checkHtmlListsExample()
@@ -387,7 +399,21 @@ Basic, Ruby, Swift.
             assertFileContent("temp.txt", res.trimIndent())
             File("temp.txt").delete()
         }
-
+        test(
+            16,
+            17,
+            "16 | 17\n-0   0\n--\n16"
+        )
+        test(
+            51,
+            18,
+            " 51 | 18\n-36   2\n---\n 15"
+        )
+        test(
+            108932,
+            3,
+            "108932 | 3\n-9       36310\n--\n 18\n-18\n---\n  09\n  -9\n  --\n   03\n   -3\n   --\n    02\n    -0\n    --\n     2"
+        )
         test(
             19935,
             22,
@@ -437,6 +463,26 @@ Basic, Ruby, Swift.
                  --
                   0
              """
+        )
+        test(
+            10,
+            2,
+            " 10 | 2\n-10   5\n---\n  0"
+        )
+        test(
+            8193,
+            2,
+            " 8193 | 2\n-8      4096\n--\n 01\n -0\n --\n  19\n -18\n ---\n   13\n  -12\n  ---\n    1"
+        )
+        test(
+            15,
+            8,
+            "15 | 8\n-8   1\n--\n 7"
+        )
+        test(
+            435725,
+            9,
+            " 435725 | 9\n-36       48413\n---\n  75\n -72\n ---\n   37\n  -36\n  ---\n    12\n    -9\n    --\n     35\n    -27\n    ---\n      8"
         )
 
         File("temp.txt").delete()

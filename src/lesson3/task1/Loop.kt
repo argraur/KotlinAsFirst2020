@@ -92,22 +92,16 @@ fun digitNumber(n: Int): Int {
  * Найти число Фибоначчи из ряда 1, 1, 2, 3, 5, 8, 13, 21, ... с номером n.
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
-fun fib(n: Int): Int =
-    when (n) {
-        1 -> 1
-        2 -> 1
-        else -> {
-            var a = 1
-            var b = 1
-            var c = 1
-            for (i in 3..n) {
-                c = a + b
-                a = b
-                b = c
-            }
-            c
-        }
+fun fib(n: Int): Int {
+    var a1 = 1
+    var a2 = 1
+    for (x in 3..n) {
+        val t = a1 + a2
+        a1 = a2
+        a2 = t
     }
+    return a2
+}
 
 /**
  * Простая (2 балла)
@@ -164,6 +158,16 @@ fun lcm(m: Int, n: Int): Int = TODO()
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
 fun isCoPrime(m: Int, n: Int): Boolean = TODO()
+
+fun pow(a: Int, b: Int): Int {
+    if (b == 0)
+        return 1
+    var r = a
+    for (x in 1 until b) {
+        r *= a
+    }
+    return r
+}
 
 /**
  * Средняя (3 балла)
@@ -237,6 +241,7 @@ fun sin(x: Double, eps: Double): Double = TODO()
  * Использовать kotlin.math.cos и другие стандартные реализации функции косинуса в этой задаче запрещается.
  */
 fun cos(x: Double, eps: Double): Double = TODO()
+
 
 /**
  * Сложная (4 балла)

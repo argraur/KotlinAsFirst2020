@@ -220,6 +220,7 @@ class Tests {
         assertEquals(1, squareSequenceDigit(1))
         assertEquals(4, squareSequenceDigit(2))
         assertEquals(5, squareSequenceDigit(7))
+        assertEquals(0, squareSequenceDigit(208580))
         assertEquals(6, squareSequenceDigit(12))
         assertEquals(0, squareSequenceDigit(17))
         assertEquals(9, squareSequenceDigit(27))
@@ -228,10 +229,12 @@ class Tests {
     @Test
     @Tag("5")
     fun fibSequenceDigit() {
+        assertEquals(2, fibSequenceDigit(9))
+        assertEquals(7, fibSequenceDigit(45))
+        assertEquals(4, fibSequenceDigit(101))
         assertEquals(1, fibSequenceDigit(1))
         assertEquals(1, fibSequenceDigit(2))
         assertEquals(3, fibSequenceDigit(4))
-        assertEquals(2, fibSequenceDigit(9))
         assertEquals(5, fibSequenceDigit(14))
         assertEquals(2, fibSequenceDigit(20))
     }

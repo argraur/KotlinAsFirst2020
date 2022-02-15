@@ -221,22 +221,37 @@ class Tests {
     @Test
     @Tag("5")
     fun roman() {
+        assertEquals("DCXCIV", roman(694))
         assertEquals("I", roman(1))
+        assertEquals("XXIII", roman(23))
         assertEquals("MMM", roman(3000))
         assertEquals("MCMLXXVIII", roman(1978))
-        assertEquals("DCXCIV", roman(694))
         assertEquals("XLIX", roman(49))
     }
 
     @Test
     @Tag("7")
     fun russian() {
-        assertEquals("триста семьдесят пять", russian(375))
+        assertEquals("одиннадцать тысяч девятьсот девяносто", russian(11990))
         assertEquals("двадцать две тысячи девятьсот шестьдесят четыре", russian(22964))
+        assertEquals("сто тысяч один", russian(100001))
+        assertEquals("триста семьдесят пять", russian(375))
+        assertEquals("триста пять", russian(305))
         assertEquals("сто девятнадцать тысяч пятьсот восемь", russian(119508))
         assertEquals("две тысячи три", russian(2003))
         assertEquals("двести тысяч два", russian(200002))
         assertEquals("девятьсот тысяч", russian(900000))
         assertEquals("двенадцать", russian(12))
+        assertEquals("сто два", russian(102))
+        assertEquals("девятьсот девяносто девять тысяч девятьсот девяносто девять", russian(999999))
+        assertEquals("девяносто тысяч", russian(90000))
+        assertEquals("один", russian(1))
+        assertEquals("четыреста девяносто одна тысяча пятьсот двадцать девять", russian(491529))
+        assertEquals("сорок пять тысяч восемьсот семьдесят семь", russian(45877))
+        assertEquals("десять", russian(10))
+        assertEquals("сто", russian(100))
+        assertEquals("семьсот двадцать шесть тысяч тринадцать", russian(726013))
+        assertEquals("девятьсот тридцать тысяч четыреста восемьдесят пять", russian(930485))
+        assertEquals("двести девяносто пять тысяч семьсот девяносто", russian(295790))
     }
 }

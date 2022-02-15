@@ -23,6 +23,16 @@ class PolynomTest {
 
     @Test
     @Tag("4")
+    fun coeffOrNull() {
+        val p = Polynom(1.0, 3.0, 2.0)
+        assertEquals(3.0, p.coeffOrNull(1), 1e-10)
+        assertEquals(1.0, p.coeffOrNull(2), 1e-10)
+        assertEquals(2.0, p.coeffOrNull(0), 1e-10)
+        assertEquals(0.0, p.coeffOrNull(5), 1e-10)
+    }
+
+    @Test
+    @Tag("4")
     fun degree() {
         val p = Polynom(1.0, 1.0, 1.0)
         assertEquals(2, p.degree())
@@ -63,16 +73,27 @@ class PolynomTest {
     @Test
     @Tag("6")
     fun times() {
+        val r1 = Polynom(1.0, -5.0)
+        val p3 = Polynom(1.0, 3.0, 2.0)
+        val p4 = Polynom(1.0, -2.0, -13.0, -10.0)
+        assertApproxEquals(p4, p3 * r1, 1e-10)
+
         val p1 = Polynom(1.0, -2.0, -1.0, 4.0)
         val p2 = Polynom(1.0, 3.0, 2.0)
         val r = Polynom(1.0, 1.0, -5.0, -3.0, 10.0, 8.0)
         assertApproxEquals(r, p1 * p2, 1e-10)
         assertApproxEquals(r, p2 * p1, 1e-10)
+
     }
 
     @Test
     @Tag("8")
     fun div() {
+        val p11 = Polynom(1.0, -12.0, 0.0, -42.0)
+        val p22 = Polynom(1.0, -3.0)
+        val res = Polynom(1.0, -9.0, -27.0)
+        assertApproxEquals(res, p11 / p22, 1e-10)
+
         val p1 = Polynom(1.0, -2.0, -1.0, 4.0)
         val p2 = Polynom(1.0, 3.0, 2.0)
         val r = Polynom(1.0, -5.0)

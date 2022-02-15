@@ -322,6 +322,20 @@ class Tests {
     @Tag("8")
     fun bagPacking() {
         assertEquals(
+            setOf("5", "4", "3", "2", "0"),
+            bagPacking(
+                mapOf(
+                    "0" to (149 to 320),
+                    "1" to (369 to 324),
+                    "2" to (1 to 1),
+                    "3" to (148 to 217),
+                    "4" to (1 to 1),
+                    "5" to (1 to 1),
+                ),
+                457
+            )
+        )
+        assertEquals(
             setOf("Кубок"),
             bagPacking(
                 mapOf("Кубок" to (500 to 2000), "Слиток" to (1000 to 5000)),
@@ -333,6 +347,127 @@ class Tests {
             bagPacking(
                 mapOf("Кубок" to (500 to 2000), "Слиток" to (1000 to 5000)),
                 450
+            )
+        )
+        assertEquals(
+            setOf("0"),
+            bagPacking(
+                mapOf("0" to (2 to 1)),
+                2
+            )
+        )
+        assertEquals(
+            setOf("0"),
+            bagPacking(
+                mapOf("0" to (1 to 1), "1" to (1 to 1) ),
+                1
+            )
+        )
+        assertEquals(
+            setOf("0", "1"),
+            bagPacking(
+                mapOf("0" to (1 to 1), "1" to (1 to 1)),
+                2
+            )
+        )
+        assertEquals(
+            setOf("1"),
+            bagPacking(
+                mapOf("0" to (1 to 1), "1" to (2 to 2)),
+                2
+            )
+        )
+        assertEquals(
+            setOf("0", "1"),
+            bagPacking(
+                mapOf("0" to (1 to 1), "1" to (1 to 1), "2" to (2 to 1)),
+                2
+            )
+        )
+        assertEquals(
+            setOf("2", "1"),
+            bagPacking(
+                mapOf("0" to (1 to 1), "1" to (1 to 413), "2" to (2 to 438), "3" to (1 to 386)),
+                3
+            )
+        )
+        assertEquals(
+            setOf("9", "0"),
+            bagPacking(
+                mapOf(
+                    "0" to (1 to 1),
+                    "1" to (1 to 1),
+                    "2" to (2 to 2),
+                    "3" to (1 to 1),
+                    "4" to (1 to 1),
+                    "5" to (1 to 1),
+                    "6" to (1 to 1),
+                    "7" to (1 to 1),
+                    "8" to (1 to 1),
+                    "9" to (1 to 2),
+                ),
+                2
+            )
+        )
+        assertEquals(
+            setOf("5", "4", "3", "2", "0"),
+            bagPacking(
+                mapOf(
+                    "0" to (149 to 320),
+                    "1" to (369 to 324),
+                    "2" to (1 to 1),
+                    "3" to (148 to 217),
+                    "4" to (1 to 1),
+                    "5" to (1 to 1),
+                ),
+                457
+            )
+        )
+        assertEquals(
+            setOf("14", "17"),
+            bagPacking(
+                mapOf(
+                    "0" to (1 to 1),
+                    "1" to (1 to 1),
+                    "2" to (2 to 2),
+                    "3" to (1 to 1),
+                    "4" to (1 to 1),
+                    "5" to (1 to 1),
+                    "6" to (1 to 1),
+                    "7" to (1 to 1),
+                    "8" to (1 to 1),
+                    "9" to (1 to 2),
+                    "10" to (1 to 1),
+                    "11" to (1 to 1),
+                    "12" to (2 to 2),
+                    "13" to (1 to 1),
+                    "14" to (1 to 321),
+                    "15" to (1 to 1),
+                    "16" to (1 to 1),
+                    "17" to (1 to 250),
+                    "18" to (1 to 1),
+                    "19" to (1 to 2),
+                    "20" to (1 to 1),
+                    "21" to (1 to 1),
+                    "22" to (2 to 2),
+                    "23" to (1 to 1),
+                    "24" to (1 to 1),
+                    "25" to (2 to 325),
+                    "26" to (1 to 1),
+                    "27" to (1 to 1),
+                    "28" to (1 to 1),
+                    "29" to (1 to 2),
+                    "30" to (1 to 1),
+                    "31" to (1 to 1),
+                    "32" to (1 to 1),
+                    "33" to (1 to 1),
+                    "34" to (1 to 2),
+                    "30" to (1 to 1),
+                    "31" to (1 to 1),
+                    "32" to (1 to 1),
+                    "33" to (1 to 1),
+                ),
+                2
             )
         )
     }

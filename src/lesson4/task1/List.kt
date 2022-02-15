@@ -254,18 +254,13 @@ fun decimal(digits: List<Int>, base: Int): Int {
  */
 fun decimalFromString(str: String, base: Int): Int {
     var result = 0
-    str.forEachIndexed { index, i ->
-        var a = 0
-        println(i + " " + i.code)
-        when {
-            i <= '9' -> {
-                a = i.digitToInt()
-            }
-            i >= 'a' -> {
-                a = i.code - 87
-            }
+    val str = str.reversed()
+    for (x in str.indices) {
+        result += if (str[x].digitToIntOrNull() == null) {
+            (str[x].code - 87) * pow(base, x)
+        } else {
+            str[x].digitToIntOrNull()!! * pow(base, x)
         }
-        result += a * base.toDouble().pow(str.length - index - 1).toInt()
     }
     return result
 }
@@ -279,32 +274,17 @@ fun decimalFromString(str: String, base: Int): Int {
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
 fun roman(n: Int): String {
-    var mN = n
-    var t = 1
-    val s = StringBuilder()
-    while (mN > 0) {
-        val a = mN % 10 * t
-        s.insert(
-            0, when (a) {
-                in 1..3 -> "I".repeat(a)
-                4 -> "IV"
-                in 5..8 -> "V${"I".repeat(a - 5)}"
-                9 -> "IX"
-                in 10..30 -> "X".repeat(a / 10)
-                40 -> "XL"
-                in 50..80 -> "L${"X".repeat((a - 50) / 10)}"
-                90 -> "XC"
-                in 100..300 -> "C".repeat(a / 100)
-                400 -> "CD"
-                in 500..800 -> "D${"C".repeat((a - 500) / 100)}"
-                900 -> "CM"
-                else -> "M".repeat(a / 1000)
-            }
-        )
-        t *= 10
-        mN /= 10
+    val str = StringBuilder()
+    var n = n
+    val nums = arrayOf("M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I")
+    val numsDecade = arrayOf(1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1)
+    for (x in numsDecade.indices) {
+        while (n / numsDecade[x] > 0) {
+            str.append(nums[x])
+            n -= numsDecade[x]
+        }
     }
-    return s.toString()
+    return str.toString()
 }
 
 /**

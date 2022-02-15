@@ -219,7 +219,23 @@ fun mostExpensive(description: String): String {
  *
  * Вернуть -1, если roman не является корректным римским числом
  */
-fun fromRoman(roman: String): Int = TODO()
+fun fromRoman(roman: String): Int {
+    if (roman == "")
+        return -1
+    var str = roman
+    var result = 0
+    val nums = arrayOf("CM", "M", "CD", "D", "XC", "C", "XL", "L", "IX", "X", "IV", "V", "I")
+    val numsDecade = arrayOf(900, 1000, 400, 500, 90, 100, 40, 50, 9, 10, 4, 5, 1)
+    for (x in numsDecade.indices) {
+        while (str.indexOf(nums[x]) > -1) {
+            result += numsDecade[x]
+            str = str.replaceFirst(nums[x], "")
+        }
+    }
+    if (str != "")
+        return -1
+    return result
+}
 
 /**
  * Очень сложная (7 баллов)

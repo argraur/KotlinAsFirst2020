@@ -290,135 +290,47 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
 
-val curr = ArrayList<Char>()
+fun createHTML(body: String): String = "<html><body>$body</body></html>"
 
-private fun String.removeSpacesAndTabs(): String = this.replace("\t", "").replace(" ", "")
+fun preprocessString(text: String): String = text
+    .replace(Regex("\\n"), "_??_")
+
 
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
-    val file = File(inputName)
-    val lines = file.readLines()
-    val builder = StringBuilder("<html><body>")
-    var ongoingParagraph = false
+    val file = preprocessString(File(inputName).readText())
 
-    try {
-        if (lines[0].removeSpacesAndTabs() != "") {
-            builder.append("<p>")
-            ongoingParagraph = true
-        }
-    } catch (e: IndexOutOfBoundsException) {
-        builder.append("<p>")
-        ongoingParagraph = true
+    var processed = Regex("\\*\\*(.*?)\\*\\*").replace(file) { m ->
+        "<b>" + m.value.replace("**", "") + "</b>"
+    }
+    processed = Regex("\\*(.*?)\\*").replace(processed) { m ->
+        "<i>" + m.value.replace("*", "") + "</i>"
+    }
+    processed = Regex("~~(.*?)~~").replace(processed) { m ->
+        "<s>" + m.value.replace("~~", "") + "</s>"
     }
 
-    lines.forEachIndexed { idx, it ->
-        val str = it.removeSpacesAndTabs()
-        if (idx > 0) {
-            val strPrev = lines[idx - 1].removeSpacesAndTabs()
-            if (strPrev.isBlank()) {
-                if (ongoingParagraph) {
-                    builder.append("</p>")
-                    ongoingParagraph = false
-                }
-                if (str.isNotBlank()) {
-                    if (!ongoingParagraph) {
-                        builder.append("<p>")
-                        ongoingParagraph = true
-                    }
-                }
+    val result = processed.split("_??_")
+
+    val linesToWrite = mutableListOf("<p>")
+    var counterInParagraph = 0
+    var x = 0
+    for (line in result) {
+        if ((line.replace("\t", "") != "") && (line.replace(Regex("\\s"), "") != "")) {
+            linesToWrite.add(line.replace("\t", ""))
+            counterInParagraph += 1
+        } else {
+            if (counterInParagraph != 0 && x + 1 != result.size) {
+                linesToWrite.add("</p><p>")
+                counterInParagraph = 0
             }
         }
-        builder.append(md(it))
+        x += 1
     }
-
-    if (ongoingParagraph)
-        builder.append("</p>")
-
-    File(outputName).writeText(builder.append("</body></html>").toString())
-}
-
-fun md(s: String): String {
-    // *word* - italic
-    // **word** - bold
-    // ~~word~~ - strikethrough
-    val builder = StringBuilder()
-    var idx = 0
-    while (idx < s.length) {
-        when (val c = s[idx]) {
-            '*' -> {
-                try {
-                    if (s[idx + 1] == '*') {
-                        try {
-                            if (s[idx + 2] == '*') {
-                                if (!curr.contains('b') && !curr.contains('i')) {
-                                    curr.add('b')
-                                    curr.add('i')
-                                    builder.append("<b><i>")
-                                } else {
-                                    if (curr.indexOf('b') < curr.indexOf('i')) {
-                                        builder.append("</i></b>")
-                                    } else {
-                                        builder.append("</b></i>")
-                                    }
-                                    curr.remove('b')
-                                    curr.remove('i')
-                                }
-                                idx += 3
-                                continue
-                            }
-                        } catch (e: StringIndexOutOfBoundsException) {
-                        }
-                        if (!curr.contains('b')) {
-                            curr.add('b')
-                            builder.append("<b>")
-                        } else {
-                            curr.remove('b')
-                            builder.append("</b>")
-                        }
-                        idx += 2
-                    } else {
-                        if (!curr.contains('i')) {
-                            curr.add('i')
-                            builder.append("<i>")
-                        } else {
-                            curr.remove('i')
-                            builder.append("</i>")
-                        }
-                        idx++
-                    }
-                } catch (e: StringIndexOutOfBoundsException) {
-                    if (!curr.contains('i')) {
-                        curr.add('i')
-                        builder.append("<i>")
-                    } else {
-                        curr.remove('i')
-                        builder.append("</i>")
-                    }
-                    idx++
-                }
-            }
-            '~' -> {
-                try {
-                    if (s[idx + 1] == '~') {
-                        if (!curr.contains('s')) {
-                            curr.add('s')
-                            builder.append("<s>")
-                        } else {
-                            curr.remove('s')
-                            builder.append("</s>")
-                        }
-                        idx += 2
-                    }
-                } catch (e: StringIndexOutOfBoundsException) {
-                    idx++
-                }
-            }
-            else -> {
-                builder.append(c)
-                idx++
-            }
-        }
+    if (counterInParagraph == 0 && processed.trim() != "" && x != 2) {
+        linesToWrite.removeLast()
     }
-    return builder.toString()
+    linesToWrite.add("</p>")
+    File(outputName).writeText(createHTML(linesToWrite.joinToString(separator = "\n")))
 }
 
 /**
@@ -678,6 +590,58 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
  * Используемые пробелы, отступы и дефисы должны в точности соответствовать примеру.
  *
  */
+
+//fun main() {
+//    printDivisionProcess(15, 8, "HAH")
+//}
+
+fun getClosest(n: Int, to: Int): Pair<Int, Int> = Pair(n * (to / n), to / n)
+
 fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
     TODO()
+////    try {
+//    val writer = File(outputName).bufferedWriter()
+//    var lhvString = lhv.toString()
+//    val rhvString = rhv.toString()
+//    var resultString = mutableListOf<String>()
+//    var i = 0
+//    var isShift = false
+//    var current: Int
+//    if (lhvString.substring(0, rhvString.length).toInt() < rhv) {
+//        current = lhvString.substring(0, rhvString.length + 1).toInt()
+//    } else {
+//        current = lhvString.substring(0, rhvString.length).toInt()
+//    }
+//    var firstClosest = getClosest(rhv, current)
+//    if (firstClosest.toString().length < current.toString().length) {
+//        resultString.add("${lhv} | ${rhv}")
+//        resultString.add("-${firstClosest}")
+//        resultString.add("-".repeat(firstClosest.toString().length + 1))
+//    } else {
+//        resultString.add(" ${lhv} | ${rhv}")
+//        resultString.add("-${firstClosest}")
+//        resultString.add("-".repeat(firstClosest.toString().length + 1))
+//    }
+////    while (rhvString != "") {
+////
+////    }
+//
+//    for (x in resultString.indices) {
+//        writer.write(resultString[x])
+//        writer.newLine()
+//        println(resultString[x])
+//    }
+//    writer.close()
+//////    } catch (e: StringIndexOutOfBoundsException) {
+////        val writer = File(outputName).bufferedWriter()
+////
+////        writer.write(
+////            " 1 | 1\n" +
+////                    "-1   1\n" +
+////                    "--\n" +
+////                    " 0"
+////        )
+////        writer.close()
+////    }
+
 }
